@@ -12,7 +12,7 @@ def noise_evaluation(res, noise, loc, pts, data_scene, output_dir):
     g8p_norm = norm_8pa()
     g8p = EightPointAlgorithmGeneralGeometry()
 
-    # ! Gebereating PCL from the dataset
+    # ! Generating PCL from the dataset
     pcl_dense, _ = get_dense_pcl_sample(scene=data_scene["scene"],
                                         path=data_scene["path"],
                                         idx=data_scene["idx"],
