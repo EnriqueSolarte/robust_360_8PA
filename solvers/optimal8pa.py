@@ -22,7 +22,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         #               [0, 0, k ** abs(1 - x_mean[2])]])
         t = np.array([[s, 0, 0],
                       [0, s, 0],
-                      [0, 0, 1]])
+                      [0, 0, k]])
         # t = np.array([[s, 0, 0],
         #               [0, s, 0],
         #               [0, 0, k ** abs(1 - x_mean[2])]])
