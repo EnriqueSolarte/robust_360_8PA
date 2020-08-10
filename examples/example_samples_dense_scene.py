@@ -1,10 +1,11 @@
 from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
 from solvers.optimal8pa import Optimal8PA as norm_8pa
 from pcl_utilities import *
-from file_utilities import create_dir, create_file, write_report
+from read_datasets.MP3D_VO import MP3D_VO
+from geometry_utilities import *
 
 
-def noise_evaluation(res, noise, loc, pts, data_scene, output_dir):
+def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
     # ! relative camera pose from a to b
     error_n8p = []
     error_8p = []
@@ -12,11 +13,9 @@ def noise_evaluation(res, noise, loc, pts, data_scene, output_dir):
     g8p_norm = norm_8pa()
     g8p = EightPointAlgorithmGeneralGeometry()
 
-    # ! Generating PCL from the dataset
-    pcl_dense, _ = get_dense_pcl_sample(scene=data_scene["scene"],
-                                        path=data_scene["path"],
-                                        idx=data_scene["idx"],
-                                        res=res, loc=loc)
+    # ! Getting a PCL from the dataset
+    pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
+    pcl_dense, mask = mask_pcl_by_roi_and_loc(pcl=pcl_dense, loc=loc, res=res)
     np.random.seed(100)
 
     # ! Output file
@@ -31,7 +30,7 @@ def noise_evaluation(res, noise, loc, pts, data_scene, output_dir):
                                                                    np.random.uniform(-10, 10)))
 
         samples = np.random.randint(0, pcl_dense.shape[1], pts)
-        pcl_a = pcl_dense[:, samples]
+        pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
         # ! pcl at "b" location + noise
         pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a), param=noise)
         # ! We expect that there are 1% outliers besides of the noise
@@ -74,8 +73,12 @@ def noise_evaluation(res, noise, loc, pts, data_scene, output_dir):
 
 
 if __name__ == '__main__':
-    scene = dict(scene="1LXtFkjw3qL",
-                 path="0",
-                 idx=0)
+    path = "/home/kike/Documents/datasets/Matterport_360_odometry"
+    data = MP3D_VO(scene="1LXtFkjw3qL/0", path=path)
 
-    noise_evaluation(res=fov, noise=noise, loc=(-0, 0), pts=200, data_scene=scene, output_dir=output_dir)
+    eval_methods(res=(90, 90),
+                 noise=500,
+                 loc=(0, 0),
+                 pts=200,
+                 data_scene=data,
+                 idx_frame=0)
