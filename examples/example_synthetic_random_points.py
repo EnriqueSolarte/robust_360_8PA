@@ -46,6 +46,7 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
                                                          transform_est=cam_a2b_8p))
         print("ours:{} - {}".format(np.median(error_n8p, axis=0), len(error_n8p)))
         print("8PA: {} - {}".format(np.median(error_8p, axis=0), len(error_8p)))
+        print("---------------------------------------------------------------")
 
 
 if __name__ == '__main__':
@@ -56,8 +57,8 @@ if __name__ == '__main__':
                                                                 np.random.uniform(-10, 10)))
     delta_theta = -0
     delta_phi = -0
-    cfg = dict(theta_roi=(-27 + delta_theta, 27 + delta_theta),
-               phi_roi=(-18 + delta_phi, 18 + delta_phi),
+    cfg = dict(theta_roi=(-180 + delta_theta, 180 + delta_theta),
+               phi_roi=(-90 + delta_phi, 90 + delta_phi),
                n_pts=200, min_d=2, max_d=20,
                relative_cam_pose=cam_pose,
                noise_parameter=500)
