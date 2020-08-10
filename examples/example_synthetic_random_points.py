@@ -1,5 +1,5 @@
-from Solvers.EpipolarConstraint import EightPointAlgorithmGeneralGeometry
-from Solvers.Optimal8PA import Optimal8PA
+from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
+from solvers.optimal8pa import Optimal8PA
 from pcl_utilities import *
 from geometry_utilities import *
 

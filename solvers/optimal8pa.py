@@ -1,4 +1,4 @@
-from Solvers.EpipolarConstraint import EightPointAlgorithmGeneralGeometry
+from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
 from geometry_utilities import *
 from scipy.optimize import least_squares
 
@@ -30,7 +30,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         return x_norm, t
 
     def lsq_normalizer(self, x1, x2):
-        from delta_bound import get_delta_bound_by_bearings
+        from analysis.delta_bound import get_delta_bound_by_bearings
         assert x1.shape == x2.shape
         assert x1.shape[0] == 3
 
