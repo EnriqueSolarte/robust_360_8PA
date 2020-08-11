@@ -39,10 +39,10 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             x2_norm_, _ = self.normalizer(x2.copy(), s=x[0], k=x[1])
 
             delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
-            pm = np.mean(angle_between_vectors_arrays(x1_norm_, x2_norm_))
+            pm = np.degrees(np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
-            return C / delta_
+            return C/(1000 *delta_)
 
         initial = [1, 1]
         lsq = least_squares(residuals, initial)
@@ -50,9 +50,12 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         x2_norm, T2 = self.normalizer(x2.copy(), s=lsq.x[0], k=lsq.x[1])
         delta_norm, C_norm2 = get_delta_bound_by_bearings(x1_norm, x2_norm)
         delta, C2 = get_delta_bound_by_bearings(x1, x2)
+        pm_norm = np.nanmean(angle_between_vectors_arrays(x1_norm, x2_norm))
+        pm = np.nanmean(angle_between_vectors_arrays(x1, x2))
         print("S    :{0:0.3f} - K         :{1:0.3f}".format(lsq.x[0], lsq.x[1]))
         print("delta:{0:0.3f} - delta_norm:{1:0.3f}".format(delta, delta_norm))
         print("C2   :{0:0.3f} - C_norm2   :{1:0.5f}".format(C2, C_norm2))
+        print("pm   :{0:0.3f} - pm_norm   :{1:0.5f}".format(pm, pm_norm))
 
         return x1_norm, x2_norm, T1, T2
 
