@@ -71,7 +71,8 @@ if __name__ == '__main__':
     error_n8p = []
     error_8p = []
     scene = "1LXtFkjw3qL/1"
-    path = "/home/kike/Documents/datasets/Matterport_360_odometry"
+    # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
+    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     dt = MP3D_VO(scene=scene, path=path)
     orb = ORBExtractor()
     tracker = LKTracker()

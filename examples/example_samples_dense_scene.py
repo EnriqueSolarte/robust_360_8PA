@@ -73,7 +73,8 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/Matterport_360_odometry"
+    # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
+    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", path=path)
 
     eval_methods(res=(90, 90),
