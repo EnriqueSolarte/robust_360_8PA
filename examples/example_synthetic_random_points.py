@@ -44,6 +44,7 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
                                                           transform_est=cam_a2b_n8p))
         error_8p.append(evaluate_error_in_transformation(transform_gt=cam_a2b,
                                                          transform_est=cam_a2b_8p))
+
         print("=====================================================================")
         # ! Ours' method
         print("Q1-ours:{}- {}".format(np.quantile(error_n8p, 0.25, axis=0),
@@ -52,7 +53,6 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
                                       len(error_n8p)))
         print("Q3-ours:{}- {}".format(np.quantile(error_n8p, 0.75, axis=0),
                                       len(error_n8p)))
-
         print("=====================================================================")
         # ! 8PA
         print("Q1-8PA:{}-  {}".format(np.quantile(error_8p, 0.25, axis=0),
@@ -61,6 +61,7 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
                                       len(error_8p)))
         print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
                                       len(error_8p)))
+        print("=====================================================================")
 
 
 if __name__ == '__main__':

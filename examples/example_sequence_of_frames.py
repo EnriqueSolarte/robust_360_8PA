@@ -65,6 +65,7 @@ def eval_camera_pose(tracker, cam_gt):
                                   len(error_8p)))
     print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
                                   len(error_8p)))
+    print("=====================================================================")
 
 
 if __name__ == '__main__':

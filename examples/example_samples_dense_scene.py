@@ -70,6 +70,7 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
                                       len(error_8p)))
         print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
                                       len(error_8p)))
+        print("=====================================================================")
 
 
 if __name__ == '__main__':
