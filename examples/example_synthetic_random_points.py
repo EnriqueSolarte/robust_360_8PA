@@ -2,6 +2,7 @@ from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
 from solvers.optimal8pa import Optimal8PA
 from pcl_utilities import *
 from geometry_utilities import *
+from file_utilities import FileReport
 
 
 def evaluate_synthetic_points(theta_roi, phi_roi,
@@ -15,6 +16,8 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
     g8p_norm = Optimal8PA()
     g8p = EightPointAlgorithmGeneralGeometry()
 
+    error_report = FileReport(filename="../report/v1_random_points.csv")
+    error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         pcl_a = generate_pcl_by_roi_theta_phi(theta=theta_roi,
                                               phi=phi_roi,
@@ -31,8 +34,18 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
         x1 = bearings_a[:, samples]
         x2 = bearings_b[:, samples]
 
-        cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=x1.copy(), x2=x2.copy())
         cam_a2b_8p = g8p.recover_pose_from_matches(x1=x1.copy(), x2=x2.copy())
+        # # ! prior motion
+        prior_motion = cam_a2b_8p[0:3, 3]
+        rot = get_rot_from_directional_vectors(prior_motion, (0, 0, 1))
+        bearings_a_rot = rot.dot(x1)
+        bearings_b_rot = rot.dot(x2)
+        #
+        cam_a2b_n8p_rot = g8p_norm.recover_pose_from_matches(x1=bearings_a_rot.copy(),
+                                                             x2=bearings_b_rot.copy())
+
+        cam_a2b_n8p = extend_SO3_to_homogenous(rot.T).dot(cam_a2b_n8p_rot).dot(extend_SO3_to_homogenous(rot))
+        # cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=x1.copy(), x2=x2.copy())
 
         if cam_a2b_8p is None:
             print("8p failed")
@@ -63,10 +76,15 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
                                       len(error_8p)))
         print("=====================================================================")
 
+        line = [error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0], error_n8p[-1][1]]
+        error_report.write(line)
+
 
 if __name__ == '__main__':
     # ! relative camera pose from a to b
-    cam_pose = get_homogeneous_transform_from_vectors(t_vector=(0, 0, 0.5),
+    cam_pose = get_homogeneous_transform_from_vectors(t_vector=(np.random.uniform(-1, 1),
+                                                                np.random.uniform(-1, 1),
+                                                                np.random.uniform(-1, 1)),
                                                       r_vector=(np.random.uniform(-10, 10),
                                                                 np.random.uniform(-10, 10),
                                                                 np.random.uniform(-10, 10)))

@@ -3,6 +3,7 @@ from solvers.optimal8pa import Optimal8PA as norm_8pa
 from pcl_utilities import *
 from read_datasets.MP3D_VO import MP3D_VO
 from geometry_utilities import *
+from file_utilities import FileReport
 
 
 def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
@@ -19,7 +20,8 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
     np.random.seed(100)
 
     # ! Output file
-
+    error_report = FileReport(filename="../report/v1_sample_scene.scv")
+    error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         # ! relative camera pose from a to b
         cam_a2b = get_homogeneous_transform_from_vectors(t_vector=(np.random.uniform(-1, 1),
@@ -39,7 +41,17 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
         bearings_b = sph.sphere_normalization(pcl_b)
 
         cam_a2b_8p = g8p.recover_pose_from_matches(x1=bearings_a.copy(), x2=bearings_b.copy())
-        cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=bearings_a.copy(), x2=bearings_b.copy())
+        # # ! prior motion
+        prior_motion = cam_a2b_8p[0:3, 3]
+        rot = get_rot_from_directional_vectors(prior_motion, (0, 0, 1))
+        bearings_a_rot = rot.dot(bearings_a)
+        bearings_b_rot = rot.dot(bearings_b)
+        #
+        cam_a2b_n8p_rot = g8p_norm.recover_pose_from_matches(x1=bearings_a_rot.copy(),
+                                                             x2=bearings_b_rot.copy())
+
+        cam_a2b_n8p = extend_SO3_to_homogenous(rot.T).dot(cam_a2b_n8p_rot).dot(extend_SO3_to_homogenous(rot))
+        # cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=x1.copy(), x2=x2.copy())
 
         if cam_a2b_8p is None:
             print("8p failed")
@@ -72,14 +84,17 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
                                       len(error_8p)))
         print("=====================================================================")
 
+        line = [error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0], error_n8p[-1][1]]
+        error_report.write(line)
+
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/Matterport_360_odometry"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", path=path)
 
-    eval_methods(res=(90, 90),
+    eval_methods(res=(360, 180),
                  noise=500,
                  loc=(0, 0),
                  pts=200,
                  data_scene=data,
-                 idx_frame=0)
+                 idx_frame=50)

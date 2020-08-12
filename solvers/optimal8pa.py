@@ -44,7 +44,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
                 return np.inf
             return C / (1000 * delta_)
 
-        initial = [1, 1]
+        initial = [1, 1, 1, 1]
         lsq = least_squares(residuals, initial)
         x1_norm, T1 = self.normalizer(x1.copy(), s=lsq.x[0], k=lsq.x[1])
         x2_norm, T2 = self.normalizer(x2.copy(), s=lsq.x[2], k=lsq.x[3])
