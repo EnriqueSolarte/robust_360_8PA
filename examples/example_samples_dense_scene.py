@@ -3,6 +3,7 @@ from solvers.optimal8pa import Optimal8PA as norm_8pa
 from pcl_utilities import *
 from read_datasets.MP3D_VO import MP3D_VO
 from geometry_utilities import *
+from file_utilities import FileReport
 
 
 def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
@@ -19,7 +20,8 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
     np.random.seed(100)
 
     # ! Output file
-
+    error_report = FileReport(filename="../report/sample_scene.scv")
+    error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         # ! relative camera pose from a to b
         cam_a2b = get_homogeneous_transform_from_vectors(t_vector=(np.random.uniform(-1, 1),
@@ -71,6 +73,9 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
         print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
                                       len(error_8p)))
 
+        line = [error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0], error_n8p[-1][1]]
+        error_report.write(line)
+
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/Matterport_360_odometry"
@@ -81,4 +86,4 @@ if __name__ == '__main__':
                  loc=(0, 0),
                  pts=200,
                  data_scene=data,
-                 idx_frame=0)
+                 idx_frame=50)

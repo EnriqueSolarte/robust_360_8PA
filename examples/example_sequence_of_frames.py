@@ -6,18 +6,14 @@ from structures.extractor import ORBExtractor
 from structures.tracker import LKTracker
 from structures.frame import Frame
 from geometry_utilities import *
-
-global error_n8p
-global error_8p
+from file_utilities import FileReport
 
 
 def eval_camera_pose(tracker, cam_gt):
     cam = Sphere(shape=tracker.initial_frame.shape)
     matches = tracker.get_matches()
-    # rot = get_rot_from_directional_vectors((0, 0, 1), (0, 0, 1))
     bearings_kf = cam.pixel2normalized_vector(matches[0])
     bearings_frm = cam.pixel2normalized_vector(matches[1])
-    # cam_gt = extend_SO3_to_homogenous(rot).dot(cam_gt).dot(extend_SO3_to_homogenous(rot.T))
 
     cam_8p = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
                                            x2=bearings_frm.copy())
@@ -66,7 +62,12 @@ def eval_camera_pose(tracker, cam_gt):
     print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
                                   len(error_8p)))
 
+    line = [error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0], error_n8p[-1][1]]
+    error_report.write(line)
 
+
+error_report = FileReport(filename="../report/sequence_frames.scv")
+error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
 if __name__ == '__main__':
     error_n8p = []
     error_8p = []
@@ -77,10 +78,11 @@ if __name__ == '__main__':
     tracker = LKTracker()
     g8p_norm = g8p_norm()
     g8p = g8p()
-    threshold_camera_distance = 0.1
+    threshold_camera_distance = 0.5
     camera_distance = 0
     i = 0
-    for idx in range(i, dt.number_frames, 1):
+
+    for idx in range(dt.number_frames):
         frame_curr = Frame(**dt.get_frame(idx, return_dict=True))
 
         if idx == i:
@@ -101,5 +103,5 @@ if __name__ == '__main__':
         # print("Camera Distance       {}".format(camera_distance))
         # print("Tracked features      {}".format(len(tracker.tracks)))
         # print("KeyFrame/CurrFrame:   {}-{}".format(tracker.initial_frame.idx, frame_curr.idx))
-        cv2.imshow("preview", tracked_img[:, :, ::-1])
-        cv2.waitKey(10)
+        # cv2.imshow("preview", tracked_img[:, :, ::-1])
+        # cv2.waitKey(10)
