@@ -20,7 +20,7 @@ def eval_camera_pose(tracker, cam_gt):
 
     # # ! prior motion
     prior_motion = cam_8p[0:3, 3]
-    rot = get_rot_from_directional_vectors(prior_motion, (1, 0, 1))
+    rot = get_rot_from_directional_vectors(prior_motion, (0, 0, 1))
     bearings_a_rot = rot.dot(bearings_kf)
     bearings_b_rot = rot.dot(bearings_frm)
     #
@@ -37,13 +37,6 @@ def eval_camera_pose(tracker, cam_gt):
     error_n8p.append(evaluate_error_in_transformation(transform_gt=cam_gt,
                                                       transform_est=cam_8p_norm))
 
-    # print("ours:  {}".format(error_n8p[-1]))
-    # print("8PA:   {}".format(error_8p[-1]))
-    # # print("kf:{} - frm:{} - matches:{}".format(tracker.initial_frame.idx,
-    # #                                            tracker.tracked_frame.idx,
-    # #                                            len(tracker.tracks)))
-    # print("=====================================================================")
-    # # cv2.waitKey(0)
     print("=====================================================================")
     # ! Ours' method
     print("Q1-ours:{}- {}".format(np.quantile(error_n8p, 0.25, axis=0),
@@ -66,7 +59,7 @@ def eval_camera_pose(tracker, cam_gt):
     error_report.write(line)
 
 
-error_report = FileReport(filename="../report/sequence_frames.scv")
+error_report = FileReport(filename="../report/v1_sequence_frames.scv")
 error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
 if __name__ == '__main__':
     error_n8p = []

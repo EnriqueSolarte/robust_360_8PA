@@ -20,7 +20,7 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
     np.random.seed(100)
 
     # ! Output file
-    error_report = FileReport(filename="../report/sample_scene.scv")
+    error_report = FileReport(filename="../report/v1_sample_scene.scv")
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         # ! relative camera pose from a to b
@@ -41,7 +41,17 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
         bearings_b = sph.sphere_normalization(pcl_b)
 
         cam_a2b_8p = g8p.recover_pose_from_matches(x1=bearings_a.copy(), x2=bearings_b.copy())
-        cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=bearings_a.copy(), x2=bearings_b.copy())
+        # # ! prior motion
+        prior_motion = cam_a2b_8p[0:3, 3]
+        rot = get_rot_from_directional_vectors(prior_motion, (0, 0, 1))
+        bearings_a_rot = rot.dot(bearings_a)
+        bearings_b_rot = rot.dot(bearings_b)
+        #
+        cam_a2b_n8p_rot = g8p_norm.recover_pose_from_matches(x1=bearings_a_rot.copy(),
+                                                             x2=bearings_b_rot.copy())
+
+        cam_a2b_n8p = extend_SO3_to_homogenous(rot.T).dot(cam_a2b_n8p_rot).dot(extend_SO3_to_homogenous(rot))
+        # cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=x1.copy(), x2=x2.copy())
 
         if cam_a2b_8p is None:
             print("8p failed")
@@ -81,7 +91,7 @@ if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/Matterport_360_odometry"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", path=path)
 
-    eval_methods(res=(90, 90),
+    eval_methods(res=(360, 180),
                  noise=500,
                  loc=(0, 0),
                  pts=200,
