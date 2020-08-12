@@ -20,7 +20,7 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
     np.random.seed(100)
 
     # ! Output file
-    error_report = FileReport(filename="../report/v2_sample_scene.scv")
+    error_report = FileReport(filename="../report/v1_sample_scene.scv")
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         # ! relative camera pose from a to b
