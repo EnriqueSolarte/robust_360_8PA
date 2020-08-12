@@ -92,9 +92,9 @@ if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/Matterport_360_odometry"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", path=path)
 
-    eval_methods(res=(360, 180),
+    eval_methods(res=(90, 90),
                  noise=500,
                  loc=(0, 0),
-                 pts=200,
+                 pts=150,
                  data_scene=data,
                  idx_frame=50)

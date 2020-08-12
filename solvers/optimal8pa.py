@@ -42,7 +42,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             pm = np.degrees(np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
-            return C / (1000 * delta_)
+            return C, 1 / delta_, 1/pm
 
         initial = [1, 1, 1, 1]
         lsq = least_squares(residuals, initial)
