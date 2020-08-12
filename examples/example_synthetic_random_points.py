@@ -16,7 +16,7 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
     g8p_norm = Optimal8PA()
     g8p = EightPointAlgorithmGeneralGeometry()
 
-    error_report = FileReport(filename="../report/v1_random_points.csv")
+    error_report = FileReport(filename="../report/v2_random_points.csv")
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         pcl_a = generate_pcl_by_roi_theta_phi(theta=theta_roi,

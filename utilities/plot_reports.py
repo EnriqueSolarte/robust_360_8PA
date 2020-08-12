@@ -36,6 +36,8 @@ def plot_frame_errors(filename, fig=0):
 
 
 if __name__ == '__main__':
-    plot_histograms_of_errors("../report/v1_random_points.csv", fig=0)
-    plot_histograms_of_errors("../report/v1_sample_scene.scv", fig=1)
-    plot_frame_errors("../report/v1_sequence_frames.scv", fig=2)
+    plot_histograms_of_errors("../report/v1_sample_scene.scv", fig=0)
+    plot_histograms_of_errors("../report/v2_sample_scene.scv", fig=1)
+    # plot_histograms_of_errors("../report/v1_sample_scene.scv", fig=1)
+    # plot_frame_errors("../report/v1_sequence_frames.scv", fig=2)
+    # plot_frame_errors("../report/v2_sequence_frames.scv", fig=3)
