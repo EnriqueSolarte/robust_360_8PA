@@ -11,6 +11,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
     def __init__(self, version='v1'):
         super().__init__()
+        if version == 'v0':
+            self.optimize_parameters = self.optimizer_v0
         if version == 'v1':
             self.optimize_parameters = self.optimizer_v1
         if version == 'v2':
@@ -36,6 +38,11 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     @staticmethod
     def loss(C, delta, pm):
         return C / delta
+
+    def optimizer_v0(self, x1, x2):
+        s = 2
+        k = 10
+        return s, s, k, k
 
     def optimizer_v1(self, x1, x2):
         from analysis.delta_bound import get_delta_bound_by_bearings

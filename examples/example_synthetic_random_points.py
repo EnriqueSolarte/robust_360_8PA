@@ -8,17 +8,19 @@ from file_utilities import FileReport
 def evaluate_synthetic_points(theta_roi, phi_roi,
                               n_pts, min_d, max_d,
                               relative_cam_pose,
-                              noise_parameter):
+                              noise_parameter,
+                              opt_version):
     # ! relative camera pose from a to b
     cam_a2b = relative_cam_pose
     error_n8p = []
     error_8p = []
-    g8p_norm = Optimal8PA()
+    g8p_norm = Optimal8PA(version=opt_version)
     g8p = EightPointAlgorithmGeneralGeometry()
 
-    error_report = FileReport(filename="../report/v2_random_points.csv")
+    error_report = FileReport(filename="../report/{}_random_points.csv".format(opt_version))
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
-    while True:
+
+    for _ in range(100):
         pcl_a = generate_pcl_by_roi_theta_phi(theta=theta_roi,
                                               phi=phi_roi,
                                               n_pts=n_pts,
@@ -94,5 +96,6 @@ if __name__ == '__main__':
                phi_roi=(-90 + delta_phi, 90 + delta_phi),
                n_pts=200, min_d=2, max_d=20,
                relative_cam_pose=cam_pose,
-               noise_parameter=500)
+               noise_parameter=500,
+               opt_version="v2")
     evaluate_synthetic_points(**cfg)
