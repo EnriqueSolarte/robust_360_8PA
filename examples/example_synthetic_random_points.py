@@ -82,17 +82,19 @@ def evaluate_synthetic_points(theta_roi, phi_roi,
 
 if __name__ == '__main__':
     # ! relative camera pose from a to b
-    cam_pose = get_homogeneous_transform_from_vectors(t_vector=(np.random.uniform(-1, 1),
-                                                                np.random.uniform(-1, 1),
-                                                                np.random.uniform(-1, 1)),
-                                                      r_vector=(np.random.uniform(-10, 10),
-                                                                np.random.uniform(-10, 10),
-                                                                np.random.uniform(-10, 10)))
+    # cam_pose = get_homogeneous_transform_from_vectors(t_vector=(np.random.uniform(-1, 1),
+    #                                                             np.random.uniform(-1, 1),
+    #                                                             np.random.uniform(-1, 1)),
+    #                                                   r_vector=(np.random.uniform(-10, 10),
+    #                                                             np.random.uniform(-10, 10),
+    #                                                             np.random.uniform(-10, 10)))
+    cam_pose = get_homogeneous_transform_from_vectors(t_vector=(1, 1, 1),
+                                                      r_vector=(45, 45, 45))
     delta_theta = -0
     delta_phi = -0
     cfg = dict(theta_roi=(-180 + delta_theta, 180 + delta_theta),
                phi_roi=(-90 + delta_phi, 90 + delta_phi),
-               n_pts=200, min_d=2, max_d=20,
+               n_pts=200, min_d=10, max_d=50,
                relative_cam_pose=cam_pose,
                noise_parameter=500)
     evaluate_synthetic_points(**cfg)
