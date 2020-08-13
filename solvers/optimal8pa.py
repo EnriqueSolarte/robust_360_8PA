@@ -9,8 +9,12 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     for perspective and spherical projection models
     """
 
-    def __init__(self):
+    def __init__(self, version='v1'):
         super().__init__()
+        if version == 'v1':
+            self.optimize_parameters = self.optimizer_v1
+        if version == 'v2':
+            self.optimize_parameters = self.optimizer_v2
 
     @staticmethod
     def normalizer(x, s, k):
@@ -29,10 +33,12 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         x_norm = np.dot(t, x)
         return x_norm, t
 
-    def lsq_normalizer(self, x1, x2):
+    @staticmethod
+    def loss(C, delta, pm):
+        return C / delta
+
+    def optimizer_v1(self, x1, x2):
         from analysis.delta_bound import get_delta_bound_by_bearings
-        assert x1.shape == x2.shape
-        assert x1.shape[0] == 3
 
         def residuals(x):
             x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])
@@ -42,17 +48,48 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             pm = np.degrees(np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
-            return C, 1 / delta_, 1/pm
+            return self.loss(C, delta_, pm)
 
         initial = [1, 1]
         lsq = least_squares(residuals, initial)
-        x1_norm, T1 = self.normalizer(x1.copy(), s=lsq.x[0], k=lsq.x[1])
-        x2_norm, T2 = self.normalizer(x2.copy(), s=lsq.x[0], k=lsq.x[1])
+        s = lsq.x[0]
+        k = lsq.x[1]
+        return s, s, k, k
+
+    def optimizer_v2(self, x1, x2):
+        from analysis.delta_bound import get_delta_bound_by_bearings
+
+        def residuals(x):
+            x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])
+            x2_norm_, _ = self.normalizer(x2.copy(), s=x[2], k=x[3])
+
+            delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
+            pm = np.degrees(np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
+            if delta_ == np.nan:
+                return np.inf
+            return self.loss(C, delta_, pm)
+
+        initial = [1, 1, 1, 1]
+        lsq = least_squares(residuals, initial)
+        s1, k1 = lsq.x[0], lsq.x[1]
+        s2, k2 = lsq.x[2], lsq.x[3]
+        return s1, s2, k1, k2
+
+    def lsq_normalizer(self, x1, x2):
+        assert x1.shape == x2.shape
+        assert x1.shape[0] == 3
+        from analysis.delta_bound import get_delta_bound_by_bearings
+
+        s1, s2, k1, k2 = self.optimize_parameters(x1, x2)
+
+        x1_norm, T1 = self.normalizer(x1.copy(), s=s1, k=k1)
+        x2_norm, T2 = self.normalizer(x2.copy(), s=s2, k=k2)
         delta_norm, C_norm2 = get_delta_bound_by_bearings(x1_norm, x2_norm)
         delta, C2 = get_delta_bound_by_bearings(x1, x2)
         pm_norm = np.nanmean(angle_between_vectors_arrays(x1_norm, x2_norm))
         pm = np.nanmean(angle_between_vectors_arrays(x1, x2))
-        print("S1   :{0:0.3f} - K1        :{1:0.3f}".format(lsq.x[0], lsq.x[1]))
+        print("S1   :{0:0.3f} - K1        :{1:0.3f}".format(s1, k1))
+        print("S2   :{0:0.3f} - K2        :{1:0.3f}".format(s2, k2))
         print("delta:{0:0.3f} - delta_norm:{1:0.3f}".format(delta, delta_norm))
         print("C2   :{0:0.3f} - C_norm2   :{1:0.5f}".format(C2, C_norm2))
         print("pm   :{0:0.3f} - pm_norm   :{1:0.5f}".format(pm, pm_norm))

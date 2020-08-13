@@ -60,18 +60,19 @@ def eval_camera_pose(tracker, cam_gt):
     error_report.write(line)
 
 
-error_report = FileReport(filename="../report/v2_sequence_frames.scv")
+op_version = "v2"
+error_report = FileReport(filename="../report/{}_sequence_frames.scv".format(op_version))
 error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
 if __name__ == '__main__':
     error_n8p = []
     error_8p = []
     scene = "1LXtFkjw3qL/1"
-    # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
-    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
+    path = "/home/kike/Documents/datasets/Matterport_360_odometry"
+    # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     dt = MP3D_VO(scene=scene, path=path)
     orb = ORBExtractor()
     tracker = LKTracker()
-    g8p_norm = g8p_norm()
+    g8p_norm = g8p_norm(version=op_version)
     g8p = g8p()
     threshold_camera_distance = 0.5
     camera_distance = 0

@@ -6,12 +6,12 @@ from geometry_utilities import *
 from file_utilities import FileReport
 
 
-def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
+def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
     # ! relative camera pose from a to b
     error_n8p = []
     error_8p = []
 
-    g8p_norm = norm_8pa()
+    g8p_norm = norm_8pa(version=opt_version)
     g8p = EightPointAlgorithmGeneralGeometry()
 
     # ! Getting a PCL from the dataset
@@ -20,7 +20,7 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
     np.random.seed(100)
 
     # ! Output file
-    error_report = FileReport(filename="../report/v1_sample_scene.scv")
+    error_report = FileReport(filename="../report/{}_sample_scene.scv".format(opt_version))
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         # ! relative camera pose from a to b
@@ -89,8 +89,8 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame):
 
 
 if __name__ == '__main__':
-    # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
-    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
+    path = "/home/kike/Documents/datasets/Matterport_360_odometry"
+    # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", path=path)
 
     eval_methods(res=(90, 90),
@@ -98,4 +98,5 @@ if __name__ == '__main__':
                  loc=(0, 0),
                  pts=150,
                  data_scene=data,
-                 idx_frame=50)
+                 idx_frame=50,
+                 opt_version="v2")
