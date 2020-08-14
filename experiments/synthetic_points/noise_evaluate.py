@@ -4,6 +4,7 @@ from pcl_utilities import *
 from read_datasets.MP3D_VO import MP3D_VO
 from geometry_utilities import *
 from file_utilities import FileReport, create_dir, create_file
+from config import *
 
 
 def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version,
@@ -21,14 +22,16 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version,
     np.random.seed(100)
 
     # ! Output file
-    # filename = "../../report/{}_{}_{}x{}_sample_scene.csv".format(opt_version, scene, str(res[0]), str(res[1]))
-    error_report = FileReport(
-        filename="../../report/{}/{}/{}/{}/{}_{}x{}.csv".format(
-            scene, str(idx_frame), "mc" if motion_constraint else "~mc", noise,
-            opt_version, str(res[0]), str(res[1])))
+    filename = "../../report/{}/{}/{}/{}/{}x{}/{}/{}_{}_{}_{}_{}_{}x{}_{}_{}.csv".format(
+        scene, str(idx_frame), "mc" if motion_constraint else "!mc", noise,
+        str(res[0]), str(res[1]), pts, scene[:-2], scene[-1:], str(idx_frame),
+        "mc" if motion_constraint else "!mc", noise, str(res[0]), str(res[1]),
+        pts, opt_version)
+
+    error_report = FileReport(filename=filename)
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
 
-    for _ in range(500):
+    for _ in range(100):
         # ! relative camera pose from a to b
         cam_a2b = get_homogeneous_transform_from_vectors(
             t_vector=(np.random.uniform(-1, 1), np.random.uniform(-1, 1),
@@ -117,32 +120,37 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version,
 
 
 if __name__ == '__main__':
-    # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
-    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    scene = "1LXtFkjw3qL"
-    data = MP3D_VO(scene=scene + "/0", path=path)
-    idx_frame = 0
-    motion_constraint = False
+    data = MP3D_VO(scene=scene, path=path)
 
-    ress = [(54.4, 37.8), (65.5, 46.4), (195, 195), (360, 180)]
-    # ress = [(3.44, 5.15), (16.1, 23.9), (27.0, 39.6), (54.4, 37.8), (65.5, 46.4), (81.2, 102.7), (195, 195), (360, 180)]
-    noises = [500, 1000, 2000, 10000]
-
-    create_dir("../../report/{}/{}/{}".format(
-        scene, str(idx_frame), "mc" if motion_constraint else "~mc"),
-               delete_previous=False)
-
-    for noise in noises:
-        create_dir("../../report/{}/{}/{}/{}".format(
-            scene, str(idx_frame), "mc" if motion_constraint else "~mc",
-            noise),
-                   delete_previous=False)
-        eval_methods(res=ress[1],
-                     noise=noise,
-                     loc=(0, 0),
-                     pts=150,
-                     data_scene=data,
-                     idx_frame=idx_frame,
-                     opt_version="v2",
-                     scene=scene,
-                     motion_constraint=motion_constraint)
+    if experiment_group == "noise":
+        res = ress[1]
+        for noise in noises:
+            create_dir("../../report/{}/{}/{}/{}/{}x{}/{}".format(
+                scene, str(idx_frame), "mc" if motion_constraint else "!mc",
+                noise, str(res[0]), str(res[1]), pts),
+                       delete_previous=False)
+            eval_methods(res=res,
+                         noise=noise,
+                         loc=(0, 0),
+                         pts=pts,
+                         data_scene=data,
+                         idx_frame=idx_frame,
+                         opt_version=opt_version,
+                         scene=scene,
+                         motion_constraint=motion_constraint)
+    elif experiment_group == "fov":
+        noise = noises[0]
+        for res in ress:
+            create_dir("../../report/{}/{}/{}/{}/{}x{}/{}".format(
+                scene, str(idx_frame), "mc" if motion_constraint else "!mc",
+                noise, str(res[0]), str(res[1]), pts),
+                       delete_previous=False)
+            eval_methods(res=res,
+                         noise=noise,
+                         loc=(0, 0),
+                         pts=pts,
+                         data_scene=data,
+                         idx_frame=idx_frame,
+                         opt_version=opt_version,
+                         scene=scene,
+                         motion_constraint=motion_constraint)
