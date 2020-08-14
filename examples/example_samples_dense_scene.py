@@ -20,37 +20,40 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
     np.random.seed(100)
 
     # ! Output file
-    error_report = FileReport(filename="../report/{}_sample_scene.csv".format(opt_version))
+    error_report = FileReport(
+        filename="../report/{}_sample_scene.csv".format(opt_version))
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         # ! relative camera pose from a to b
-        cam_a2b = get_homogeneous_transform_from_vectors(t_vector=(np.random.uniform(-1, 1),
-                                                                   np.random.uniform(-1, 1),
-                                                                   np.random.uniform(-1, 1)),
-                                                         r_vector=(np.random.uniform(-10, 10),
-                                                                   np.random.uniform(-10, 10),
-                                                                   np.random.uniform(-10, 10)))
+        cam_a2b = get_homogeneous_transform_from_vectors(
+            t_vector=(np.random.uniform(-1, 1), np.random.uniform(-1, 1),
+                      np.random.uniform(-1, 1)),
+            r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
+                      np.random.uniform(-10, 10)))
 
         samples = np.random.randint(0, pcl_dense.shape[1], pts)
         pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
         # ! pcl at "b" location + noise
-        pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a), param=noise)
+        pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
+                                 param=noise)
         # ! We expect that there are 1% outliers besides of the noise
         pcl_b = add_outliers_to_pcl(pcl_b.copy(), outliers=int(0.05 * pts))
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_a2b_8p = g8p.recover_pose_from_matches(x1=bearings_a.copy(), x2=bearings_b.copy())
+        cam_a2b_8p = g8p.recover_pose_from_matches(x1=bearings_a.copy(),
+                                                   x2=bearings_b.copy())
         # # ! prior motion
         prior_motion = cam_a2b_8p[0:3, 3]
         rot = get_rot_from_directional_vectors(prior_motion, (0, 0, 1))
         bearings_a_rot = rot.dot(bearings_a)
         bearings_b_rot = rot.dot(bearings_b)
         #
-        cam_a2b_n8p_rot = g8p_norm.recover_pose_from_matches(x1=bearings_a_rot.copy(),
-                                                             x2=bearings_b_rot.copy())
+        cam_a2b_n8p_rot = g8p_norm.recover_pose_from_matches(
+            x1=bearings_a_rot.copy(), x2=bearings_b_rot.copy())
 
-        cam_a2b_n8p = extend_SO3_to_homogenous(rot.T).dot(cam_a2b_n8p_rot).dot(extend_SO3_to_homogenous(rot))
+        cam_a2b_n8p = extend_SO3_to_homogenous(rot.T).dot(cam_a2b_n8p_rot).dot(
+            extend_SO3_to_homogenous(rot))
         # cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=x1.copy(), x2=x2.copy())
 
         if cam_a2b_8p is None:
@@ -60,12 +63,16 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
             print("n8p failed")
             continue
 
-        error_n8p.append(evaluate_error_in_transformation(transform_gt=cam_a2b,
-                                                          transform_est=cam_a2b_n8p))
-        error_8p.append(evaluate_error_in_transformation(transform_gt=cam_a2b,
-                                                         transform_est=cam_a2b_8p))
+        error_n8p.append(
+            evaluate_error_in_transformation(transform_gt=cam_a2b,
+                                             transform_est=cam_a2b_n8p))
+        error_8p.append(
+            evaluate_error_in_transformation(transform_gt=cam_a2b,
+                                             transform_est=cam_a2b_8p))
 
-        print("=====================================================================")
+        print(
+            "====================================================================="
+        )
         # ! Ours' method
         print("Q1-ours:{}- {}".format(np.quantile(error_n8p, 0.25, axis=0),
                                       len(error_n8p)))
@@ -74,7 +81,9 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
         print("Q3-ours:{}- {}".format(np.quantile(error_n8p, 0.75, axis=0),
                                       len(error_n8p)))
 
-        print("=====================================================================")
+        print(
+            "====================================================================="
+        )
         # ! 8PA
         print("Q1-8PA:{}-  {}".format(np.quantile(error_8p, 0.25, axis=0),
                                       len(error_8p)))
@@ -82,9 +91,14 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
                                       len(error_8p)))
         print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
                                       len(error_8p)))
-        print("=====================================================================")
+        print(
+            "====================================================================="
+        )
 
-        line = [error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0], error_n8p[-1][1]]
+        line = [
+            error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0],
+            error_n8p[-1][1]
+        ]
         error_report.write(line)
 
 

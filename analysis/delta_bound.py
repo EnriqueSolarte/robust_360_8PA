@@ -17,10 +17,10 @@ def get_delta_bound_by_bearings(x1, x2):
     assert x1.shape[0] == 3
 
     n = x1.shape[1]
-    c_fro_norm = get_frobenius_norm(x1, x2) ** 2
+    c_fro_norm = get_frobenius_norm(x1, x2)**2
     # return c_fro_norm
     # print(c_fro_norm)
-    sqr_a = (8 * c_fro_norm - n ** 2) / 7
+    sqr_a = (8 * c_fro_norm - n**2) / 7
 
     sqr_b = (n / 8) - (1 / 8) * np.sqrt(sqr_a)
     delta = np.sqrt(sqr_b)
@@ -39,9 +39,10 @@ def get_delta_bound(observed_matrix):
 
     n = observed_matrix.shape[0]
     # ! c_fro_norm has  to be small
-    c_fro_norm = np.linalg.norm(observed_matrix.T.dot(observed_matrix), ord="fro") ** 2
+    c_fro_norm = np.linalg.norm(observed_matrix.T.dot(observed_matrix),
+                                ord="fro")**2
     # print(c_fro_norm)
-    sqr_a = (8 * c_fro_norm - n ** 2) / 7
+    sqr_a = (8 * c_fro_norm - n**2) / 7
     sqr_b = (n / 8) - (1 / 8) * np.sqrt(sqr_a)
     delta_bound = np.sqrt(sqr_b)
     return delta_bound
