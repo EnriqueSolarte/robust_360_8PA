@@ -11,12 +11,12 @@ def plot_histograms_of_errors():
         for noise in reversed(noises):
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                    format(scene, str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
-                           scene[-1:], str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, opt_version))
+                format(scene, str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
+                       scene[-1:], str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, opt_version))
 
             headers = dt.columns.values
             data = dt.values
@@ -54,12 +54,12 @@ def plot_histograms_of_errors():
         for res in ress:
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                    format(scene, str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
-                           scene[-1:], str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, opt_version))
+                format(scene, str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
+                       scene[-1:], str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, opt_version))
 
             headers = dt.columns.values
             data = dt.values
@@ -103,12 +103,12 @@ def plot_median_errors():
         for noise in reversed(noises):
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                    format(scene, str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
-                           scene[-1:], str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, opt_version))
+                format(scene, str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
+                       scene[-1:], str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, opt_version))
             data = dt.values
             # ! Ours' method
             _ours.append(np.median(data[:, 2:4], axis=0))
@@ -120,12 +120,12 @@ def plot_median_errors():
         for res in ress:
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                    format(scene, str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
-                           scene[-1:], str(idx_frame),
-                           "mc" if motion_constraint else "!mc", noise,
-                           str(res[0]) + 'x' + str(res[1]), pts, opt_version))
+                format(scene, str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, scene[:-2],
+                       scene[-1:], str(idx_frame),
+                       "mc" if motion_constraint else "!mc", noise,
+                       str(res[0]) + 'x' + str(res[1]), pts, opt_version))
             data = dt.values
             # ! Ours' method
             _ours.append(np.median(data[:, 2:4], axis=0))
