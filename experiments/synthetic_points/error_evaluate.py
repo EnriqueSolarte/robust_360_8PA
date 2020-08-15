@@ -7,7 +7,7 @@ from file_utilities import FileReport, create_dir, create_file
 from config import *
 
 
-def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version,
+def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
                  scene, motion_constraint):
     # ! relative camera pose from a to b
     error_n8p = []
@@ -22,11 +22,11 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version,
     np.random.seed(100)
 
     # ! Output file
-    filename = "../../report/{}/{}/{}/{}/{}x{}/{}/{}_{}_{}_{}_{}_{}x{}_{}_{}.csv".format(
+    filename = "../../report/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
         scene, str(idx_frame), "mc" if motion_constraint else "!mc", noise,
-        str(res[0]), str(res[1]), pts, scene[:-2], scene[-1:], str(idx_frame),
-        "mc" if motion_constraint else "!mc", noise, str(res[0]), str(res[1]),
-        pts, opt_version)
+        str(res[0]) + "x" + str(res[1]), point, scene[:-2], scene[-1:],
+        str(idx_frame), "mc" if motion_constraint else "!mc", noise,
+        str(res[0]) + "x" + str(res[1]), point, opt_version)
 
     error_report = FileReport(filename=filename)
     error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
@@ -42,13 +42,13 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version,
         # cam_a2b = get_homogeneous_transform_from_vectors(t_vector=(0, 1, 0),
         #                                                  r_vector=(0, 0, 0))
 
-        samples = np.random.randint(0, pcl_dense.shape[1], pts)
+        samples = np.random.randint(0, pcl_dense.shape[1], point)
         pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
         # ! pcl at "b" location + noise
         pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
                                  param=noise)
         # ! We expect that there are 1% outliers besides of the noise
-        # pcl_b = add_outliers_to_pcl(pcl_b.copy(), outliers=int(0.05 * pts))
+        # pcl_b = add_outliers_to_pcl(pcl_b.copy(), outliers=int(0.05 * point))
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
@@ -123,32 +123,48 @@ if __name__ == '__main__':
     data = MP3D_VO(scene=scene, path=path)
 
     if experiment_group == "noise":
-        res = ress[1]
         for noise in noises:
-            create_dir("../../report/{}/{}/{}/{}/{}x{}/{}".format(
+            create_dir("../../report/{}/{}/{}/{}/{}/{}".format(
                 scene, str(idx_frame), "mc" if motion_constraint else "!mc",
-                noise, str(res[0]), str(res[1]), pts),
+                noise,
+                str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
             eval_methods(res=res,
                          noise=noise,
                          loc=(0, 0),
-                         pts=pts,
+                         point=point,
                          data_scene=data,
                          idx_frame=idx_frame,
                          opt_version=opt_version,
                          scene=scene,
                          motion_constraint=motion_constraint)
     elif experiment_group == "fov":
-        noise = noises[0]
         for res in ress:
-            create_dir("../../report/{}/{}/{}/{}/{}x{}/{}".format(
+            create_dir("../../report/{}/{}/{}/{}/{}/{}".format(
                 scene, str(idx_frame), "mc" if motion_constraint else "!mc",
-                noise, str(res[0]), str(res[1]), pts),
+                noise,
+                str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
             eval_methods(res=res,
                          noise=noise,
                          loc=(0, 0),
-                         pts=pts,
+                         point=point,
+                         data_scene=data,
+                         idx_frame=idx_frame,
+                         opt_version=opt_version,
+                         scene=scene,
+                         motion_constraint=motion_constraint)
+    elif experiment_group == "point":
+        for point in points:
+            create_dir("../../report/{}/{}/{}/{}/{}/{}".format(
+                scene, str(idx_frame), "mc" if motion_constraint else "!mc",
+                noise,
+                str(res[0]) + "x" + str(res[1]), point),
+                       delete_previous=False)
+            eval_methods(res=res,
+                         noise=noise,
+                         loc=(0, 0),
+                         point=point,
                          data_scene=data,
                          idx_frame=idx_frame,
                          opt_version=opt_version,
