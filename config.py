@@ -1,7 +1,7 @@
 # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
-path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-scene = "1LXtFkjw3qL" + "/0"
-idx_frame = 0
+path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/3dv2020"
+scene = "1LXtFkjw3qL" + "/1"
+idx_frame = 730
 
 opt_version = "v2"
 motion_constraint = True if opt_version == "v0" else False

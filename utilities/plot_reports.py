@@ -202,24 +202,25 @@ def plot_median_errors(noise, res, point):
     # plt.legend(loc='upper left')
 
     if experiment_group == "noise":
-        # x = [i for i in range(len(noises))]
+        x = [i for i in range(len(noises))]
         # labels = reversed(degs)
+        labels = reversed(noises)
 
-        x = list(range(0, len(noises) + 1, int(len(noises) / 4)))
-        labels = list(range(0, noises[-1] + 1, int(noises[-1] / 4)))
-        labels = reversed(labels)
+        # x = list(range(0, len(noises) + 1, int(len(noises) / 4)))
+        # labels = list(range(0, noises[-1] + 1, int(noises[-1] / 4)))
+        # labels = reversed(labels)
     elif experiment_group == "fov":
-        # x = [i for i in range(len(ress))]
-        # labels = ress
+        x = [i for i in range(len(ress))]
+        labels = ress
 
-        x = list(range(0, len(ress) + 1, int(len(ress) / 4)))
-        labels = list(range(0, ress[-1] + 1, int(ress[-1] / 4)))
+        # x = list(range(0, len(ress) + 1, int(len(ress) / 4)))
+        # labels = list(range(0, ress[-1] + 1, int(ress[-1] / 4)))
     elif experiment_group == "point":
-        # x = [i for i in range(len(points))]
-        # labels = points
+        x = [i for i in range(len(points))]
+        labels = points
 
-        x = list(range(0, len(points) + 1, int(len(points) / 4)))
-        labels = list(range(0, points[-1] + 1, int(points[-1] / 4)))
+        # x = list(range(0, len(points) + 1, int(len(points) / 4)))
+        # labels = list(range(0, points[-1] + 1, int(points[-1] / 4)))
 
     plt.xticks(x, labels, rotation='horizontal')
     plt.xlabel(experiment_group[0].upper() + experiment_group[1:])
