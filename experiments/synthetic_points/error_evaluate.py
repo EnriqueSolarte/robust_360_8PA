@@ -22,8 +22,9 @@ def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
     np.random.seed(100)
 
     # ! Output file
-    filename = "../../report/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-        scene, str(idx_frame), "mc" if motion_constraint else "!mc", noise,
+    filename = "../../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
+        dataset, scene, str(idx_frame), "mc" if motion_constraint else "!mc",
+        noise,
         str(res[0]) + "x" + str(res[1]), point, scene[:-2], scene[-1:],
         str(idx_frame), "mc" if motion_constraint else "!mc", noise,
         str(res[0]) + "x" + str(res[1]), point, opt_version)
@@ -120,13 +121,14 @@ def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
 
 
 if __name__ == '__main__':
-    data = MP3D_VO(scene=scene, path=path)
+    if dataset == "minos":
+        data = MP3D_VO(scene=scene, path=path)
 
     if experiment_group == "noise":
         for noise in noises:
-            create_dir("../../report/{}/{}/{}/{}/{}/{}".format(
-                scene, str(idx_frame), "mc" if motion_constraint else "!mc",
-                noise,
+            create_dir("../../report/{}/{}/{}/{}/{}/{}/{}".format(
+                dataset, scene, str(idx_frame),
+                "mc" if motion_constraint else "!mc", noise,
                 str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
             eval_methods(res=res,
@@ -140,9 +142,9 @@ if __name__ == '__main__':
                          motion_constraint=motion_constraint)
     elif experiment_group == "fov":
         for res in ress:
-            create_dir("../../report/{}/{}/{}/{}/{}/{}".format(
-                scene, str(idx_frame), "mc" if motion_constraint else "!mc",
-                noise,
+            create_dir("../../report/{}/{}/{}/{}/{}/{}/{}".format(
+                dataset, scene, str(idx_frame),
+                "mc" if motion_constraint else "!mc", noise,
                 str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
             eval_methods(res=res,
@@ -156,9 +158,9 @@ if __name__ == '__main__':
                          motion_constraint=motion_constraint)
     elif experiment_group == "point":
         for point in points:
-            create_dir("../../report/{}/{}/{}/{}/{}/{}".format(
-                scene, str(idx_frame), "mc" if motion_constraint else "!mc",
-                noise,
+            create_dir("../../report/{}/{}/{}/{}/{}/{}/{}".format(
+                dataset, scene, str(idx_frame),
+                "mc" if motion_constraint else "!mc", noise,
                 str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
             eval_methods(res=res,
