@@ -3,12 +3,14 @@ from geometry_utilities import *
 from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8p
 
 
-def get_frobenius_norm(x1, x2):
+def get_frobenius_norm(x1, x2, return_A=False):
     assert x1.shape == x2.shape
     assert x1.shape[0] == 3
 
     A = g8p.building_matrix_A(x1=x1, x2=x2)
     c_fro_norm = np.linalg.norm(A.T.dot(A), ord="fro")
+    if return_A:
+        return c_fro_norm, A
     return c_fro_norm
 
 

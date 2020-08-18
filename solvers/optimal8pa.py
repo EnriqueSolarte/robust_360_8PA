@@ -35,7 +35,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
     @staticmethod
     def loss(C, delta, pm):
-        return C / delta, 1 / pm
+        return C / delta
 
     def optimizer_v1(self, x1, x2):
         from analysis.delta_bound import get_delta_bound_by_bearings

@@ -93,7 +93,7 @@ if __name__ == '__main__':
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", path=path)
 
-    eval_methods(res=(90, 90),
+    eval_methods(res=(54, 54),
                  noise=500,
                  loc=(0, 0),
                  pts=150,

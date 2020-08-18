@@ -99,5 +99,5 @@ if __name__ == '__main__':
         # print("Camera Distance       {}".format(camera_distance))
         # print("Tracked features      {}".format(len(tracker.tracks)))
         # print("KeyFrame/CurrFrame:   {}-{}".format(tracker.initial_frame.idx, frame_curr.idx))
-        cv2.imshow("preview", tracked_img[:, :, ::-1])
-        cv2.waitKey(10)
+        # cv2.imshow("preview", tracked_img[:, :, ::-1])
+        # cv2.waitKey(10)
