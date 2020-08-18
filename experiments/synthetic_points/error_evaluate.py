@@ -18,7 +18,7 @@ def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
 
     # ! Getting a PCL from the dataset
     pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
-    pcl_dense, mask = mask_pcl_by_roi_and_loc(pcl=pcl_dense, loc=loc, res=res)
+    pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense, loc=loc, res=res)
     np.random.seed(100)
 
     # ! Output file

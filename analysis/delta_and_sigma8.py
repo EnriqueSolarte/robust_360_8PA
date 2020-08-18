@@ -11,21 +11,17 @@ def main(**arg):
     data = MP3D_VO(scene=arg["scene"], path=path)
 
     pcl_dense, pcl_dense_color, _ = data.get_dense_pcl(idx=arg["frame"])
-    pcl_dense, mask = mask_pcl_by_roi_and_loc(pcl=pcl_dense,
-                                              res=arg["res"],
-                                              loc=arg["loc"])
+    pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense, res=arg["res"], loc=arg["loc"])
     samples = np.random.randint(0, pcl_dense.shape[1], arg["samples"])
 
-    bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(
-        pcl=pcl_dense[:, samples],
-        t_vector=arg["t_vector"],
-        rot_vector=arg["r_vector"],
-        noise=arg["noise"],
-        outliers=arg["outliers"] * len(samples))
+    bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(pcl=pcl_dense[:, samples],
+                                                            t_vector=arg["t_vector"],
+                                                            rot_vector=arg["r_vector"],
+                                                            noise=arg["noise"],
+                                                            outliers=arg["outliers"] * len(samples))
 
     delta_, C = get_delta_bound_by_bearings(bearings_a, bearings_b)
-    u, sigma, v = np.linalg.svd(
-        g8p_norm.building_matrix_A(bearings_a, bearings_b))
+    u, sigma, v = np.linalg.svd(g8p_norm.building_matrix_A(bearings_a, bearings_b))
 
     print("Sigma_8:{}".format(sigma[-2]))
     print("Delta:{}".format(delta_))
