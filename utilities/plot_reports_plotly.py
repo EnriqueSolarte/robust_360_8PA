@@ -102,7 +102,7 @@ def plot_errors(noise, res, point, save=True):
                                 color="RebeccaPurple"))
     fig.update_traces(mode='lines+markers', line_shape='spline')
     # fig.update_traces(mode='lines', line_shape='spline')
-    # fig.update_layout(showlegend=False)
+    fig.update_layout(showlegend=False)
 
     if experiment_group == "fov":
         fig.update_xaxes(

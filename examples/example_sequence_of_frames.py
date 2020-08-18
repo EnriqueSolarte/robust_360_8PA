@@ -85,7 +85,8 @@ if __name__ == '__main__':
         frame_curr = Frame(**dt.get_frame(idx, return_dict=True))
 
         if idx == i:
-            tracker.set_initial_frame(initial_frame=frame_curr, extractor=feat_extractor)
+            tracker.set_initial_frame(initial_frame=frame_curr,
+                                      extractor=feat_extractor)
             continue
 
         relative_pose = frame_curr.get_relative_pose(
@@ -95,7 +96,8 @@ if __name__ == '__main__':
         if camera_distance > threshold_camera_distance:
             eval_camera_pose(tracker=tracker, cam_gt=relative_pose)
             frame_prev = tracker.tracked_frame
-            tracker.set_initial_frame(initial_frame=frame_prev, extractor=feat_extractor)
+            tracker.set_initial_frame(initial_frame=frame_prev,
+                                      extractor=feat_extractor)
             relative_pose = frame_curr.get_relative_pose(
                 key_frame=tracker.initial_frame)
             camera_distance = np.linalg.norm(relative_pose[0:3, 3])
