@@ -16,6 +16,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             self.optimize_parameters = self.optimizer_v1
         if version == 'v2':
             self.optimize_parameters = self.optimizer_v2
+        if version == 'v2.1':
+            self.optimize_parameters = self.optimizer_v2_1
 
     @staticmethod
     def normalizer(x, s, k):
@@ -73,7 +75,26 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
                 np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
-            return self.loss(C, delta_, pm)
+            return C / delta_
+
+        initial = [1, 1, 1, 1]
+        lsq = least_squares(residuals, initial)
+        s1, k1 = lsq.x[0], lsq.x[1]
+        s2, k2 = lsq.x[2], lsq.x[3]
+        return s1, s2, k1, k2
+
+    def optimizer_v2_1(self, x1, x2):
+        from analysis.delta_bound import get_frobenius_norm
+
+        def residuals(x):
+            x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])
+            x2_norm_, _ = self.normalizer(x2.copy(), s=x[2], k=x[3])
+
+            C, A = get_frobenius_norm(x1_norm_, x2_norm_, return_A=True)
+            _, sigma, _ = np.linalg.svd(A)
+            # pm = np.degrees(
+            #     np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
+            return C / sigma[-2]
 
         initial = [1, 1, 1, 1]
         lsq = least_squares(residuals, initial)

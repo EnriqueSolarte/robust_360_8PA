@@ -67,13 +67,8 @@ def eval_camera_pose(tracker, cam_gt):
     line = [
         error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0], error_n8p[-1][1]
     ]
-    error_report.write(line)
 
 
-op_version = "v2"
-error_report = FileReport(
-    filename="../report/{}_sequence_frames.scv".format(op_version))
-error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
 if __name__ == '__main__':
     error_n8p = []
     error_8p = []
