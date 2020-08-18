@@ -1,2 +1,4 @@
 .idea
 *.pyc
+report
+report_backup

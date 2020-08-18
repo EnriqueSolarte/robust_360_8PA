@@ -8,9 +8,10 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     This Class is the VSLAB implementation of the optimal 8PA
     for perspective and spherical projection models
     """
-
-    def __init__(self, version='v1'):
+    def __init__(self, version='v2'):
         super().__init__()
+        if version == 'v0':
+            self.optimize_parameters = self.optimizer_v0
         if version == 'v1':
             self.optimize_parameters = self.optimizer_v1
         if version == 'v2':
@@ -24,9 +25,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         # t = np.array([[s, 0, -s * x_mean[0]],
         #               [0, s, -s * x_mean[1]],
         #               [0, 0, k ** abs(1 - x_mean[2])]])
-        t = np.array([[s, 0, 0],
-                      [0, s, 0],
-                      [0, 0, k]])
+        t = np.array([[s, 0, 0], [0, s, 0], [0, 0, k]])
         # t = np.array([[s, 0, 0],
         #               [0, s, 0],
         #               [0, 0, k ** abs(1 - x_mean[2])]])
@@ -37,6 +36,11 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     def loss(C, delta, pm):
         return C / delta
 
+    def optimizer_v0(self, x1, x2):
+        s = 2
+        k = 10
+        return s, s, k, k
+
     def optimizer_v1(self, x1, x2):
         from analysis.delta_bound import get_delta_bound_by_bearings
 
@@ -45,7 +49,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             x2_norm_, _ = self.normalizer(x2.copy(), s=x[0], k=x[1])
 
             delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
-            pm = np.degrees(np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
+            pm = np.degrees(
+                np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
             return self.loss(C, delta_, pm)
@@ -64,7 +69,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             x2_norm_, _ = self.normalizer(x2.copy(), s=x[2], k=x[3])
 
             delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
-            pm = np.degrees(np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
+            pm = np.degrees(
+                np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
             return self.loss(C, delta_, pm)
