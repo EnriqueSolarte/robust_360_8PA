@@ -208,7 +208,7 @@ def main(res, noise, loc, pts, data_scene, idx_frame, opt_version, **kwargs):
     np.random.seed(100)
     # ! Getting a PCL from the dataset
     pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
-    pcl_dense, mask = mask_pcl_by_roi_and_loc(pcl=pcl_dense, loc=loc, res=res)
+    pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense, loc=loc, res=res)
     samples = np.random.randint(0, pcl_dense.shape[1], pts)
     bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(pcl=pcl_dense[:, samples],
                                                             t_vector=(np.random.uniform(-0.5, 0.5),
