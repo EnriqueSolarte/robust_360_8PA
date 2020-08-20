@@ -1,15 +1,54 @@
 from solvers.optimal8pa import Optimal8PA as norm_8pa
+from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8pa
 from pcl_utilities import *
 from read_datasets.MP3D_VO import MP3D_VO
 from geometry_utilities import *
+from image_utilities import get_mask_map_by_res_loc
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 import os
+from structures.extractor.orb_extractor import ORBExtractor
+from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
+import cv2
+from analysis.delta_bound import get_frobenius_norm
 
 pio.renderers.default = "browser"
 
-from analysis.delta_bound import get_frobenius_norm
+
+def pcl_creation(**kwargs):
+    data_scene = kwargs["data_scene"]
+    assert kwargs["pcl"] in ("by_sampling", "by_k_features")
+    if kwargs["pcl"] == "by_sampling":
+        pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=kwargs["idx_frame"])
+        pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
+                                            loc=kwargs["loc"],
+                                            res=kwargs["res"])
+
+        samples = np.random.randint(0, pcl.shape[1],
+                                    kwargs["pts"])
+        pcl = pcl[:, samples]
+    else:
+        mask = get_mask_map_by_res_loc(data_scene.shape,
+                                       res=kwargs["res"],
+                                       loc=kwargs["loc"])
+        pcl = data_scene.get_pcl_from_key_features(idx=kwargs["idx_frame"],
+                                                   extractor=kwargs["feat_extractor"],
+                                                   mask=mask)
+        if pcl.shape[1] > kwargs["pts"]:
+            samples = np.random.randint(0, pcl.shape[1], kwargs["pts"])
+            pcl = pcl[:, samples]
+
+    return pcl
+
+
+def get_file_name(**kwargs):
+    scene = os.path.dirname(kwargs["data_scene"].scene)
+    filename = scene + "_fr_" + str(kwargs["idx_frame"])
+    filename += "_fov_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
+    filename += "_" + kwargs["pcl"]
+    filename += "_noise_" + str(kwargs["noise"]) + "." + str(kwargs["outliers"])
+    return filename
 
 
 def msk(eval, quantile):
@@ -20,266 +59,173 @@ def msk(eval, quantile):
     return eval
 
 
-def eval_loss(c, delta, pm, quantile):
-    # cnst = (0.01, 1, 1)
-    # return msk(cnst[0] * c + cnst[1] * (1 / delta) + cnst[2] * (1 / pm))
-    return msk((0.5 * c + 1 / pm + 1 / delta), quantile=quantile)
+def eval_methods(**kwargs):
+    g8p_norm = norm_8pa(version=kwargs["opt_version"])
+    pcl = pcl_creation(**kwargs)
+
+    bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(pcl=pcl,
+                                                            t_vector=kwargs["t_vector"],
+                                                            rot_vector=kwargs["r_vector"],
+                                                            noise=kwargs["noise"],
+                                                            outliers=kwargs["outliers"] * pcl.shape[1])
+    plot_pcl_and_cameras(pcl[0:3, :].T, cam2=cam_a2b)
+
+    e = g8p_norm.build_E_by_cam_pose(cam_a2b)
+    v = np.linspace(start=kwargs["grid"][0], stop=kwargs["grid"][1], num=kwargs["grid"][2])
+    ss, kk = np.meshgrid(v, v)
+
+    kwargs["v_grid"] = v
+    kwargs["vv_grid"] = ss.flatten()
+    kwargs["losses"] = dict()
+    kwargs["losses"]["error_e"] = np.zeros_like(kk.flatten())
+    kwargs["losses"]["error_rot"] = np.zeros_like(kk.flatten())
+    kwargs["losses"]["error_tran"] = np.zeros_like(kk.flatten())
+    kwargs["losses"]["loss_c"] = np.zeros_like(kk.flatten())
+    kwargs["losses"]["loss_delta"] = np.zeros_like(kk.flatten())
+    kwargs["losses"]["loss_pm"] = np.zeros_like(kk.flatten())
+
+    cam_hat_8pa = g8pa().recover_pose_from_matches(x1=bearings_a.copy(),
+                                                   x2=bearings_b.copy())
+    error_cam_8pa = evaluate_error_in_transformation(cam_hat_8pa, cam_a2b)
+
+    for i in range(len(v) * len(v)):
+        S = ss.flatten()[i]
+        K = kk.flatten()[i]
+
+        bearings_a_norm, T1 = g8p_norm.normalizer(bearings_a, S, K)
+        bearings_b_norm, T2 = g8p_norm.normalizer(bearings_b, S, K)
+        e_hat = g8p_norm.compute_essential_matrix(bearings_a_norm, bearings_b_norm)
+        e_hat = np.dot(T1.T, np.dot(e_hat, T2))
+        cam_a2b_hat = g8p_norm.recoverPose(e_hat, bearings_a, bearings_b)
+        error_cam = evaluate_error_in_transformation(cam_a2b_hat, cam_a2b)
+        kwargs["losses"]["error_rot"][i] = error_cam[0]
+        kwargs["losses"]["error_tran"][i] = error_cam[1]
+        # ! Using Spherical bearing only for testing.
+        # ! By using unit-bearings we can evaluate the internal angles as Silveira [CVPR'19]
+        x1 = spherical_normalization(bearings_a_norm)
+        x2 = spherical_normalization(bearings_b_norm)
+        C_2 = get_frobenius_norm(x1, x2)
+
+        C, A = get_frobenius_norm(bearings_a_norm, bearings_b_norm, return_A=True)
+        kwargs["losses"]["loss_c"][i] = C
+        kwargs["losses"]["loss_pm"][i] = np.nanmean(angle_between_vectors_arrays(bearings_a_norm, bearings_b_norm))
+        u, sigma, v = np.linalg.svd(A)
+        kwargs["losses"]["loss_delta"][i] = sigma[-2]
+        kwargs["losses"]["error_e"][i] = evaluate_error_in_essential_matrix(e, e_hat)
+        print(i / ss.size)
+
+    kwargs["losses"]["error_cam"] = eval_cam_error(kwargs["losses"]["error_rot"], kwargs["losses"]["error_tran"])
+    kwargs["losses"]["loss"] = g8p_norm.loss(C=kwargs["losses"]["loss_c"],
+                                             delta=kwargs["losses"]["loss_delta"],
+                                             pm=kwargs["losses"]["loss_pm"])
+
+    optimal_parameters = ((3.68, 0.52), (3.68, 0.52))
+    cam_hat_n8pa = g8p_norm.recover_pose_from_matches(x1=bearings_a.copy(),
+                                                      x2=bearings_b.copy(), param=optimal_parameters)
+    error_cam_n8pa = evaluate_error_in_transformation(cam_hat_n8pa, cam_a2b)
+
+    print("Our camera error:Rot={}    Trans={}".format(error_cam_n8pa[0], error_cam_n8pa[1]))
+    print("8PA camera error:Rot={}    Trans={}".format(error_cam_8pa[0], error_cam_8pa[1]))
+    kwargs["Ours"] = dict()
+    kwargs["Ours"]["error_rot"] = error_cam_n8pa[0]
+    kwargs["Ours"]["error_tran"] = error_cam_n8pa[1]
+    kwargs["Ours"]["S"] = g8p_norm.T1[0, 0]
+    kwargs["Ours"]["K"] = g8p_norm.T1[2, 2]
+
+    plot_contours(**kwargs)
+    plot_surfaces(**kwargs)
 
 
-def contour_plot(s, k, e_error, rot_e, tran_e, loss_c, loss_delta, loss_pm,
-                 **kwargs):
-    loss = eval_loss(
-        c=loss_c,
-        delta=loss_delta,
-        pm=loss_pm,
-        quantile=kwargs["figure_specs"]["QX"])
-    print("done")
+def eval_cam_error(rot_error, tra_error):
+    return 0.5 * (rot_error / np.linalg.norm(rot_error) + tra_error / np.linalg.norm(tra_error))
 
+
+def plot_contours(**kwargs):
+    titles = sorted(list(kwargs["losses"].keys()))
     fig = make_subplots(
-        subplot_titles=("E-error", "Rot-e", "Tran-e", "T-e", "loss C",
-                        "loss delta", "loss Omega", "loss"),
-        rows=2,
-        cols=4,
-        specs=[[{}, {}, {}, {}], [{}, {}, {}, {}]])
+        subplot_titles=titles,
+        rows=2, cols=4,
+        specs=[[{}, {}, {}, {}],
+               [{}, {}, {}, {}]])
 
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=e_error.reshape((len(s), len(s))),
-            colorscale='Viridis',
-            showscale=False),
-        row=1,
-        col=1)
+    idxs = np.linspace(0, 7, 8).reshape(2, -1)
+    kwargs["minimum"] = dict()
+    for i, eval in enumerate(titles):
+        # ! get min values
+        results = kwargs["losses"][eval].reshape((len(kwargs["v_grid"]), len(kwargs["v_grid"])))
+        min_val = np.unravel_index(np.argmin(results, axis=None), results.shape)
+        kwargs["minimum"][eval] = kwargs["v_grid"][min_val[1]], kwargs["v_grid"][min_val[0]]
+        if eval in kwargs["mask_results"]:
+            results = msk(results, kwargs["mask_quantile"])
+        loc = np.squeeze(np.where(idxs == i))
+        fig.add_trace(
+            go.Contour(x=kwargs["v_grid"],
+                       y=kwargs["v_grid"],
+                       z=results,
+                       colorscale='Viridis',
+                       showscale=False),
+            row=loc[0] + 1, col=loc[1] + 1)
 
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=rot_e.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=1,
-        col=2)
+        fig.update_xaxes(title_text="S", row=loc[0] + 1, col=loc[1] + 1)
+        fig.update_yaxes(title_text="K", row=loc[0] + 1, col=loc[1] + 1)
+        # fig.add_trace(
+        #     go.Scatter(x=(1,), y=(1,), mode='markers', marker=dict(size=5, color=0), name="k1-s1"),
+        #     row=loc[0] + 1, col=loc[1] + 1)
+        fig.add_trace(
+            go.Scatter(x=(kwargs["minimum"][eval][0],), y=(kwargs["minimum"][eval][1],), name="min",
+                       mode='markers', marker=dict(size=5, color=2)),
+            row=loc[0] + 1, col=loc[1] + 1)
+        fig.add_trace(
+            go.Scatter(x=(kwargs["Ours"]["S"],), y=(kwargs["Ours"]["K"],), name="Ours",
+                       mode='markers', marker=dict(size=5, color=2)),
+            row=loc[0] + 1, col=loc[1] + 1)
 
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=tran_e.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=1,
-        col=3)
+    fig_file = "contour_{}.html".format(get_file_name(**kwargs))
 
-    t_e = rot_e / np.linalg.norm(rot_e) + tran_e / np.linalg.norm(tran_e)
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=t_e.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=1,
-        col=4)
-
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=loss_c.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=1)
-
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=loss_delta.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=2)
-
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=loss_pm.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=3)
-
-    fig.add_trace(
-        go.Contour(
-            x=s,
-            y=k,
-            z=loss.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=4)
-
-    # Update xaxis properties
-    for row in range(2):
-        for col in range(4):
-            fig.update_xaxes(title_text="S", row=row + 1, col=col + 1)
-            fig.update_yaxes(title_text="K", row=row + 1, col=col + 1)
-            fig.add_trace(
-                go.Scatter(
-                    x=(1, ), y=(1, ), mode='markers', marker=dict(size=5)),
-                row=row + 1,
-                col=col + 1)
-
-    fig_file = "contour_{}.{}_{}_{}_{}_{}.html".format(
-        os.path.dirname(kwargs["scene"]), kwargs["frame"],
-        kwargs["figure_specs"]["min"], kwargs["figure_specs"]["max"],
-        kwargs["figure_specs"]["res"], kwargs["figure_specs"]["QX"])
-    fig.update_layout(title_text=fig_file, height=800, width=1800)
+    fig.update_layout(
+        title_text=fig_file,
+        height=800,
+        width=1800)
     fig.show()
     fig.write_html("plots/{}".format(fig_file))
 
 
-def surface_plot(s, k, e_error, rot_e, tran_e, loss_c, loss_delta, loss_pm,
-                 **kwargs):
-    loss = eval_loss(
-        c=loss_c,
-        delta=loss_delta,
-        pm=loss_pm,
-        quantile=kwargs["figure_specs"]["QX"])
-
-    print("done")
-
+def plot_surfaces(**kwargs):
+    titles = sorted(list(kwargs["losses"].keys()))
     fig = make_subplots(
-        subplot_titles=("E-error", "Rot-e", "Tran-e", "T-e", "loss C",
-                        "loss delta", "loss Omega", "loss"),
-        rows=2,
-        cols=4,
-        specs=[[{
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }], [{
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }]])
+        subplot_titles=titles,
+        rows=2, cols=4,
+        specs=[[{'is_3d': True}, {'is_3d': True}, {'is_3d': True}, {'is_3d': True}],
+               [{'is_3d': True}, {'is_3d': True}, {'is_3d': True}, {'is_3d': True}]])
 
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=e_error.reshape((len(s), len(s))),
-            colorscale='Viridis',
-            showscale=False,
-            name="e_error"),
-        row=1,
-        col=1)
-
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=rot_e.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=1,
-        col=2)
-
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=tran_e.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=1,
-        col=3)
-
-    t_e = rot_e / np.linalg.norm(rot_e) + tran_e / np.linalg.norm(
-        tran_e) + e_error / np.linalg.norm(e_error)
-    # / np.linalg.norm(tran_e))
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=t_e.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=1,
-        col=4)
-
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=loss_c.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=1)
-
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=loss_delta.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=2)
-
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=loss_pm.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=3)
-
-    fig.add_trace(
-        go.Surface(
-            x=s,
-            y=k,
-            z=loss.reshape(len(s), len(s)),
-            colorscale='Viridis',
-            showscale=False),
-        row=2,
-        col=4)
+    idxs = np.linspace(0, 7, 8).reshape(2, -1)
+    for i, eval in enumerate(titles):
+        results = kwargs["losses"][eval]
+        if eval in kwargs["mask_results"]:
+            results = msk(results, kwargs["mask_quantile"])
+        loc = np.squeeze(np.where(idxs == i))
+        fig.add_trace(
+            go.Surface(x=kwargs["v_grid"],
+                       y=kwargs["v_grid"],
+                       z=results.reshape((len(kwargs["v_grid"]), len(kwargs["v_grid"]))),
+                       colorscale='Viridis',
+                       showscale=False),
+            row=loc[0] + 1, col=loc[1] + 1)
 
     def labels(key):
         return dict(
-            xaxis_title='S', yaxis_title='K', zaxis_title='{}'.format(key))
+            xaxis_title='S',
+            yaxis_title='K',
+            zaxis_title='{}'.format(key))
 
-    fig_file = "surface_{}.{}_{}_{}_{}_{}.html".format(
-        os.path.dirname(kwargs["scene"]), kwargs["frame"],
-        kwargs["figure_specs"]["min"], kwargs["figure_specs"]["max"],
-        kwargs["figure_specs"]["res"], kwargs["figure_specs"]["QX"])
+    fig_file = "surface_{}.html".format(get_file_name(**kwargs))
+
     fig.update_layout(
         title_text=fig_file,
-        height=800,
-        width=1800,
-        scene1=labels("E-error"),
-        scene2=labels("Rot-e"),
-        scene3=labels("Tra-e"),
-        scene4=labels("Cam-e"),
-        scene5=labels("C"),
-        scene6=labels("delta"),
-        scene7=labels("omega"),
-        scene8=labels("Loss"),
+        height=800, width=1800,
+        scene1=labels(titles[0]), scene2=labels(titles[1]), scene3=labels(titles[2]),
+        scene4=labels(titles[3]), scene5=labels(titles[4]), scene6=labels(titles[5]),
+        scene7=labels(titles[6]), scene8=labels(titles[7]),
     )
     # fig.update_traces(contours_z=dict(show=True, usecolormap=True,
     #                                   highlightcolor="limegreen", project_z=True))
@@ -287,92 +233,32 @@ def surface_plot(s, k, e_error, rot_e, tran_e, loss_c, loss_delta, loss_pm,
     fig.write_html("plots/{}".format(fig_file))
 
 
-def main(res, noise, loc, pts, data_scene, idx_frame, opt_version, **kwargs):
-    g8p_norm = norm_8pa(version=opt_version)
-    np.random.seed(100)
-    # ! Getting a PCL from the dataset
-    pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
-    pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense, loc=loc, res=res)
-    samples = np.random.randint(0, pcl_dense.shape[1], pts)
-    bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(
-        pcl=pcl_dense[:, samples],
-        t_vector=(np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5),
-                  np.random.uniform(-0.5, 0.5)),
-        rot_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
-                    np.random.uniform(-10, 10)),
-        noise=noise[0],
-        outliers=noise[1] * len(samples))
-
-    plot_pcl_and_cameras(pcl_dense[0:3, samples].T, cam2=cam_a2b)
-
-    e = g8p_norm.build_E_by_cam_pose(cam_a2b)
-    print(cam_a2b)
-    s = np.linspace(kwargs["figure_specs"]["min"],
-                    kwargs["figure_specs"]["max"],
-                    kwargs["figure_specs"]["res"])
-    k = np.linspace(kwargs["figure_specs"]["min"],
-                    kwargs["figure_specs"]["max"],
-                    kwargs["figure_specs"]["res"])
-    ss, kk = np.meshgrid(s, k)
-    e_error = np.zeros_like(kk.flatten())
-    rot_error = np.zeros_like(kk.flatten())
-    tra_error = np.zeros_like(kk.flatten())
-    loss_c = np.zeros_like(kk.flatten())
-    loss_delta = np.zeros_like(kk.flatten())
-    loss_pm = np.zeros_like(kk.flatten())
-    for i in range(ss.size):
-        S = ss.flatten()[i]
-        K = kk.flatten()[i]
-        bearings_a_norm, T1 = g8p_norm.normalizer(bearings_a, S, K)
-        bearings_b_norm, T2 = g8p_norm.normalizer(bearings_b, S, K)
-        e_hat = g8p_norm.compute_essential_matrix(bearings_a_norm,
-                                                  bearings_b_norm)
-        e_hat = np.dot(T1.T, np.dot(e_hat, T2))
-        cam_a2b_hat = g8p_norm.recoverPose(e_hat, bearings_a, bearings_b)
-        cam_error = evaluate_error_in_transformation(cam_a2b_hat, cam_a2b)
-        rot_error[i] = cam_error[0]
-        tra_error[i] = cam_error[1]
-        x1 = spherical_normalization(bearings_a_norm)
-        x2 = spherical_normalization(bearings_b_norm)
-        C_2 = get_frobenius_norm(x1, x2)
-        C, A = get_frobenius_norm(
-            bearings_a_norm, bearings_b_norm, return_A=True)
-        loss_c[i] = C_2
-        loss_pm[i] = np.nanmean(
-            angle_between_vectors_arrays(bearings_a_norm, bearings_b_norm))
-        u, sigma, v = np.linalg.svd(A)
-        loss_delta[i] = sigma[-2]
-        e_error[i] = evaluate_error_in_essential_matrix(e, e_hat)
-        print(i / ss.size)
-
-    captions = dict(
-        figure_specs=kwargs["figure_specs"],
-        frame=idx_frame,
-        scene=data_scene.scene)
-    contour_plot(s, k, msk(e_error, quantile=kwargs["figure_specs"]["QX"]),
-                 rot_error, tra_error,
-                 msk(loss_c, quantile=kwargs["figure_specs"]["QX"]),
-                 loss_delta, loss_pm, **captions)
-
-    surface_plot(s, k, msk(e_error, quantile=kwargs["figure_specs"]["QX"]),
-                 rot_error, tra_error,
-                 msk(loss_c, quantile=kwargs["figure_specs"]["QX"]),
-                 loss_delta, loss_pm, **captions)
-
-
 if __name__ == '__main__':
+    np.random.seed(100)
     path = "/home/kike/Documents/datasets/MP3D_VO"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene="2azQ1b91cZZ/0", path=path)
 
-    res = (66, 46)
-    figure_specs_ = dict(min=0.01, max=10, res=20, QX=0.1)
-    main(
-        res=res,
-        noise=(500, 0.05),
-        loc=(0, 0),
-        pts=200,
-        data_scene=data,
-        idx_frame=150,
-        opt_version="v2",
-        figure_specs=figure_specs_)
+    scene_settings = dict(data_scene=data, idx_frame=150,
+                          pts=200,
+                          # res=(65.5, 46.4),
+                          res=(180, 180),
+                          loc=(0, 0),
+                          pcl="by_k_features",
+                          # pcl="by_sampling",
+                          # feat_extractor=ORBExtractor(),
+                          feat_extractor=Shi_Tomasi_Extractor()
+                          )
+
+    pcl_settings = dict(t_vector=get_random_vector_R3(1, 1, 1),
+                        r_vector=get_random_vector_R3(10, 10, 10),
+                        noise=500, outliers=0.05)
+
+    model_settings = dict(opt_version="v1",
+                          grid=(-10, 10, 20),
+                          mask_results=(None,),
+                          mask_quantile=0.1)
+
+    eval_methods(**scene_settings,
+                 **pcl_settings,
+                 **model_settings)
