@@ -8,8 +8,11 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     This Class is the VSLAB implementation of the optimal 8PA
     for perspective and spherical projection models
     """
+
     def __init__(self, version='v2'):
         super().__init__()
+        self.T1 = np.eye(3)
+        self.T2 = np.eye(3)
         if version == 'v0':
             self.optimize_parameters = self.optimizer_v0
         if version == 'v1':
@@ -34,7 +37,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
     @staticmethod
     def loss(C, delta, pm):
-        return C / delta
+        return (C / delta)
 
     def optimizer_v0(self, x1, x2):
         s = 2
@@ -42,18 +45,16 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         return s, s, k, k
 
     def optimizer_v1(self, x1, x2):
-        from analysis.delta_bound import get_delta_bound_by_bearings
+        from analysis.delta_bound import get_frobenius_norm
 
         def residuals(x):
             x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])
             x2_norm_, _ = self.normalizer(x2.copy(), s=x[0], k=x[1])
 
-            delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
-            pm = np.degrees(
-                np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
-            if delta_ == np.nan:
-                return np.inf
-            return self.loss(C, delta_, pm)
+            C, A = get_frobenius_norm(x1_norm_, x2_norm_, return_A=True)
+            pm = np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_))
+            u, sigma, v = np.linalg.svd(A)
+            return self.loss(C, delta=sigma[-2], pm=pm)
 
         initial = [1, 1]
         lsq = least_squares(residuals, initial)
@@ -91,24 +92,28 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         x1_norm, T1 = self.normalizer(x1.copy(), s=s1, k=k1)
         x2_norm, T2 = self.normalizer(x2.copy(), s=s2, k=k2)
         delta_norm, C_norm2 = get_delta_bound_by_bearings(x1_norm, x2_norm)
-        delta, C2 = get_delta_bound_by_bearings(x1, x2)
-        pm_norm = np.nanmean(angle_between_vectors_arrays(x1_norm, x2_norm))
-        pm = np.nanmean(angle_between_vectors_arrays(x1, x2))
+        # delta, C2 = get_delta_bound_by_bearings(x1, x2)
+        # pm_norm = np.nanmean(angle_between_vectors_arrays(x1_norm, x2_norm))
+        # pm = np.nanmean(angle_between_vectors_arrays(x1, x2))
         print("S1   :{0:0.3f} - K1        :{1:0.3f}".format(s1, k1))
         print("S2   :{0:0.3f} - K2        :{1:0.3f}".format(s2, k2))
-        print("delta:{0:0.3f} - delta_norm:{1:0.3f}".format(delta, delta_norm))
-        print("C2   :{0:0.3f} - C_norm2   :{1:0.5f}".format(C2, C_norm2))
-        print("pm   :{0:0.3f} - pm_norm   :{1:0.5f}".format(pm, pm_norm))
+        # print("delta:{0:0.3f} - delta_norm:{1:0.3f}".format(delta, delta_norm))
+        # print("C2   :{0:0.3f} - C_norm2   :{1:0.5f}".format(C2, C_norm2))
+        # print("pm   :{0:0.3f} - pm_norm   :{1:0.5f}".format(pm, pm_norm))
 
         return x1_norm, x2_norm, T1, T2
 
-    def recover_pose_from_matches(self, x1, x2):
+    def recover_pose_from_matches(self, x1, x2, param=None):
         """
         return the a relative camera pose by using TLS method (Higgins 1981)
         """
-        x1_norm, x2_norm, T1, T2 = self.lsq_normalizer(x1, x2)
+        if param is None:
+            x1_norm, x2_norm, self.T1, self.T2 = self.lsq_normalizer(x1, x2)
+        else:
+            x1_norm, self.T1, = self.normalizer(x1, s=param[0][0], k=param[0][1])
+            x2_norm, self.T2, = self.normalizer(x2, s=param[1][0], k=param[1][1])
 
         e = self.compute_essential_matrix(x1_norm, x2_norm)
-        e = np.dot(T1.T, np.dot(e, T2))
+        e = np.dot(self.T1.T, np.dot(e, self.T2))
 
         return self.recoverPose(e, x1, x2)
