@@ -68,7 +68,8 @@ def eval_camera_pose(tracker, cam_gt):
 if __name__ == '__main__':
     error_n8p = []
     error_8p = []
-    scene = "1LXtFkjw3qL/1"
+    # scene = "1LXtFkjw3qL/1"
+    scene = "2azQ1b91cZZ/0"
     path = "/home/kike/Documents/datasets/MP3D_VO"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     dt = MP3D_VO(scene=scene, path=path)
@@ -105,4 +106,4 @@ if __name__ == '__main__':
         # print("Tracked features      {}".format(len(tracker.tracks)))
         # print("KeyFrame/CurrFrame:   {}-{}".format(tracker.initial_frame.idx, frame_curr.idx))
         cv2.imshow("preview", tracked_img[:, :, ::-1])
-        cv2.waitKey(10)
+        cv2.waitKey(0)

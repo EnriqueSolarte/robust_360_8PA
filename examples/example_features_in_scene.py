@@ -86,9 +86,10 @@ def eval_methods(res, noise, loc, data_scene, idx_frame, opt_version, feat_extra
 
 
 if __name__ == '__main__':
-    scene = "1LXtFkjw3qL/1"
+    # scene = "1LXtFkjw3qL/1"
+    scene = "2azQ1b91cZZ/0"
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    data = MP3D_VO(scene="1LXtFkjw3qL/1", path=path)
+    data = MP3D_VO(scene=scene, path=path)
 
     eval_methods(res=(54, 54),
                  noise=500,
@@ -96,5 +97,5 @@ if __name__ == '__main__':
                  feat_extractor=ORBExtractor(),
                  # feat_extractor = Shi_Tomasi_Extractor(),
                  data_scene=data,
-                 idx_frame=50,
+                 idx_frame=150,
                  opt_version="v2")
