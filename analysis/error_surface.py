@@ -28,95 +28,111 @@ def eval_loss(c, delta, pm, quantile):
 
 def contour_plot(s, k, e_error, rot_e, tran_e, loss_c, loss_delta, loss_pm,
                  **kwargs):
-    loss = eval_loss(c=loss_c,
-                     delta=loss_delta,
-                     pm=loss_pm,
-                     quantile=kwargs["figure_specs"]["QX"])
+    loss = eval_loss(
+        c=loss_c,
+        delta=loss_delta,
+        pm=loss_pm,
+        quantile=kwargs["figure_specs"]["QX"])
     print("done")
 
-    fig = make_subplots(subplot_titles=("E-error", "Rot-e", "Tran-e", "T-e",
-                                        "loss C", "loss delta", "loss Omega",
-                                        "loss"),
-                        rows=2,
-                        cols=4,
-                        specs=[[{}, {}, {}, {}], [{}, {}, {}, {}]])
+    fig = make_subplots(
+        subplot_titles=("E-error", "Rot-e", "Tran-e", "T-e", "loss C",
+                        "loss delta", "loss Omega", "loss"),
+        rows=2,
+        cols=4,
+        specs=[[{}, {}, {}, {}], [{}, {}, {}, {}]])
 
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=e_error.reshape((len(s), len(s))),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=1,
-                  col=1)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=e_error.reshape((len(s), len(s))),
+            colorscale='Viridis',
+            showscale=False),
+        row=1,
+        col=1)
 
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=rot_e.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=1,
-                  col=2)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=rot_e.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=1,
+        col=2)
 
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=tran_e.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=1,
-                  col=3)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=tran_e.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=1,
+        col=3)
 
     t_e = rot_e / np.linalg.norm(rot_e) + tran_e / np.linalg.norm(tran_e)
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=t_e.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=1,
-                  col=4)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=t_e.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=1,
+        col=4)
 
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=loss_c.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=1)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=loss_c.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=1)
 
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=loss_delta.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=2)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=loss_delta.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=2)
 
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=loss_pm.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=3)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=loss_pm.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=3)
 
-    fig.add_trace(go.Contour(x=s,
-                             y=k,
-                             z=loss.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=4)
+    fig.add_trace(
+        go.Contour(
+            x=s,
+            y=k,
+            z=loss.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=4)
 
     # Update xaxis properties
     for row in range(2):
         for col in range(4):
             fig.update_xaxes(title_text="S", row=row + 1, col=col + 1)
             fig.update_yaxes(title_text="K", row=row + 1, col=col + 1)
-            fig.add_trace(go.Scatter(x=(1, ),
-                                     y=(1, ),
-                                     mode='markers',
-                                     marker=dict(size=5)),
-                          row=row + 1,
-                          col=col + 1)
+            fig.add_trace(
+                go.Scatter(
+                    x=(1, ), y=(1, ), mode='markers', marker=dict(size=5)),
+                row=row + 1,
+                col=col + 1)
 
     fig_file = "contour_{}.{}_{}_{}_{}_{}.html".format(
         os.path.dirname(kwargs["scene"]), kwargs["frame"],
@@ -129,109 +145,124 @@ def contour_plot(s, k, e_error, rot_e, tran_e, loss_c, loss_delta, loss_pm,
 
 def surface_plot(s, k, e_error, rot_e, tran_e, loss_c, loss_delta, loss_pm,
                  **kwargs):
-    loss = eval_loss(c=loss_c,
-                     delta=loss_delta,
-                     pm=loss_pm,
-                     quantile=kwargs["figure_specs"]["QX"])
+    loss = eval_loss(
+        c=loss_c,
+        delta=loss_delta,
+        pm=loss_pm,
+        quantile=kwargs["figure_specs"]["QX"])
 
     print("done")
 
-    fig = make_subplots(subplot_titles=("E-error", "Rot-e", "Tran-e", "T-e",
-                                        "loss C", "loss delta", "loss Omega",
-                                        "loss"),
-                        rows=2,
-                        cols=4,
-                        specs=[[{
-                            'is_3d': True
-                        }, {
-                            'is_3d': True
-                        }, {
-                            'is_3d': True
-                        }, {
-                            'is_3d': True
-                        }],
-                               [{
-                                   'is_3d': True
-                               }, {
-                                   'is_3d': True
-                               }, {
-                                   'is_3d': True
-                               }, {
-                                   'is_3d': True
-                               }]])
+    fig = make_subplots(
+        subplot_titles=("E-error", "Rot-e", "Tran-e", "T-e", "loss C",
+                        "loss delta", "loss Omega", "loss"),
+        rows=2,
+        cols=4,
+        specs=[[{
+            'is_3d': True
+        }, {
+            'is_3d': True
+        }, {
+            'is_3d': True
+        }, {
+            'is_3d': True
+        }], [{
+            'is_3d': True
+        }, {
+            'is_3d': True
+        }, {
+            'is_3d': True
+        }, {
+            'is_3d': True
+        }]])
 
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=e_error.reshape((len(s), len(s))),
-                             colorscale='Viridis',
-                             showscale=False,
-                             name="e_error"),
-                  row=1,
-                  col=1)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=e_error.reshape((len(s), len(s))),
+            colorscale='Viridis',
+            showscale=False,
+            name="e_error"),
+        row=1,
+        col=1)
 
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=rot_e.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=1,
-                  col=2)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=rot_e.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=1,
+        col=2)
 
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=tran_e.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=1,
-                  col=3)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=tran_e.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=1,
+        col=3)
 
     t_e = rot_e / np.linalg.norm(rot_e) + tran_e / np.linalg.norm(
         tran_e) + e_error / np.linalg.norm(e_error)
     # / np.linalg.norm(tran_e))
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=t_e.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=1,
-                  col=4)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=t_e.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=1,
+        col=4)
 
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=loss_c.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=1)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=loss_c.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=1)
 
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=loss_delta.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=2)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=loss_delta.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=2)
 
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=loss_pm.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=3)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=loss_pm.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=3)
 
-    fig.add_trace(go.Surface(x=s,
-                             y=k,
-                             z=loss.reshape(len(s), len(s)),
-                             colorscale='Viridis',
-                             showscale=False),
-                  row=2,
-                  col=4)
+    fig.add_trace(
+        go.Surface(
+            x=s,
+            y=k,
+            z=loss.reshape(len(s), len(s)),
+            colorscale='Viridis',
+            showscale=False),
+        row=2,
+        col=4)
 
     def labels(key):
-        return dict(xaxis_title='S',
-                    yaxis_title='K',
-                    zaxis_title='{}'.format(key))
+        return dict(
+            xaxis_title='S', yaxis_title='K', zaxis_title='{}'.format(key))
 
     fig_file = "surface_{}.{}_{}_{}_{}_{}.html".format(
         os.path.dirname(kwargs["scene"]), kwargs["frame"],
@@ -304,9 +335,8 @@ def main(res, noise, loc, pts, data_scene, idx_frame, opt_version, **kwargs):
         x1 = spherical_normalization(bearings_a_norm)
         x2 = spherical_normalization(bearings_b_norm)
         C_2 = get_frobenius_norm(x1, x2)
-        C, A = get_frobenius_norm(bearings_a_norm,
-                                  bearings_b_norm,
-                                  return_A=True)
+        C, A = get_frobenius_norm(
+            bearings_a_norm, bearings_b_norm, return_A=True)
         loss_c[i] = C_2
         loss_pm[i] = np.nanmean(
             angle_between_vectors_arrays(bearings_a_norm, bearings_b_norm))
@@ -315,9 +345,10 @@ def main(res, noise, loc, pts, data_scene, idx_frame, opt_version, **kwargs):
         e_error[i] = evaluate_error_in_essential_matrix(e, e_hat)
         print(i / ss.size)
 
-    captions = dict(figure_specs=kwargs["figure_specs"],
-                    frame=idx_frame,
-                    scene=data_scene.scene)
+    captions = dict(
+        figure_specs=kwargs["figure_specs"],
+        frame=idx_frame,
+        scene=data_scene.scene)
     contour_plot(s, k, msk(e_error, quantile=kwargs["figure_specs"]["QX"]),
                  rot_error, tra_error,
                  msk(loss_c, quantile=kwargs["figure_specs"]["QX"]),
@@ -336,11 +367,12 @@ if __name__ == '__main__':
 
     res = (66, 46)
     figure_specs_ = dict(min=0.01, max=10, res=20, QX=0.1)
-    main(res=res,
-         noise=(500, 0.05),
-         loc=(0, 0),
-         pts=200,
-         data_scene=data,
-         idx_frame=150,
-         opt_version="v2",
-         figure_specs=figure_specs_)
+    main(
+        res=res,
+        noise=(500, 0.05),
+        loc=(0, 0),
+        pts=200,
+        data_scene=data,
+        idx_frame=150,
+        opt_version="v2",
+        figure_specs=figure_specs_)

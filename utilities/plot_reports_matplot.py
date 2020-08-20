@@ -10,11 +10,11 @@ def plot_histograms_of_errors(noise, res, point):
         for noise in reversed(noises):
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                format(dataset, scene, str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
-                       scene[-1:], str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                       scene[-1:], str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, opt_version))
 
             headers = dt.columns.values
@@ -22,42 +22,46 @@ def plot_histograms_of_errors(noise, res, point):
 
             plt.figure()
             plt.subplot(1, 2, 1)
-            plt.hist(data[:, 0],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[0])
-            plt.hist(data[:, 2],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[2])
+            plt.hist(
+                data[:, 0],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[0])
+            plt.hist(
+                data[:, 2],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[2])
             plt.legend()
             plt.subplot(1, 2, 2)
-            plt.hist(data[:, 1],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[1])
-            plt.hist(data[:, 3],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[3])
+            plt.hist(
+                data[:, 1],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[1])
+            plt.hist(
+                data[:, 3],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[3])
             plt.legend()
             plt.suptitle("{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-                dataset, scene[:-2], scene[-1:], str(idx_frame),
-                "mc" if motion_constraint else "!mc", experiment_group,
-                noise if experiment_group != "noise" else "",
-                str(res[0]) + "x" +
-                str(res[1]) if experiment_group != "fov" else "",
-                point if experiment_group != "point" else "", opt_version))
+                dataset, scene[:-2], scene[-1:], str(idx_frame), "mc"
+                if motion_constraint else "!mc", experiment_group, noise
+                if experiment_group != "noise" else "",
+                str(res[0]) + "x" + str(res[1])
+                if experiment_group != "fov" else "", point
+                if experiment_group != "point" else "", opt_version))
             plt.show()
     elif experiment_group == "fov":
         for res in ress:
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                format(dataset, scene, str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
-                       scene[-1:], str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                       scene[-1:], str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, opt_version))
 
             headers = dt.columns.values
@@ -65,42 +69,46 @@ def plot_histograms_of_errors(noise, res, point):
 
             plt.figure()
             plt.subplot(1, 2, 1)
-            plt.hist(data[:, 0],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[0])
-            plt.hist(data[:, 2],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[2])
+            plt.hist(
+                data[:, 0],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[0])
+            plt.hist(
+                data[:, 2],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[2])
             plt.legend()
             plt.subplot(1, 2, 2)
-            plt.hist(data[:, 1],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[1])
-            plt.hist(data[:, 3],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[3])
+            plt.hist(
+                data[:, 1],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[1])
+            plt.hist(
+                data[:, 3],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[3])
             plt.legend()
             plt.suptitle("{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-                dataset, scene[:-2], scene[-1:], str(idx_frame),
-                "mc" if motion_constraint else "!mc", experiment_group,
-                noise if experiment_group != "noise" else "",
-                str(res[0]) + "x" +
-                str(res[1]) if experiment_group != "fov" else "",
-                point if experiment_group != "point" else "", opt_version))
+                dataset, scene[:-2], scene[-1:], str(idx_frame), "mc"
+                if motion_constraint else "!mc", experiment_group, noise
+                if experiment_group != "noise" else "",
+                str(res[0]) + "x" + str(res[1])
+                if experiment_group != "fov" else "", point
+                if experiment_group != "point" else "", opt_version))
             plt.show()
     elif experiment_group == "point":
         for point in points:
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                format(dataset, scene, str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
-                       scene[-1:], str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                       scene[-1:], str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, opt_version))
 
             headers = dt.columns.values
@@ -108,32 +116,36 @@ def plot_histograms_of_errors(noise, res, point):
 
             plt.figure()
             plt.subplot(1, 2, 1)
-            plt.hist(data[:, 0],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[0])
-            plt.hist(data[:, 2],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[2])
+            plt.hist(
+                data[:, 0],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[0])
+            plt.hist(
+                data[:, 2],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[2])
             plt.legend()
             plt.subplot(1, 2, 2)
-            plt.hist(data[:, 1],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[1])
-            plt.hist(data[:, 3],
-                     density=True,
-                     bins=data.shape[0] // 10,
-                     label=headers[3])
+            plt.hist(
+                data[:, 1],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[1])
+            plt.hist(
+                data[:, 3],
+                density=True,
+                bins=data.shape[0] // 10,
+                label=headers[3])
             plt.legend()
             plt.suptitle("{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-                dataset, scene[:-2], scene[-1:], str(idx_frame),
-                "mc" if motion_constraint else "!mc", experiment_group,
-                noise if experiment_group != "noise" else "",
-                str(res[0]) + "x" +
-                str(res[1]) if experiment_group != "fov" else "",
-                point if experiment_group != "point" else "", opt_version))
+                dataset, scene[:-2], scene[-1:], str(idx_frame), "mc"
+                if motion_constraint else "!mc", experiment_group, noise
+                if experiment_group != "noise" else "",
+                str(res[0]) + "x" + str(res[1])
+                if experiment_group != "fov" else "", point
+                if experiment_group != "point" else "", opt_version))
             plt.show()
 
 
@@ -145,11 +157,11 @@ def plot_median_errors(noise, res, point):
         for noise in reversed(noises):
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                format(dataset, scene, str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
-                       scene[-1:], str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                       scene[-1:], str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! Ours' method
@@ -160,11 +172,11 @@ def plot_median_errors(noise, res, point):
         for res in ress:
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                format(dataset, scene, str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
-                       scene[-1:], str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                       scene[-1:], str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! Ours' method
@@ -175,11 +187,11 @@ def plot_median_errors(noise, res, point):
         for point in points:
             dt = pd.read_csv(
                 "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                format(dataset, scene, str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
-                       scene[-1:], str(idx_frame),
-                       "mc" if motion_constraint else "!mc", noise,
+                       scene[-1:], str(idx_frame), "mc"
+                       if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! Ours' method
@@ -235,19 +247,21 @@ def plot_median_errors(noise, res, point):
     #     opt_version))
 
     plt.suptitle("{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-        dataset, scene[:-2], scene[-1:], str(idx_frame),
-        "mc" if motion_constraint else "!mc", experiment_group,
-        noise if experiment_group != "noise" else "",
-        str(res[0]) + "x" + str(res[1]) if experiment_group != "fov" else "",
-        point if experiment_group != "point" else "", opt_version))
+        dataset, scene[:-2], scene[-1:], str(idx_frame), "mc"
+        if motion_constraint else "!mc", experiment_group, noise
+        if experiment_group != "noise" else "",
+        str(res[0]) + "x" + str(res[1])
+        if experiment_group != "fov" else "", point
+        if experiment_group != "point" else "", opt_version))
 
     plt.subplots_adjust(left=0.175, right=0.885, bottom=0.160, top=0.895)
     plt.savefig("../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(
         dataset, scene, str(idx_frame), scene[:-2], scene[-1:], str(idx_frame),
-        "mc" if motion_constraint else "!mc", experiment_group,
-        noise if experiment_group != "noise" else "",
-        str(res[0]) + "x" + str(res[1]) if experiment_group != "fov" else "",
-        point if experiment_group != "point" else "", opt_version))
+        "mc" if motion_constraint else "!mc", experiment_group, noise
+        if experiment_group != "noise" else "",
+        str(res[0]) + "x" + str(res[1])
+        if experiment_group != "fov" else "", point
+        if experiment_group != "point" else "", opt_version))
     plt.show()
 
 

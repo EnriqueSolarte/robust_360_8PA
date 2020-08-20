@@ -1,4 +1,5 @@
 .idea
 *.pyc
+analysis/plots
 report
 report_backup

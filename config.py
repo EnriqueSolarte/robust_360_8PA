@@ -5,15 +5,15 @@ dataset = "minos"
 
 if dataset == "minos":
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/3dv2020"
-    scene = "1LXtFkjw3qL" + "/1"
-# elif dataset == "tum_rgbd":
-#     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/3dv2020"
-#     scene = "1LXtFkjw3qL" + "/1"
-
-idx_frame = 230
+    scene = "759xd9YjKW5" + "/0"
+    idx_frame = 62
+elif dataset == "tum_rgbd":
+    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/TUM_RGBD/Testing_and_debugging/unzip/"
+    scene = "rgbd_dataset_freiburg1_xyz"
 
 # ! Choices: "v0", "v1", "v2", "v2.1"
-opt_version = "v2.1"
+opt_version_choices = ["v0", "v1", "v2", "v2.1"]
+opt_version = opt_version_choices[3]
 motion_constraint = True if opt_version == "v0" else False
 
 # ! FoV
@@ -29,7 +29,8 @@ points = [8, 150, 500, 1000]
 degs = [3.21, 2.27, 1.60, 0.72]
 
 # ! Choices: "noise", "fov", "point"
-experiment_group = "noise"
+experiment_group_choices = ["noise", "fov", "point"]
+experiment_group = experiment_group_choices[0]
 
 noise = noises[0] if experiment_group != "noise" else None
 res = ress[1] if experiment_group != "fov" else None

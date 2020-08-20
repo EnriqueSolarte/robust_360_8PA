@@ -8,6 +8,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     This Class is the VSLAB implementation of the optimal 8PA
     for perspective and spherical projection models
     """
+
     def __init__(self, version='v2'):
         super().__init__()
         if version == 'v0':
@@ -44,18 +45,17 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         return s, s, k, k
 
     def optimizer_v1(self, x1, x2):
-        from analysis.delta_bound import get_delta_bound_by_bearings
+        from analysis.delta_bound import get_frobenius_norm
 
         def residuals(x):
             x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])
             x2_norm_, _ = self.normalizer(x2.copy(), s=x[0], k=x[1])
 
-            delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
-            pm = np.degrees(
-                np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
-            if delta_ == np.nan:
-                return np.inf
-            return self.loss(C, delta_, pm)
+            C, A = get_frobenius_norm(x1_norm_, x2_norm_, return_A=True)
+            _, sigma, _ = np.linalg.svd(A)
+            # pm = np.degrees(
+            #     np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
+            return C / sigma[-2]
 
         initial = [1, 1]
         lsq = least_squares(residuals, initial)
