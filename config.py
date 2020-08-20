@@ -5,8 +5,8 @@ dataset = "minos"
 
 if dataset == "minos":
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/3dv2020"
-    scene = "759xd9YjKW5" + "/0"
-    idx_frame = 62
+    scene = "1LXtFkjw3qL" + "/1"
+    idx_frame = 230
 elif dataset == "tum_rgbd":
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/TUM_RGBD/Testing_and_debugging/unzip/"
     scene = "rgbd_dataset_freiburg1_xyz"

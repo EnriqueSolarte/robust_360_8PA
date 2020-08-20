@@ -11,10 +11,12 @@ from config import *
 
 
 def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
-                 scene, motion_constraint):
+                 scene, motion_constraint, plot_sk=False):
     # ! relative camera pose from a to b
-    error_n8p = []
-    error_8p = []
+    error_n8p, error_8p = [], []
+
+    # Record s1 and k1 values
+    s1, k1 = [], []
 
     g8p_norm = norm_8pa(version=opt_version)
     g8p = EightPointAlgorithmGeneralGeometry()
@@ -78,6 +80,9 @@ def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
         else:
             cam_a2b_n8p = g8p_norm.recover_pose_from_matches(
                 x1=bearings_a.copy(), x2=bearings_b.copy())
+            # print("s1, k1 = ({}, {})".format(_s1, _k1))
+            # s1.append(_s1)
+            # k1.append(_k1)
 
         if cam_a2b_8p is None:
             print("8p failed")
@@ -124,6 +129,15 @@ def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
         ]
         error_report.write(line)
 
+    if plot_sk:
+        import plotly.graph_objects as go
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=s1, y=k1))
+        fig.show()
+
+
+
 
 if __name__ == '__main__':
     if dataset == "minos":
@@ -148,7 +162,8 @@ if __name__ == '__main__':
                 idx_frame=idx_frame,
                 opt_version=opt_version,
                 scene=scene,
-                motion_constraint=motion_constraint)
+                motion_constraint=motion_constraint,
+                plot_sk=True)
     elif experiment_group == "fov":
         for res in ress:
             create_dir(
@@ -166,7 +181,8 @@ if __name__ == '__main__':
                 idx_frame=idx_frame,
                 opt_version=opt_version,
                 scene=scene,
-                motion_constraint=motion_constraint)
+                motion_constraint=motion_constraint,
+                plot_sk=True)
     elif experiment_group == "point":
         for point in points:
             create_dir(
@@ -184,4 +200,5 @@ if __name__ == '__main__':
                 idx_frame=idx_frame,
                 opt_version=opt_version,
                 scene=scene,
-                motion_constraint=motion_constraint)
+                motion_constraint=motion_constraint,
+                plot_sk=True)
