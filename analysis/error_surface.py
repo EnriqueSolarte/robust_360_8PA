@@ -15,6 +15,10 @@ from analysis.delta_bound import get_frobenius_norm
 
 pio.renderers.default = "browser"
 
+OURS_COLOR = (200, 100, 51)
+_8PA_COLOR = (0, 0, 154)
+MIN_COLOR = (0, 255, 50)
+
 
 def pcl_creation(**kwargs):
     data_scene = kwargs["data_scene"]
@@ -48,6 +52,18 @@ def get_file_name(**kwargs):
     filename += "_fov_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
     filename += "_" + kwargs["pcl"]
     filename += "_noise_" + str(kwargs["noise"]) + "." + str(kwargs["outliers"])
+    filename += "_grid_" + str(kwargs["grid"][0])
+    filename += "." + str(kwargs["grid"][1])
+    filename += "." + str(kwargs["grid"][2])
+
+    if None in kwargs["mask_results"]:
+        pass
+    else:
+        filename += "_masking_"
+        for mask in kwargs["mask_results"]:
+            filename += mask + "_"
+        filename += str(kwargs["mask_quantile"])
+
     return filename
 
 
@@ -112,16 +128,15 @@ def eval_methods(**kwargs):
         u, sigma, v = np.linalg.svd(A)
         kwargs["losses"]["loss_delta"][i] = sigma[-2]
         kwargs["losses"]["error_e"][i] = evaluate_error_in_essential_matrix(e, e_hat)
-        print(i / ss.size)
+        print("{}:{}".format(get_file_name(**kwargs), i / ss.size))
 
     kwargs["losses"]["error_cam"] = eval_cam_error(kwargs["losses"]["error_rot"], kwargs["losses"]["error_tran"])
     kwargs["losses"]["loss"] = g8p_norm.loss(C=kwargs["losses"]["loss_c"],
                                              delta=kwargs["losses"]["loss_delta"],
                                              pm=kwargs["losses"]["loss_pm"])
 
-    optimal_parameters = ((3.68, 0.52), (3.68, 0.52))
     cam_hat_n8pa = g8p_norm.recover_pose_from_matches(x1=bearings_a.copy(),
-                                                      x2=bearings_b.copy(), param=optimal_parameters)
+                                                      x2=bearings_b.copy(), param=kwargs["optimal_parameters"])
     error_cam_n8pa = evaluate_error_in_transformation(cam_hat_n8pa, cam_a2b)
 
     print("Our camera error:Rot={}    Trans={}".format(error_cam_n8pa[0], error_cam_n8pa[1]))
@@ -132,7 +147,11 @@ def eval_methods(**kwargs):
     kwargs["Ours"]["S"] = g8p_norm.T1[0, 0]
     kwargs["Ours"]["K"] = g8p_norm.T1[2, 2]
 
-    plot_contours(**kwargs)
+    kwargs["8PA"] = dict()
+    kwargs["8PA"]["error_rot"] = error_cam_8pa[0]
+    kwargs["8PA"]["error_tran"] = error_cam_8pa[1]
+
+    kwargs = plot_contours(**kwargs)
     plot_surfaces(**kwargs)
 
 
@@ -154,7 +173,7 @@ def plot_contours(**kwargs):
         # ! get min values
         results = kwargs["losses"][eval].reshape((len(kwargs["v_grid"]), len(kwargs["v_grid"])))
         min_val = np.unravel_index(np.argmin(results, axis=None), results.shape)
-        kwargs["minimum"][eval] = kwargs["v_grid"][min_val[1]], kwargs["v_grid"][min_val[0]]
+        kwargs["minimum"][eval] = kwargs["v_grid"][min_val[1]], kwargs["v_grid"][min_val[0]], results.min()
         if eval in kwargs["mask_results"]:
             results = msk(results, kwargs["mask_quantile"])
         loc = np.squeeze(np.where(idxs == i))
@@ -168,16 +187,28 @@ def plot_contours(**kwargs):
 
         fig.update_xaxes(title_text="S", row=loc[0] + 1, col=loc[1] + 1)
         fig.update_yaxes(title_text="K", row=loc[0] + 1, col=loc[1] + 1)
-        # fig.add_trace(
-        #     go.Scatter(x=(1,), y=(1,), mode='markers', marker=dict(size=5, color=0), name="k1-s1"),
-        #     row=loc[0] + 1, col=loc[1] + 1)
         fig.add_trace(
-            go.Scatter(x=(kwargs["minimum"][eval][0],), y=(kwargs["minimum"][eval][1],), name="min",
-                       mode='markers', marker=dict(size=5, color=2)),
+            go.Scatter(x=(1,), y=(1,),
+                       mode='markers',
+                       marker=dict(size=8,
+                                   color=_8PA_COLOR),
+                       name="8PA"),
             row=loc[0] + 1, col=loc[1] + 1)
         fig.add_trace(
-            go.Scatter(x=(kwargs["Ours"]["S"],), y=(kwargs["Ours"]["K"],), name="Ours",
-                       mode='markers', marker=dict(size=5, color=2)),
+            go.Scatter(x=(kwargs["minimum"][eval][0],),
+                       y=(kwargs["minimum"][eval][1],),
+                       name="min",
+                       mode='markers',
+                       marker=dict(size=10,
+                                   color=MIN_COLOR)),
+            row=loc[0] + 1, col=loc[1] + 1)
+        fig.add_trace(
+            go.Scatter(x=(kwargs["Ours"]["S"],),
+                       y=(kwargs["Ours"]["K"],),
+                       name="Ours",
+                       mode='markers',
+                       marker=dict(size=8,
+                                   color=OURS_COLOR)),
             row=loc[0] + 1, col=loc[1] + 1)
 
     fig_file = "contour_{}.html".format(get_file_name(**kwargs))
@@ -188,6 +219,7 @@ def plot_contours(**kwargs):
         width=1800)
     fig.show()
     fig.write_html("plots/{}".format(fig_file))
+    return kwargs
 
 
 def plot_surfaces(**kwargs):
@@ -212,6 +244,35 @@ def plot_surfaces(**kwargs):
                        showscale=False),
             row=loc[0] + 1, col=loc[1] + 1)
 
+        if eval in ("error_rot", "error_tran"):
+            fig.add_trace(
+                go.Scatter3d(x=(kwargs["Ours"]["S"],),
+                             y=(kwargs["Ours"]["K"],),
+                             z=(kwargs["Ours"][eval],),
+                             marker=dict(
+                                 color=OURS_COLOR,
+                                 size=5),
+                             name="Ours"),
+                row=loc[0] + 1, col=loc[1] + 1)
+            fig.add_trace(
+                go.Scatter3d(x=(1,),
+                             y=(1,),
+                             z=(kwargs["8PA"][eval],),
+                             marker=dict(
+                                 color=_8PA_COLOR,
+                                 size=5),
+                             name="8PA"),
+                row=loc[0] + 1, col=loc[1] + 1)
+            fig.add_trace(
+                go.Scatter3d(x=(kwargs["minimum"][eval][0],),
+                             y=(kwargs["minimum"][eval][1],),
+                             z=(kwargs["minimum"][eval][2],),
+                             marker=dict(
+                                 color=MIN_COLOR,
+                                 size=5),
+                             name="min"),
+                row=loc[0] + 1, col=loc[1] + 1)
+
     def labels(key):
         return dict(
             xaxis_title='S',
@@ -231,18 +292,22 @@ def plot_surfaces(**kwargs):
     #                                   highlightcolor="limegreen", project_z=True))
     fig.show()
     fig.write_html("plots/{}".format(fig_file))
+    return kwargs
 
 
 if __name__ == '__main__':
-    np.random.seed(100)
+    np.random.seed(50)
     path = "/home/kike/Documents/datasets/MP3D_VO"
+    # scene = "2azQ1b91cZZ/0"
+    # scene = "1LXtFkjw3qL/0"
+    scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene="2azQ1b91cZZ/0", path=path)
+    data = MP3D_VO(scene=scene, path=path)
 
-    scene_settings = dict(data_scene=data, idx_frame=150,
-                          pts=200,
-                          # res=(65.5, 46.4),
-                          res=(180, 180),
+    scene_settings = dict(data_scene=data, idx_frame=62,
+                          pts=150,
+                          res=(65.5, 46.4),
+                          # res=(180, 180),
                           loc=(0, 0),
                           pcl="by_k_features",
                           # pcl="by_sampling",
@@ -252,12 +317,14 @@ if __name__ == '__main__':
 
     pcl_settings = dict(t_vector=get_random_vector_R3(1, 1, 1),
                         r_vector=get_random_vector_R3(10, 10, 10),
-                        noise=500, outliers=0.05)
+                        noise=500, outliers=0.00)
 
     model_settings = dict(opt_version="v1",
-                          grid=(-10, 10, 20),
-                          mask_results=(None,),
-                          mask_quantile=0.1)
+                          grid=(-1, 1, 100),
+                          mask_results=("loss", "loss_delta", "loss_c"),
+                          # mask_results=(None,),
+                          mask_quantile=0.25,
+                          optimal_parameters=None)
 
     eval_methods(**scene_settings,
                  **pcl_settings,
