@@ -8,7 +8,6 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     This Class is the VSLAB implementation of the optimal 8PA
     for perspective and spherical projection models
     """
-
     def __init__(self, version='v2'):
         super().__init__()
         self.T1 = np.eye(3)
@@ -132,8 +131,12 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         if param is None:
             x1_norm, x2_norm, self.T1, self.T2 = self.lsq_normalizer(x1, x2)
         else:
-            x1_norm, self.T1, = self.normalizer(x1, s=param[0][0], k=param[0][1])
-            x2_norm, self.T2, = self.normalizer(x2, s=param[1][0], k=param[1][1])
+            x1_norm, self.T1, = self.normalizer(x1,
+                                                s=param[0][0],
+                                                k=param[0][1])
+            x2_norm, self.T2, = self.normalizer(x2,
+                                                s=param[1][0],
+                                                k=param[1][1])
 
         e = self.compute_essential_matrix(x1_norm, x2_norm)
         e = np.dot(self.T1.T, np.dot(e, self.T2))
