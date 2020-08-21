@@ -41,8 +41,8 @@ def get_delta_bound(observed_matrix):
 
     n = observed_matrix.shape[0]
     # ! c_fro_norm has  to be small
-    c_fro_norm = np.linalg.norm(
-        observed_matrix.T.dot(observed_matrix), ord="fro")**2
+    c_fro_norm = np.linalg.norm(observed_matrix.T.dot(observed_matrix),
+                                ord="fro")**2
     # print(c_fro_norm)
     sqr_a = (8 * c_fro_norm - n**2) / 7
     sqr_b = (n / 8) - (1 / 8) * np.sqrt(sqr_a)

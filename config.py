@@ -24,16 +24,13 @@ noises = [500, 1000, 2000, 10000]
 # noises = [i for i in range(100, 10000 + 1, 500)]
 
 # ! Point
-# points = [8, 150, 500, 1000]
-points = [8]
-for i in range(10, 1001, 25):
-    points.append(i)
-# points = [i for i in range(8, 1000 + 1, 10)]
+points = [8, 150, 500, 1000]
+# points = [i for i in range(10, 1000 + 1, 10)]
 degs = [3.21, 2.27, 1.60, 0.72]
 
 # ! Choices: "noise", "fov", "point"
 experiment_group_choices = ["noise", "fov", "point"]
-experiment_group = experiment_group_choices[2]
+experiment_group = experiment_group_choices[0]
 
 noise = noises[0] if experiment_group != "noise" else None
 res = ress[1] if experiment_group != "fov" else None
