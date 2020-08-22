@@ -56,7 +56,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             _, sigma, _ = np.linalg.svd(A)
             # pm = np.degrees(
             #     np.nanmean(angle_between_vectors_arrays(x1_norm_, x2_norm_)))
-            return C / sigma[-2]
+            return self.loss(C, sigma[-2], None)
 
         initial = [1, 1]
         lsq = least_squares(residuals, initial)
