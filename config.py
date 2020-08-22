@@ -5,7 +5,7 @@ dataset = "minos"
 
 if dataset == "minos":
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/3dv2020"
-    scene = "1LXtFkjw3qL" + "/1"
+    scene = "pRbA3pwrgk9" + "/0"
     idx_frame = 230
 elif dataset == "tum_rgbd":
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/TUM_RGBD/Testing_and_debugging/unzip/"
@@ -13,7 +13,7 @@ elif dataset == "tum_rgbd":
 
 # ! Choices: "v0", "v1", "v2", "v2.1"
 opt_version_choices = ["v0", "v1", "v2", "v2.1"]
-opt_version = opt_version_choices[3]
+opt_version = opt_version_choices[1]
 motion_constraint = True if opt_version == "v0" else False
 
 # ! FoV
