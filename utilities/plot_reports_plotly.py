@@ -19,8 +19,8 @@ def plot_sk_values(noise, res, point, save=False):
         x = noises[::-1]
         for noise in noises[::-1]:
             dt = pd.read_csv(
-                "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
+                "../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
+                format(experiment, dataset, scene, str(idx_frame),
                        "mc" if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
                        scene[-1:], str(idx_frame),
@@ -43,8 +43,8 @@ def plot_sk_values(noise, res, point, save=False):
         x = list(range(len(ress)))
         for res in ress:
             dt = pd.read_csv(
-                "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
+                "../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
+                format(experiment, dataset, scene, str(idx_frame),
                        "mc" if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
                        scene[-1:], str(idx_frame),
@@ -67,8 +67,8 @@ def plot_sk_values(noise, res, point, save=False):
         x = points
         for point in points:
             dt = pd.read_csv(
-                "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
+                "../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
+                format(experiment, dataset, scene, str(idx_frame),
                        "mc" if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
                        scene[-1:], str(idx_frame),
@@ -118,7 +118,7 @@ def plot_sk_values(noise, res, point, save=False):
         )
 
     fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_s1k1".format(
-        dataset, scene[:-2], scene[-1:], str(idx_frame),
+        experiment, dataset, scene[:-2], scene[-1:], str(idx_frame),
         "mc" if motion_constraint else "!mc", experiment_group,
         noise if experiment_group != "noise" else "",
         str(res[0]) + "x" + str(res[1]) if experiment_group != "fov" else "",
@@ -136,8 +136,8 @@ def plot_sk_values(noise, res, point, save=False):
     if save:
         # ! Save .png
         fig.write_image(
-            "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}_s1k1.png".format(
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+            "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}_s1k1.png".format(
+                experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                 str(idx_frame), "mc" if motion_constraint else "!mc",
                 experiment_group, noise if experiment_group != "noise" else "",
                 str(res[0]) + "x" +
@@ -147,8 +147,8 @@ def plot_sk_values(noise, res, point, save=False):
         '''
         # ! Save .html
         fig.write_html(
-            "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.html".format(
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+            "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.html".format(
+                experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                 str(idx_frame), "mc"
                 if motion_constraint else "!mc", experiment_group, noise
                 if experiment_group != "noise" else "",
@@ -158,8 +158,8 @@ def plot_sk_values(noise, res, point, save=False):
         
         # ! Save .svg
         fig.write_image(
-            "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.svg".format(
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+            "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.svg".format(
+                experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                 str(idx_frame), "mc"
                 if motion_constraint else "!mc", experiment_group, noise
                 if experiment_group != "noise" else "",
@@ -193,7 +193,7 @@ def plot_sk_values(noise, res, point, save=False):
             )
 
         fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_s2k2".format(
-            dataset, scene[:-2], scene[-1:], str(idx_frame),
+            experiment, dataset, scene[:-2], scene[-1:], str(idx_frame),
             "mc" if motion_constraint else "!mc", experiment_group,
             noise if experiment_group != "noise" else "",
             str(res[0]) + "x" +
@@ -212,9 +212,9 @@ def plot_sk_values(noise, res, point, save=False):
         if save:
             # ! Save .png
             fig.write_image(
-                "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}_s2k2.png".
+                "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}_s2k2.png".
                 format(
-                    dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+                    experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                     str(idx_frame), "mc" if motion_constraint else "!mc",
                     experiment_group,
                     noise if experiment_group != "noise" else "",
@@ -225,8 +225,8 @@ def plot_sk_values(noise, res, point, save=False):
             '''
             # ! Save .html
             fig.write_html(
-                "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.html".format(
-                    dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+                "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.html".format(
+                    experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                     str(idx_frame), "mc"
                     if motion_constraint else "!mc", experiment_group, noise
                     if experiment_group != "noise" else "",
@@ -236,8 +236,8 @@ def plot_sk_values(noise, res, point, save=False):
 
             # ! Save .svg
             fig.write_image(
-                "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.svg".format(
-                    dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+                "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.svg".format(
+                    experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                     str(idx_frame), "mc"
                     if motion_constraint else "!mc", experiment_group, noise
                     if experiment_group != "noise" else "",
@@ -257,8 +257,8 @@ def plot_errors(noise, res, point, save=True):
         x = noises[::-1]
         for noise in noises[::-1]:
             dt = pd.read_csv(
-                "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
+                "../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
+                format(experiment, dataset, scene, str(idx_frame),
                        "mc" if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
                        scene[-1:], str(idx_frame),
@@ -276,8 +276,8 @@ def plot_errors(noise, res, point, save=True):
         x = list(range(len(ress)))
         for res in ress:
             dt = pd.read_csv(
-                "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
+                "../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
+                format(experiment, dataset, scene, str(idx_frame),
                        "mc" if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
                        scene[-1:], str(idx_frame),
@@ -295,8 +295,8 @@ def plot_errors(noise, res, point, save=True):
         x = points
         for point in points:
             dt = pd.read_csv(
-                "../report/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
-                format(dataset, scene, str(idx_frame),
+                "../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".
+                format(experiment, dataset, scene, str(idx_frame),
                        "mc" if motion_constraint else "!mc", noise,
                        str(res[0]) + "x" + str(res[1]), point, scene[:-2],
                        scene[-1:], str(idx_frame),
@@ -418,7 +418,7 @@ def plot_errors(noise, res, point, save=True):
 
     fig.update_layout(
         title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-            dataset, scene[:-2], scene[-1:], str(idx_frame),
+            experiment, dataset, scene[:-2], scene[-1:], str(idx_frame),
             "mc" if motion_constraint else "!mc", experiment_group,
             noise if experiment_group != "noise" else "",
             str(res[0]) + "x" +
@@ -458,8 +458,8 @@ def plot_errors(noise, res, point, save=True):
     if save:
         # ! Save .png
         fig.write_image(
-            "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+            "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(
+                experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                 str(idx_frame), "mc" if motion_constraint else "!mc",
                 experiment_group, noise if experiment_group != "noise" else "",
                 str(res[0]) + "x" +
@@ -469,8 +469,8 @@ def plot_errors(noise, res, point, save=True):
         '''
         # ! Save .html
         fig.write_html(
-            "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.html".format(
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+            "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.html".format(
+                experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                 str(idx_frame), "mc"
                 if motion_constraint else "!mc", experiment_group, noise
                 if experiment_group != "noise" else "",
@@ -480,8 +480,8 @@ def plot_errors(noise, res, point, save=True):
 
         # ! Save .svg
         fig.write_image(
-            "../report/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.svg".format(
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
+            "../report/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.svg".format(
+                experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
                 str(idx_frame), "mc"
                 if motion_constraint else "!mc", experiment_group, noise
                 if experiment_group != "noise" else "",

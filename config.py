@@ -36,3 +36,9 @@ experiment_group = experiment_group_choices[0]
 noise = noises[0] if experiment_group != "noise" else None
 res = ress[1] if experiment_group != "fov" else None
 point = points[1] if experiment_group != "point" else None
+
+experiment_choices = ["sample", "feature", "sequence"]
+experiment = experiment_choices[1]
+
+if experiment == experiment_choices[1]:
+    point = None
