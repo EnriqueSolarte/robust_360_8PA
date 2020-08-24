@@ -1,5 +1,3 @@
-from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
-from solvers.optimal8pa import Optimal8PA as norm_8pa
 from pcl_utilities import *
 
 from read_datasets.MP3D_VO import MP3D_VO
@@ -10,14 +8,17 @@ from file_utilities import FileReport, create_dir, create_file
 from config import *
 
 
-def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
-                 scene, motion_constraint):
+def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
+               scene, motion_constraint):
     # ! relative camera pose from a to b
     error_n8p, error_8p = [], []
     s1, s2, k1, k2 = 0, 0, 0, 0
 
+    from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8p
+    from solvers.optimal8pa import Optimal8PA as norm_8pa
+
     g8p_norm = norm_8pa(version=opt_version)
-    g8p = EightPointAlgorithmGeneralGeometry()
+    g8p = g8p()
 
     # ! Getting a PCL from the dataset
     pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
@@ -71,7 +72,7 @@ def eval_methods(res, noise, loc, point, data_scene, idx_frame, opt_version,
             rot = get_rot_from_directional_vectors(prior_motion, (0, 0, 1))
             bearings_a_rot = rot.dot(bearings_a)
             bearings_b_rot = rot.dot(bearings_b)
-            #
+
             cam_a2b_n8p_rot = g8p_norm.recover_pose_from_matches(
                 x1=bearings_a_rot.copy(), x2=bearings_b_rot.copy())
 
@@ -149,15 +150,15 @@ if __name__ == '__main__':
                 "mc" if motion_constraint else "!mc", noise,
                 str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
-            eval_methods(res=res,
-                         noise=noise,
-                         loc=(0, 0),
-                         point=point,
-                         data_scene=data,
-                         idx_frame=idx_frame,
-                         opt_version=opt_version,
-                         scene=scene,
-                         motion_constraint=motion_constraint)
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       point=point,
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint)
     elif experiment_group == "fov":
         for res in ress:
             create_dir("../../report/{}/{}/{}/{}/{}/{}/{}".format(
@@ -165,15 +166,15 @@ if __name__ == '__main__':
                 "mc" if motion_constraint else "!mc", noise,
                 str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
-            eval_methods(res=res,
-                         noise=noise,
-                         loc=(0, 0),
-                         point=point,
-                         data_scene=data,
-                         idx_frame=idx_frame,
-                         opt_version=opt_version,
-                         scene=scene,
-                         motion_constraint=motion_constraint)
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       point=point,
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint)
     elif experiment_group == "point":
         for point in points:
             create_dir("../../report/{}/{}/{}/{}/{}/{}/{}".format(
@@ -181,12 +182,12 @@ if __name__ == '__main__':
                 "mc" if motion_constraint else "!mc", noise,
                 str(res[0]) + "x" + str(res[1]), point),
                        delete_previous=False)
-            eval_methods(res=res,
-                         noise=noise,
-                         loc=(0, 0),
-                         point=point,
-                         data_scene=data,
-                         idx_frame=idx_frame,
-                         opt_version=opt_version,
-                         scene=scene,
-                         motion_constraint=motion_constraint)
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       point=point,
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint)

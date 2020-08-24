@@ -13,7 +13,7 @@ elif dataset == "tum_rgbd":
 
 # ! Choices: "v0", "v1", "v2", "v2.1"
 opt_version_choices = ["v0", "v1", "v2", "v2.1"]
-opt_version = opt_version_choices[3]
+opt_version = opt_version_choices[1]
 motion_constraint = True if opt_version == "v0" else False
 
 # ! FoV

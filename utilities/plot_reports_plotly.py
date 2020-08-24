@@ -8,6 +8,8 @@ import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 
+from plotly.subplots import make_subplots
+
 
 def plot_sk_values(noise, res, point, save=False):
     s1_m, s1_std, s2_m, s2_std = [], [], [], []
@@ -99,6 +101,15 @@ def plot_sk_values(noise, res, point, save=False):
                    mode='markers',
                    error_y=dict(type='data', array=k1_std),
                    name='k1'))
+
+    # s1_sdw = [s1_m[i] + s1_std[i] for i in range(len(s1_m))] + [s1_m[i] - s1_std[i] for i in range(len(s1_m))]
+    # fig.add_trace(go.Scatter(
+    #     x=x,
+    #     y=s1_sdw,
+    #     fill='toself',
+    #     showlegend=False,
+    #     name='Ideal',
+    # ))
 
     if experiment_group == "fov":
         fig.update_xaxes(
@@ -304,7 +315,17 @@ def plot_errors(noise, res, point, save=True):
     _ours_std = np.array(_ours_std)
     _8pa_std = np.array(_8pa_std)
 
+    _ours_sdw = [_ours_m[i] + _ours_std[i] for i in range(len(_ours_m))] + \
+                [_ours_m[i] - _ours_std[i] for i in range(len(_ours_m))]
+
+    _8pa_sdw = [_8pa_m[i] + _8pa_std[i] for i in range(len(_8pa_m))] + \
+               [_8pa_m[i] - _8pa_std[i] for i in range(len(_8pa_m))]
+
+    _ours_sdw = np.array(_ours_sdw)
+    _8pa_sdw = np.array(_8pa_sdw)
+
     fig = go.Figure()
+    fig = make_subplots(rows=1, cols=2)
 
     # ! Ours method
     fig.add_trace(
@@ -313,14 +334,18 @@ def plot_errors(noise, res, point, save=True):
             y=_ours_m[:, 0],
             name='ours-rot',
             # error_y=dict(type='data', array=_ours_std[:, 0])
-        ))
+        ),
+        row=1,
+        col=1)
     fig.add_trace(
         go.Scatter(
             x=x,
             y=_ours_m[:, 1],
             name='ours-trans',
             # error_y=dict(type='data', array=_ours_std[:, 1])
-        ))
+        ),
+        row=1,
+        col=2)
 
     # ! 8PA
     fig.add_trace(
@@ -330,7 +355,9 @@ def plot_errors(noise, res, point, save=True):
             name='8pa-rot',
             line=dict(width=2, dash='dot'),
             # error_y=dict(type='data', array=_8pa_std[:, 0])
-        ))
+        ),
+        row=1,
+        col=1)
     fig.add_trace(
         go.Scatter(
             x=x,
@@ -338,26 +365,89 @@ def plot_errors(noise, res, point, save=True):
             name='8pa-trans',
             line=dict(width=2, dash='dot'),
             # error_y=dict(type='data', array=_8pa_std[:, 1])
-        ))
+        ),
+        row=1,
+        col=2)
 
-    fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-        dataset, scene[:-2], scene[-1:], str(idx_frame),
-        "mc" if motion_constraint else "!mc", experiment_group,
-        noise if experiment_group != "noise" else "",
-        str(res[0]) + "x" + str(res[1]) if experiment_group != "fov" else "",
-        point if experiment_group != "point" else "", opt_version),
-                      xaxis_type="log",
-                      xaxis_title=experiment_group[0].upper() +
-                      experiment_group[1:],
-                      yaxis_title="Error",
-                      font=dict(family="Courier New, monospace",
-                                size=14,
-                                color="RebeccaPurple"))
+    _ours_up = _ours_sdw[0:4]
+    _ours_low = _ours_sdw[8:3:-1]
+    _8pa_up = _8pa_sdw[0:4]
+    _8pa_low = _8pa_sdw[8:3:-1]
+
+    fig.add_trace(go.Scatter(x=x + x[::-1],
+                             y=_ours_up[:, 0].tolist() +
+                             _ours_low[:, 0].tolist(),
+                             fill='toself',
+                             fillcolor='rgba(0,0,255,0.1)',
+                             line_color='rgba(255,255,255,0)',
+                             name='ours-rot'),
+                  row=1,
+                  col=1)
+
+    fig.add_trace(go.Scatter(x=x + x[::-1],
+                             y=_ours_up[:, 1].tolist() +
+                             _ours_low[:, 1].tolist(),
+                             fill='toself',
+                             fillcolor='rgba(255,0,0,0.1)',
+                             line_color='rgba(255,255,255,0)',
+                             name='ours-trans'),
+                  row=1,
+                  col=2)
+
+    fig.add_trace(go.Scatter(
+        x=x + x[::-1],
+        y=_8pa_up[:, 0].tolist() + _8pa_low[:, 0].tolist(),
+        fill='toself',
+        fillcolor='rgba(0,204,150,0.1)',
+        line_color='rgba(255,255,255,0)',
+        name='8pa-rot',
+    ),
+                  row=1,
+                  col=1)
+
+    fig.add_trace(go.Scatter(
+        x=x + x[::-1],
+        y=_8pa_up[:, 1].tolist() + _8pa_low[:, 1].tolist(),
+        fill='toself',
+        fillcolor='rgba(171,99,250,0.1)',
+        line_color='rgba(255,255,255,0)',
+        name='8pa-trans',
+    ),
+                  row=1,
+                  col=2)
+
+    fig.update_layout(
+        title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
+            dataset, scene[:-2], scene[-1:], str(idx_frame),
+            "mc" if motion_constraint else "!mc", experiment_group,
+            noise if experiment_group != "noise" else "",
+            str(res[0]) + "x" +
+            str(res[1]) if experiment_group != "fov" else "",
+            point if experiment_group != "point" else "", opt_version),
+        # xaxis_title=experiment_group[0].upper() +
+        # experiment_group[1:],
+        # yaxis_title="Error",
+        font=dict(
+            family="Courier New, monospace",
+            size=14,
+        ))
+    # color = "RebeccaPurple"
     # , xaxis_type="log"
 
     fig.update_traces(mode='lines+markers', line_shape='linear')
+    fig.update_xaxes(title_text=experiment_group[0].upper() +
+                     experiment_group[1:],
+                     row=1,
+                     col=1)
+    fig.update_xaxes(title_text=experiment_group[0].upper() +
+                     experiment_group[1:],
+                     row=1,
+                     col=2)
+
+    fig.update_yaxes(title_text="Error", row=1, col=1)
+    fig.update_yaxes(title_text="Error", row=1, col=2)
     # fig.update_traces(mode='lines', line_shape='spline')
-    fig.update_layout(showlegend=False)
+    # fig.update_layout(showlegend=False)
 
     if experiment_group == "fov":
         fig.update_xaxes(
@@ -404,6 +494,6 @@ def plot_errors(noise, res, point, save=True):
 
 
 if __name__ == "__main__":
-    plot_errors(noise, res, point, save=True)
+    plot_errors(noise, res, point, save=False)
     if experiment_group == "fov":
-        plot_sk_values(noise, res, point, save=True)
+        plot_sk_values(noise, res, point, save=False)
