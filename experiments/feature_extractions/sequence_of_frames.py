@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     # data.number_frames
     for idx in range(i, 200):
-        frame_curr = Frame(**data.get_frame(idx, return_dict=True))
+        frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
 
         if idx == i:
             mask = np.zeros_like(frame_curr.grey_map)
