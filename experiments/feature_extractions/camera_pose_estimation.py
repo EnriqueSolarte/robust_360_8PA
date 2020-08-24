@@ -32,7 +32,6 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
 
     cam_8p = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
                                            x2=bearings_frm.copy())
-
     if motion_constraint:
         # ! Forward motion constraint
         prior_motion = cam_8p[0:3, 3]
