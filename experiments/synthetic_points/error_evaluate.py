@@ -141,7 +141,7 @@ if __name__ == '__main__':
     if dataset == "minos":
         data = MP3D_VO(path=path, scene=scene)
     # elif dataset == "tum_rgbd":
-    #     data = TUM_RGBD(path=path, scene=scene)
+    #     data = undistort_depth(path=path, scene=scene)
 
     if experiment_group == "noise":
         for noise in noises:

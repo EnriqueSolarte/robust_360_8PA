@@ -9,7 +9,7 @@ if dataset == "minos":
     scene = "1LXtFkjw3qL" + "/1"
     idx_frame = 230
 elif dataset == "tum_rgbd":
-    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/TUM_RGBD/Testing_and_debugging/unzip/"
+    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/undistort_depth/Testing_and_debugging/unzip/"
     scene = "rgbd_dataset_freiburg1_xyz"
 
 # ! Choices: "v0", "v1", "v2", "v2.1"
