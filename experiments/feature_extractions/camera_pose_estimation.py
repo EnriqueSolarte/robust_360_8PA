@@ -8,6 +8,7 @@ from geometry_utilities import *
 from file_utilities import create_dir, write_report, create_file
 
 from config import *
+from pcl_utilities import *
 
 error_n8p, error_8p = [], []
 
