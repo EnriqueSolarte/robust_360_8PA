@@ -1,15 +1,15 @@
+from config import *
+from file_utilities import FileReport, create_dir
+from geometry_utilities import *
+from image_utilities import get_mask_map_by_res_loc
 from pcl_utilities import *
 from read_datasets.MP3D_VO import MP3D_VO
-from geometry_utilities import *
-from file_utilities import FileReport, create_dir
-from image_utilities import get_mask_map_by_res_loc
 
-# ! Feature Extractor
-from structures.extractor.orb_extractor import ORBExtractor
+# ! Feature extractor
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 
-import os
-from config import *
+# ! Plot results
+from utilities.plot_reports_plotly import plot_sk_values, plot_errors
 
 
 def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
@@ -30,14 +30,20 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
                                                mask=get_mask_map_by_res_loc(
                                                    data_scene.shape,
                                                    res=res,
-                                                   loc=loc)
-                                               )
+                                                   loc=loc))
     # pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
     pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl, loc=loc, res=res)
     np.random.seed(100)
 
+    # Output directory
+    create_dir(output_dir + "/{}/{}/{}/{}/{}/{}/{}/{}".format(
+        experiment, dataset, scene, str(idx_frame),
+        "mc" if motion_constraint else "!mc", noise,
+        str(res[0]) + "x" + str(res[1]), point),
+               delete_previous=False)
+
     # ! Output file
-    filename = "../../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
+    filename = output_dir + "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
         experiment, dataset, scene, str(idx_frame),
         "mc" if motion_constraint else "!mc", noise,
         str(res[0]) + "x" + str(res[1]), point, scene[:-2], scene[-1:],
@@ -137,6 +143,12 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
             "====================================================================="
         )
 
+        print("Features: {}".format(len((pcl[0]))))
+
+        print(
+            "====================================================================="
+        )
+
         line = [
             error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0],
             error_n8p[-1][1], s1, k1, s2, k2
@@ -150,57 +162,60 @@ if __name__ == '__main__':
     if dataset == "minos":
         data = MP3D_VO(path=path, scene=scene)
 
+    if experiment_group != experiment_group_choices[2]:
+        if experiment_group == experiment_group_choices[1]:
+            res = ress[0]
+        point = points[1]
+        for _ in range(100):
+            point = min(
+                len(
+                    data.get_pcl_from_key_features(
+                        idx=idx_frame,
+                        extractor=Shi_Tomasi_Extractor(),
+                        mask=get_mask_map_by_res_loc(data.shape,
+                                                     res=res,
+                                                     loc=(0, 0)))[0]), point)
+        print("Features: {}".format(point))
+        with open("../../config.py", "a") as config:
+            config.write("point = {}\n".format(point))
+        config.close()
+
     if experiment_group == "noise":
         for noise in noises:
-            create_dir("../../report/{}/{}/{}/{}/{}/{}/{}/{}".format(
-                experiment, dataset, scene, str(idx_frame),
-                "mc" if motion_constraint else "!mc", noise,
-                str(res[0]) + "x" + str(res[1]), point),
-                       delete_previous=False)
-            eval_error(
-                res=res,
-                noise=noise,
-                loc=(0, 0),
-                # point=point,
-                data_scene=data,
-                idx_frame=idx_frame,
-                opt_version=opt_version,
-                scene=scene,
-                motion_constraint=motion_constraint,
-                feat_extractor=Shi_Tomasi_Extractor())
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint,
+                       feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
     elif experiment_group == "fov":
         for res in ress:
-            create_dir("../../report/{}/{}/{}/{}/{}/{}/{}/{}".format(
-                experiment, dataset, scene, str(idx_frame),
-                "mc" if motion_constraint else "!mc", noise,
-                str(res[0]) + "x" + str(res[1]), point),
-                       delete_previous=False)
-            eval_error(
-                res=res,
-                noise=noise,
-                loc=(0, 0),
-                # point=point,
-                data_scene=data,
-                idx_frame=idx_frame,
-                opt_version=opt_version,
-                scene=scene,
-                motion_constraint=motion_constraint,
-                feat_extractor=Shi_Tomasi_Extractor())
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint,
+                       feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
     elif experiment_group == "point":
         for point in points:
-            create_dir("../../report/{}/{}/{}/{}/{}/{}/{}/{}".format(
-                experiment, dataset, scene, str(idx_frame),
-                "mc" if motion_constraint else "!mc", noise,
-                str(res[0]) + "x" + str(res[1]), point),
-                       delete_previous=False)
-            eval_error(
-                res=res,
-                noise=noise,
-                loc=(0, 0),
-                # point=point,
-                data_scene=data,
-                idx_frame=idx_frame,
-                opt_version=opt_version,
-                scene=scene,
-                motion_constraint=motion_constraint,
-                feat_extractor=Shi_Tomasi_Extractor())
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint,
+                       feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
+
+    # ! Plot results using plotly
+    print("Plotting results...")
+    plot_errors(noise, res, point, save=True)
+    if experiment_group == experiment_group_choices[1]:
+        plot_sk_values(noise, res, point, save=True)

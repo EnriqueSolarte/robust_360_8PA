@@ -99,7 +99,7 @@ if __name__ == '__main__':
         noise=500,
         loc=(0, 0),
         # feat_extractor=ORBExtractor(),
-        feat_extractor = Shi_Tomasi_Extractor(),
+        feat_extractor=Shi_Tomasi_Extractor(),
         data_scene=data,
         idx_frame=150,
         opt_version="v2")

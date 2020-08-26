@@ -27,8 +27,8 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
 
     # ! Output file
     filename = "../../report/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-        experiment, dataset, scene, str(idx_frame), "mc" if motion_constraint else "!mc",
-        noise,
+        experiment, dataset, scene, str(idx_frame),
+        "mc" if motion_constraint else "!mc", noise,
         str(res[0]) + "x" + str(res[1]), point, scene[:-2], scene[-1:],
         str(idx_frame), "mc" if motion_constraint else "!mc", noise,
         str(res[0]) + "x" + str(res[1]), point, opt_version)
