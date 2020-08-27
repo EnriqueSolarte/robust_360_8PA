@@ -8,6 +8,7 @@ from geometry_utilities import *
 from file_utilities import create_dir, write_report, create_file
 
 from config import *
+from pcl_utilities import *
 
 error_n8p, error_8p = [], []
 
@@ -31,7 +32,6 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
 
     cam_8p = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
                                            x2=bearings_frm.copy())
-
     if motion_constraint:
         # ! Forward motion constraint
         prior_motion = cam_8p[0:3, 3]
@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     # data.number_frames
     for idx in range(i, 200):
-        frame_curr = Frame(**data.get_frame(idx, return_dict=True))
+        frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
 
         if idx == i:
             mask = np.zeros_like(frame_curr.grey_map)

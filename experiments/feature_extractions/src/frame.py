@@ -3,7 +3,7 @@ import numpy as np
 
 
 class Frame:
-    def __init__(self, image, depth, pose, idx):
+    def __init__(self, image, depth, pose, idx, timestamp):
         self.idx = idx
         self.shape = image.shape[0], image.shape[1]
         self.depth = depth
