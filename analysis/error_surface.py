@@ -24,7 +24,7 @@ def pcl_creation(**kwargs):
     data_scene = kwargs["data_scene"]
     assert kwargs["pcl"] in ("by_sampling", "by_k_features")
     if kwargs["pcl"] == "by_sampling":
-        pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(
+        pcl_dense, pcl_dense_color, _ = data_scene.get_pcl(
             idx=kwargs["idx_frame"])
         pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
                                             loc=kwargs["loc"],
@@ -332,7 +332,7 @@ if __name__ == '__main__':
     # scene = "1LXtFkjw3qL/0"
     scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=scene, path=path)
+    data = MP3D_VO(scene=scene, basedir=path)
 
     scene_settings = dict(
         data_scene=data,

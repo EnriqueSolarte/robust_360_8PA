@@ -8,9 +8,9 @@ def main(**arg):
     g8p_norm = norm_8pa()
     path = "/home/kike/Documents/datasets/MP3D_VO"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=arg["scene"], path=path)
+    data = MP3D_VO(scene=arg["scene"], basedir=path)
 
-    pcl_dense, pcl_dense_color, _ = data.get_dense_pcl(idx=arg["frame"])
+    pcl_dense, pcl_dense_color, _ = data.get_pcl(idx=arg["frame"])
     pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
                                               res=arg["res"],
                                               loc=arg["loc"])

@@ -86,7 +86,7 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
 
 if __name__ == '__main__':
     if dataset == "minos":
-        data = MP3D_VO(path=path, scene=scene)
+        data = MP3D_VO(basedir=path, scene=scene)
 
     orb = ORBExtractor(nfeatures=point)
     tracker = LKTracker()
