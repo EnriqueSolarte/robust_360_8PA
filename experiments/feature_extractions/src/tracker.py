@@ -14,10 +14,11 @@ class LKTracker:
         self.frame_idx = 0
         self.track_len = 10
         self.detect_interval = skip_frames
-        self.lk_params = dict(winSize=(20, 20),
-                              maxLevel=2,
-                              criteria=(cv2.TERM_CRITERIA_EPS
-                                        | cv2.TERM_CRITERIA_COUNT, 10, 0.001))
+        self.lk_params = dict(
+            winSize=(20, 20),
+            maxLevel=2,
+            criteria=(cv2.TERM_CRITERIA_EPS
+                      | cv2.TERM_CRITERIA_COUNT, 10, 0.001))
 
     def track(self, frame):
         self.tracked_frame = frame
@@ -27,8 +28,8 @@ class LKTracker:
 
         if len(self.tracks) > 0:
             img0, img1 = self.prev_img, self.curr_img
-            p0 = np.float32([np.squeeze(tr[-1])
-                             for tr in self.tracks]).reshape(-1, 1, 2)
+            p0 = np.float32(
+                [np.squeeze(tr[-1]) for tr in self.tracks]).reshape(-1, 1, 2)
             p1, _st, _err = cv2.calcOpticalFlowPyrLK(img0, img1, p0, None,
                                                      **self.lk_params)
             p0_hat, _st, _err = cv2.calcOpticalFlowPyrLK(
@@ -75,7 +76,7 @@ class LKTracker:
                 self.tracks.append([(key_point.pt[0], key_point.pt[1])])
 
     def get_matches(self):
-        matches = np.array([((tr[0]), (tr[-1]))
-                            for tr in self.tracks]).reshape(
-                                (-1, 4)).astype(int)
+        matches = np.array(
+            [((tr[0]), (tr[-1])) for tr in self.tracks]).reshape(
+                (-1, 4)).astype(int)
         return matches[:, 0:2], matches[:, 2:4]

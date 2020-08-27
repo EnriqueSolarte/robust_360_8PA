@@ -131,7 +131,7 @@ if __name__ == '__main__':
     # data.number_frames
     # tmp = 500
     errs = []
-    for idx in range(i, data.number_frames):
+    for idx in range(i, 10):
         frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
 
         if idx == i:

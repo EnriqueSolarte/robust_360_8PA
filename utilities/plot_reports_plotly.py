@@ -21,11 +21,11 @@ def plot_sk_values(noise, res, point, save=False):
             dt = pd.read_csv(
                 output_dir +
                 "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-                    experiment, dataset, scene, str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
-                    str(res[0]) + "x" +
-                    str(res[1]), point, scene[:-2], scene[-1:], str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
+                    experiment, dataset, scene, str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
+                    str(res[0]) + "x" + str(res[1]), point, scene[:-2],
+                    scene[-1:], str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
                     str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! S and K values
@@ -46,11 +46,11 @@ def plot_sk_values(noise, res, point, save=False):
             dt = pd.read_csv(
                 output_dir +
                 "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-                    experiment, dataset, scene, str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
-                    str(res[0]) + "x" +
-                    str(res[1]), point, scene[:-2], scene[-1:], str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
+                    experiment, dataset, scene, str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
+                    str(res[0]) + "x" + str(res[1]), point, scene[:-2],
+                    scene[-1:], str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
                     str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! S and K values
@@ -71,11 +71,11 @@ def plot_sk_values(noise, res, point, save=False):
             dt = pd.read_csv(
                 output_dir +
                 "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-                    experiment, dataset, scene, str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
-                    str(res[0]) + "x" +
-                    str(res[1]), point, scene[:-2], scene[-1:], str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
+                    experiment, dataset, scene, str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
+                    str(res[0]) + "x" + str(res[1]), point, scene[:-2],
+                    scene[-1:], str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
                     str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! S and K values
@@ -93,17 +93,19 @@ def plot_sk_values(noise, res, point, save=False):
     fig = go.Figure()
 
     fig.add_trace(
-        go.Scatter(x=x,
-                   y=s1_m,
-                   mode='markers',
-                   error_y=dict(type='data', array=s1_std),
-                   name='s1'))
+        go.Scatter(
+            x=x,
+            y=s1_m,
+            mode='markers',
+            error_y=dict(type='data', array=s1_std),
+            name='s1'))
     fig.add_trace(
-        go.Scatter(x=x,
-                   y=k1_m,
-                   mode='markers',
-                   error_y=dict(type='data', array=k1_std),
-                   name='k1'))
+        go.Scatter(
+            x=x,
+            y=k1_m,
+            mode='markers',
+            error_y=dict(type='data', array=k1_std),
+            name='k1'))
 
     # s1_sdw = [s1_m[i] + s1_std[i] for i in range(len(s1_m))] + [s1_m[i] - s1_std[i] for i in range(len(s1_m))]
     # fig.add_trace(go.Scatter(
@@ -120,16 +122,17 @@ def plot_sk_values(noise, res, point, save=False):
             tickvals=x,
         )
 
-    fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_s1k1".format(
-        experiment, dataset, scene[:-2], scene[-1:], str(idx_frame),
-        "mc" if motion_constraint else "!mc", experiment_group,
-        noise if experiment_group != "noise" else "",
-        str(res[0]) + "x" + str(res[1]) if experiment_group != "fov" else "",
-        point if experiment_group != "point" else "", opt_version),
-                      xaxis_title=experiment_group[0].upper() +
-                      experiment_group[1:],
-                      yaxis_title="Error",
-                      font=dict(family="Courier New, monospace", size=14))
+    fig.update_layout(
+        title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_s1k1".format(
+            experiment, dataset, scene[:-2], scene[-1:], str(idx_frame), "mc"
+            if motion_constraint else "!mc", experiment_group, noise
+            if experiment_group != "noise" else "",
+            str(res[0]) + "x" + str(res[1])
+            if experiment_group != "fov" else "", point
+            if experiment_group != "point" else "", opt_version),
+        xaxis_title=experiment_group[0].upper() + experiment_group[1:],
+        yaxis_title="Error",
+        font=dict(family="Courier New, monospace", size=14))
 
     # fig.update_layout(showlegend=False)
 
@@ -139,13 +142,13 @@ def plot_sk_values(noise, res, point, save=False):
         fig.write_image(
             output_dir +
             "/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}_s1k1.png".format(
-                experiment,
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
-                str(idx_frame), "mc" if motion_constraint else "!mc",
-                experiment_group, noise if experiment_group != "noise" else "",
-                str(res[0]) + "x" +
-                str(res[1]) if experiment_group != "fov" else "",
-                point if experiment_group != "point" else "", opt_version),
+                experiment, dataset, scene, str(idx_frame), scene[:-2],
+                scene[-1:], str(idx_frame), "mc"
+                if motion_constraint else "!mc", experiment_group, noise
+                if experiment_group != "noise" else "",
+                str(res[0]) + "x" + str(res[1])
+                if experiment_group != "fov" else "", point
+                if experiment_group != "point" else "", opt_version),
             scale=2)
         '''
         # ! Save .html
@@ -177,17 +180,19 @@ def plot_sk_values(noise, res, point, save=False):
         fig = go.Figure()
 
         fig.add_trace(
-            go.Scatter(x=x,
-                       y=s2_m,
-                       mode='markers',
-                       error_y=dict(type='data', array=s2_std),
-                       name='s2'))
+            go.Scatter(
+                x=x,
+                y=s2_m,
+                mode='markers',
+                error_y=dict(type='data', array=s2_std),
+                name='s2'))
         fig.add_trace(
-            go.Scatter(x=x,
-                       y=k2_m,
-                       mode='markers',
-                       error_y=dict(type='data', array=k2_std),
-                       name='k2'))
+            go.Scatter(
+                x=x,
+                y=k2_m,
+                mode='markers',
+                error_y=dict(type='data', array=k2_std),
+                name='k2'))
 
         if experiment_group == "fov":
             fig.update_xaxes(
@@ -195,17 +200,17 @@ def plot_sk_values(noise, res, point, save=False):
                 tickvals=x,
             )
 
-        fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_s2k2".format(
-            experiment, dataset, scene[:-2], scene[-1:], str(idx_frame),
-            "mc" if motion_constraint else "!mc", experiment_group,
-            noise if experiment_group != "noise" else "",
-            str(res[0]) + "x" +
-            str(res[1]) if experiment_group != "fov" else "",
-            point if experiment_group != "point" else "", opt_version),
-                          xaxis_title=experiment_group[0].upper() +
-                          experiment_group[1:],
-                          yaxis_title="Error",
-                          font=dict(family="Courier New, monospace", size=14))
+        fig.update_layout(
+            title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_s2k2".format(
+                experiment, dataset, scene[:-2], scene[-1:], str(idx_frame),
+                "mc" if motion_constraint else "!mc", experiment_group, noise
+                if experiment_group != "noise" else "",
+                str(res[0]) + "x" + str(res[1])
+                if experiment_group != "fov" else "", point
+                if experiment_group != "point" else "", opt_version),
+            xaxis_title=experiment_group[0].upper() + experiment_group[1:],
+            yaxis_title="Error",
+            font=dict(family="Courier New, monospace", size=14))
 
         # fig.update_layout(showlegend=False)
 
@@ -216,12 +221,12 @@ def plot_sk_values(noise, res, point, save=False):
                 output_dir +
                 "/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}_s2k2.png".format(
                     experiment, dataset, scene, str(idx_frame), scene[:-2],
-                    scene[-1:], str(idx_frame),
-                    "mc" if motion_constraint else "!mc", experiment_group,
-                    noise if experiment_group != "noise" else "",
-                    str(res[0]) + "x" +
-                    str(res[1]) if experiment_group != "fov" else "",
-                    point if experiment_group != "point" else "", opt_version),
+                    scene[-1:], str(idx_frame), "mc"
+                    if motion_constraint else "!mc", experiment_group, noise
+                    if experiment_group != "noise" else "",
+                    str(res[0]) + "x" + str(res[1])
+                    if experiment_group != "fov" else "", point
+                    if experiment_group != "point" else "", opt_version),
                 scale=2)
             '''
             # ! Save .html
@@ -260,11 +265,11 @@ def plot_errors(noise, res, point, save=True):
             dt = pd.read_csv(
                 output_dir +
                 "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-                    experiment, dataset, scene, str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
-                    str(res[0]) + "x" +
-                    str(res[1]), point, scene[:-2], scene[-1:], str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
+                    experiment, dataset, scene, str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
+                    str(res[0]) + "x" + str(res[1]), point, scene[:-2],
+                    scene[-1:], str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
                     str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! Ours' method
@@ -280,11 +285,11 @@ def plot_errors(noise, res, point, save=True):
             dt = pd.read_csv(
                 output_dir +
                 "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-                    experiment, dataset, scene, str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
-                    str(res[0]) + "x" +
-                    str(res[1]), point, scene[:-2], scene[-1:], str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
+                    experiment, dataset, scene, str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
+                    str(res[0]) + "x" + str(res[1]), point, scene[:-2],
+                    scene[-1:], str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
                     str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! Ours' method
@@ -300,11 +305,11 @@ def plot_errors(noise, res, point, save=True):
             dt = pd.read_csv(
                 output_dir +
                 "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-                    experiment, dataset, scene, str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
-                    str(res[0]) + "x" +
-                    str(res[1]), point, scene[:-2], scene[-1:], str(idx_frame),
-                    "mc" if motion_constraint else "!mc", noise,
+                    experiment, dataset, scene, str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
+                    str(res[0]) + "x" + str(res[1]), point, scene[:-2],
+                    scene[-1:], str(idx_frame), "mc"
+                    if motion_constraint else "!mc", noise,
                     str(res[0]) + "x" + str(res[1]), point, opt_version))
             data = dt.values
             # ! Ours' method
@@ -378,56 +383,60 @@ def plot_errors(noise, res, point, save=True):
     _8pa_up = _8pa_sdw[0:len(x)]
     _8pa_low = _8pa_sdw[len(x) * 2:len(x) - 1:-1]
 
-    fig.add_trace(go.Scatter(x=x + x[::-1],
-                             y=_ours_up[:, 0].tolist() +
-                             _ours_low[:, 0].tolist(),
-                             fill='toself',
-                             fillcolor='rgba(0,0,255,0.1)',
-                             line_color='rgba(255,255,255,0)',
-                             name='ours-rot'),
-                  row=1,
-                  col=1)
+    fig.add_trace(
+        go.Scatter(
+            x=x + x[::-1],
+            y=_ours_up[:, 0].tolist() + _ours_low[:, 0].tolist(),
+            fill='toself',
+            fillcolor='rgba(0,0,255,0.1)',
+            line_color='rgba(255,255,255,0)',
+            name='ours-rot'),
+        row=1,
+        col=1)
 
-    fig.add_trace(go.Scatter(x=x + x[::-1],
-                             y=_ours_up[:, 1].tolist() +
-                             _ours_low[:, 1].tolist(),
-                             fill='toself',
-                             fillcolor='rgba(255,0,0,0.1)',
-                             line_color='rgba(255,255,255,0)',
-                             name='ours-trans'),
-                  row=1,
-                  col=2)
+    fig.add_trace(
+        go.Scatter(
+            x=x + x[::-1],
+            y=_ours_up[:, 1].tolist() + _ours_low[:, 1].tolist(),
+            fill='toself',
+            fillcolor='rgba(255,0,0,0.1)',
+            line_color='rgba(255,255,255,0)',
+            name='ours-trans'),
+        row=1,
+        col=2)
 
-    fig.add_trace(go.Scatter(
-        x=x + x[::-1],
-        y=_8pa_up[:, 0].tolist() + _8pa_low[:, 0].tolist(),
-        fill='toself',
-        fillcolor='rgba(0,204,150,0.1)',
-        line_color='rgba(255,255,255,0)',
-        name='8pa-rot',
-    ),
-                  row=1,
-                  col=1)
+    fig.add_trace(
+        go.Scatter(
+            x=x + x[::-1],
+            y=_8pa_up[:, 0].tolist() + _8pa_low[:, 0].tolist(),
+            fill='toself',
+            fillcolor='rgba(0,204,150,0.1)',
+            line_color='rgba(255,255,255,0)',
+            name='8pa-rot',
+        ),
+        row=1,
+        col=1)
 
-    fig.add_trace(go.Scatter(
-        x=x + x[::-1],
-        y=_8pa_up[:, 1].tolist() + _8pa_low[:, 1].tolist(),
-        fill='toself',
-        fillcolor='rgba(171,99,250,0.1)',
-        line_color='rgba(255,255,255,0)',
-        name='8pa-trans',
-    ),
-                  row=1,
-                  col=2)
+    fig.add_trace(
+        go.Scatter(
+            x=x + x[::-1],
+            y=_8pa_up[:, 1].tolist() + _8pa_low[:, 1].tolist(),
+            fill='toself',
+            fillcolor='rgba(171,99,250,0.1)',
+            line_color='rgba(255,255,255,0)',
+            name='8pa-trans',
+        ),
+        row=1,
+        col=2)
 
     fig.update_layout(
         title="{}_{}_{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-            experiment, dataset, scene[:-2], scene[-1:], str(idx_frame),
-            "mc" if motion_constraint else "!mc", experiment_group,
-            noise if experiment_group != "noise" else "",
-            str(res[0]) + "x" +
-            str(res[1]) if experiment_group != "fov" else "",
-            point if experiment_group != "point" else "", opt_version),
+            experiment, dataset, scene[:-2], scene[-1:], str(idx_frame), "mc"
+            if motion_constraint else "!mc", experiment_group, noise
+            if experiment_group != "noise" else "",
+            str(res[0]) + "x" + str(res[1])
+            if experiment_group != "fov" else "", point
+            if experiment_group != "point" else "", opt_version),
         # xaxis_title=experiment_group[0].upper() +
         # experiment_group[1:],
         # yaxis_title="Error",
@@ -439,14 +448,16 @@ def plot_errors(noise, res, point, save=True):
     # , xaxis_type="log"
 
     fig.update_traces(mode='lines+markers', line_shape='linear')
-    fig.update_xaxes(title_text=experiment_group[0].upper() +
-                     experiment_group[1:] + " - Rot",
-                     row=1,
-                     col=1)
-    fig.update_xaxes(title_text=experiment_group[0].upper() +
-                     experiment_group[1:] + " - Trans",
-                     row=1,
-                     col=2)
+    fig.update_xaxes(
+        title_text=experiment_group[0].upper() + experiment_group[1:] +
+        " - Rot",
+        row=1,
+        col=1)
+    fig.update_xaxes(
+        title_text=experiment_group[0].upper() + experiment_group[1:] +
+        " - Trans",
+        row=1,
+        col=2)
 
     fig.update_yaxes(title_text="Error", row=1, col=1)
     fig.update_yaxes(title_text="Error", row=1, col=2)
@@ -465,13 +476,13 @@ def plot_errors(noise, res, point, save=True):
         fig.update_layout(width=1000, height=500)
         fig.write_image(
             output_dir + "/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.png".format(
-                experiment,
-                dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
-                str(idx_frame), "mc" if motion_constraint else "!mc",
-                experiment_group, noise if experiment_group != "noise" else "",
-                str(res[0]) + "x" +
-                str(res[1]) if experiment_group != "fov" else "",
-                point if experiment_group != "point" else "", opt_version),
+                experiment, dataset, scene, str(idx_frame), scene[:-2],
+                scene[-1:], str(idx_frame), "mc"
+                if motion_constraint else "!mc", experiment_group, noise
+                if experiment_group != "noise" else "",
+                str(res[0]) + "x" + str(res[1])
+                if experiment_group != "fov" else "", point
+                if experiment_group != "point" else "", opt_version),
             scale=2)
         '''
         # ! Save .html
