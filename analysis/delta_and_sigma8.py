@@ -8,11 +8,12 @@ def main(**arg):
     g8p_norm = norm_8pa()
     path = "/home/kike/Documents/datasets/MP3D_VO"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=arg["scene"], path=path)
+    data = MP3D_VO(scene=arg["scene"], basedir=path)
 
-    pcl_dense, pcl_dense_color, _ = data.get_dense_pcl(idx=arg["frame"])
-    pcl_dense, mask = mask_pcl_by_res_and_loc(
-        pcl=pcl_dense, res=arg["res"], loc=arg["loc"])
+    pcl_dense, pcl_dense_color, _ = data.get_pcl(idx=arg["frame"])
+    pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
+                                              res=arg["res"],
+                                              loc=arg["loc"])
     samples = np.random.randint(0, pcl_dense.shape[1], arg["samples"])
 
     bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(
@@ -31,17 +32,18 @@ def main(**arg):
 
 
 if __name__ == '__main__':
-    parameters = dict(
-        scene="1LXtFkjw3qL/1",
-        frame=100,
-        res=(55, 65),
-        loc=(0, 0),
-        samples=200,
-        noise=500,
-        outliers=0.05,
-        t_vector=(np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5),
-                  np.random.uniform(-0.5, 0.5)),
-        r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
-                  np.random.uniform(-10, 10)))
+    parameters = dict(scene="1LXtFkjw3qL/1",
+                      frame=100,
+                      res=(55, 65),
+                      loc=(0, 0),
+                      samples=200,
+                      noise=500,
+                      outliers=0.05,
+                      t_vector=(np.random.uniform(-0.5, 0.5),
+                                np.random.uniform(-0.5, 0.5),
+                                np.random.uniform(-0.5, 0.5)),
+                      r_vector=(np.random.uniform(-10, 10),
+                                np.random.uniform(-10, 10),
+                                np.random.uniform(-10, 10)))
 
     main(**parameters)

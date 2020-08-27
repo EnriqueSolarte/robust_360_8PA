@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # scene = "1LXtFkjw3qL/1"
     scene = "2azQ1b91cZZ/0"
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    data = MP3D_VO(scene=scene, path=path)
+    data = MP3D_VO(scene=scene, basedir=path)
 
     eval_methods(
         res=(54, 54),

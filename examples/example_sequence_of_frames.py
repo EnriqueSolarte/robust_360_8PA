@@ -72,7 +72,7 @@ if __name__ == '__main__':
     scene = "2azQ1b91cZZ/0"
     path = "/home/kike/Documents/datasets/MP3D_VO"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    dt = MP3D_VO(scene=scene, path=path)
+    dt = MP3D_VO(scene=scene, basedir=path)
     feat_extractor = ORBExtractor()
     # feat_extractor = Shi_Tomasi_Extractor()
     tracker = LKTracker()

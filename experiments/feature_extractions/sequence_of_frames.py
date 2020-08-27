@@ -94,7 +94,7 @@ if __name__ == '__main__':
     assert experiment == experiment_choices[1]
 
     if dataset == "minos":
-        data = MP3D_VO(path=path, scene=scene)
+        data = MP3D_VO(basedir=path, scene=scene)
 
     tracker = LKTracker()
     threshold_camera_distance = 0.5
