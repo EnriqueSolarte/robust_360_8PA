@@ -64,7 +64,7 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
         #               np.random.uniform(-10, 10)))
 
         cam_a2b = get_homogeneous_transform_from_vectors(
-            t_vector=(np.random.uniform(0, 0.5), np.random.uniform(0, 0.5),
+            t_vector=(np.random.uniform(0, 0.01), np.random.uniform(0, 0.01),
                       np.random.uniform(0, 0.5)),
             r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
                       np.random.uniform(-10, 10)))
@@ -74,8 +74,8 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
         pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
                                  param=noise)
         # ! We expect that there are 1% outliers besides of the noise
-        # pcl_b = add_outliers_to_pcl(pcl_b.copy(),
-        #                             outliers=int(0.05 * pcl_a.shape[1]))
+        pcl_b = add_outliers_to_pcl(pcl_b.copy(),
+                                    outliers=int(0.10 * pcl_a.shape[1]))
 
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)

@@ -1,7 +1,7 @@
 import cv2
 
 from config import *
-from frame import Frame
+
 from geometry_utilities import *
 from image_utilities import get_mask_map_by_res_loc
 from pcl_utilities import *
@@ -9,6 +9,7 @@ from read_datasets.MP3D_VO import MP3D_VO
 # ! Feature extractor
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
+from structures.frame import Frame
 
 error_n8p, error_8p = [], []
 
@@ -24,6 +25,24 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
 
     cam = Sphere(shape=tracker.initial_frame.shape)
     matches = tracker.get_matches()
+
+    matches = np.array(matches)
+    import plotly.graph_objects as go
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(x=matches[0, :, 0],
+                   y=matches[0, :, 1],
+                   mode='markers',
+                   name='Ref'))
+    fig.add_trace(
+        go.Scatter(x=matches[1, :, 0],
+                   y=matches[1, :, 1],
+                   mode='markers',
+                   name='Key'))
+    fig.update_xaxes(tickvals=list(range(0, 1024, 128)))
+    fig.update_yaxes(tickvals=list(range(0, 512, 128)))
+    fig.show()
+
     # rot = get_rot_from_directional_vectors((0, 0, 1), (0, 0, 1))
     bearings_kf = cam.pixel2normalized_vector(matches[0])
     bearings_frm = cam.pixel2normalized_vector(matches[1])
@@ -94,7 +113,7 @@ if __name__ == '__main__':
 
     # data.number_frames
     errs = []
-    for idx in range(i, 100):
+    for idx in range(i, 10):
         frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
 
         if idx == i:

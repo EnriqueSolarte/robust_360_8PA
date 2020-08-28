@@ -21,7 +21,7 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
     g8p = g8p()
 
     # ! Getting a PCL from the dataset
-    pcl_dense, pcl_dense_color, _ = data_scene.get_pcl(idx=idx_frame)
+    pcl_dense, pcl_dense_color, _, _ = data_scene.get_pcl(idx=idx_frame)
     pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense, loc=loc, res=res)
     np.random.seed(100)
 
@@ -141,7 +141,7 @@ if __name__ == '__main__':
     assert experiment == experiment_choices[0]
 
     if dataset == "minos":
-        data = MP3D_VO(basedir=path, scene=scene)
+        data = MP3D_VO(basedir=basedir, scene=scene)
     # elif dataset == "tum_rgbd":
     #     data = undistort_depth(path=path, scene=scene)
 
