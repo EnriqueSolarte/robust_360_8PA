@@ -35,8 +35,8 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
 
     # cam_gt = extend_SO3_to_homogenous(rot).dot(cam_gt).dot(extend_SO3_to_homogenous(rot.T))
 
-    cam_8p = g8p.recover_pose_from_matches(
-        x1=bearings_kf.copy(), x2=bearings_frm.copy())
+    cam_8p = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
+                                           x2=bearings_frm.copy())
     if motion_constraint:
         # ! Forward motion constraint
         prior_motion = cam_8p[0:3, 3]
@@ -50,8 +50,8 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
         cam_n8p = extend_SO3_to_homogenous(rot.T).dot(cam_n8p_rot).dot(
             extend_SO3_to_homogenous(rot))
     else:
-        cam_n8p = g8p_norm.recover_pose_from_matches(
-            x1=bearings_kf.copy(), x2=bearings_frm.copy())
+        cam_n8p = g8p_norm.recover_pose_from_matches(x1=bearings_kf.copy(),
+                                                     x2=bearings_frm.copy())
 
         s1 = g8p_norm.T1[0][0]
         k1 = g8p_norm.T1[2][2]
@@ -63,11 +63,11 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
             print("s2, k2 = ({}, {})".format(s2, k2))
 
     error_n8p.append(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_n8p))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_n8p))
     error_8p.append(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_8p))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_8p))
 
     print("ours:  {}".format(error_n8p[-1]))
     print("8PA:   {}".format(error_8p[-1]))
@@ -137,10 +137,9 @@ if __name__ == '__main__':
         if idx == i:
             mask = get_mask_map_by_res_loc(data.shape, res=res, loc=(0, 0))
 
-            tracker.set_initial_frame(
-                initial_frame=frame_curr,
-                extractor=Shi_Tomasi_Extractor(),
-                mask=mask)
+            tracker.set_initial_frame(initial_frame=frame_curr,
+                                      extractor=Shi_Tomasi_Extractor(),
+                                      mask=mask)
             continue
 
         relative_pose = frame_curr.get_relative_pose(
@@ -148,16 +147,14 @@ if __name__ == '__main__':
         camera_distance = np.linalg.norm(relative_pose[0:3, 3])
 
         if camera_distance > threshold_camera_distance:
-            eval_camera_pose(
-                tracker=tracker,
-                cam_gt=relative_pose,
-                output_dir=output_dir,
-                file=file)
+            eval_camera_pose(tracker=tracker,
+                             cam_gt=relative_pose,
+                             output_dir=output_dir,
+                             file=file)
             frame_prev = tracker.tracked_frame
-            tracker.set_initial_frame(
-                initial_frame=frame_prev,
-                extractor=Shi_Tomasi_Extractor(),
-                mask=mask)
+            tracker.set_initial_frame(initial_frame=frame_prev,
+                                      extractor=Shi_Tomasi_Extractor(),
+                                      mask=mask)
             relative_pose = frame_curr.get_relative_pose(
                 key_frame=tracker.initial_frame)
             camera_distance = np.linalg.norm(relative_pose[0:3, 3])
@@ -218,22 +215,22 @@ if __name__ == '__main__':
         "====================================================================="
     )
     # ! Ours' method
-    print("Q1-ours:{} - {}".format(
-        np.quantile(error_n8p, 0.25, axis=0), len(error_n8p)))
-    print("Q2-ours:{} - {}".format(
-        np.median(error_n8p, axis=0), len(error_n8p)))
-    print("Q3-ours:{} - {}".format(
-        np.quantile(error_n8p, 0.75, axis=0), len(error_n8p)))
+    print("Q1-ours:{} - {}".format(np.quantile(error_n8p, 0.25, axis=0),
+                                   len(error_n8p)))
+    print("Q2-ours:{} - {}".format(np.median(error_n8p, axis=0),
+                                   len(error_n8p)))
+    print("Q3-ours:{} - {}".format(np.quantile(error_n8p, 0.75, axis=0),
+                                   len(error_n8p)))
 
     print(
         "====================================================================="
     )
     # ! 8PA
-    print("Q1-8PA:{} -  {}".format(
-        np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
+    print("Q1-8PA:{} -  {}".format(np.quantile(error_8p, 0.25, axis=0),
+                                   len(error_8p)))
     print("Q2-8PA:{} -  {}".format(np.median(error_8p, axis=0), len(error_8p)))
-    print("Q3-8PA:{} -  {}".format(
-        np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
+    print("Q3-8PA:{} -  {}".format(np.quantile(error_8p, 0.75, axis=0),
+                                   len(error_8p)))
     print(
         "====================================================================="
     )
@@ -248,51 +245,46 @@ if __name__ == '__main__':
     fig = make_subplots(rows=1, cols=2)
 
     # ! Ours Method
-    fig.add_trace(
-        go.Scatter(x=errs, y=error_n8p[:, 0], name='ours-rot'), row=1, col=1)
-    fig.add_trace(
-        go.Scatter(x=errs, y=error_n8p[:, 1], name='ours-trans'), row=1, col=2)
+    fig.add_trace(go.Scatter(x=errs, y=error_n8p[:, 0], name='ours-rot'),
+                  row=1,
+                  col=1)
+    fig.add_trace(go.Scatter(x=errs, y=error_n8p[:, 1], name='ours-trans'),
+                  row=1,
+                  col=2)
 
     # ! 8PA
-    fig.add_trace(
-        go.Scatter(
-            x=errs,
-            y=error_8p[:, 0],
-            line=dict(width=2, dash='dot'),
-            name='8p-rot'),
-        row=1,
-        col=1)
-    fig.add_trace(
-        go.Scatter(
-            x=errs,
-            y=error_8p[:, 1],
-            line=dict(width=2, dash='dot'),
-            name='8p-trans'),
-        row=1,
-        col=2)
+    fig.add_trace(go.Scatter(x=errs,
+                             y=error_8p[:, 0],
+                             line=dict(width=2, dash='dot'),
+                             name='8p-rot'),
+                  row=1,
+                  col=1)
+    fig.add_trace(go.Scatter(x=errs,
+                             y=error_8p[:, 1],
+                             line=dict(width=2, dash='dot'),
+                             name='8p-trans'),
+                  row=1,
+                  col=2)
 
     fig.update_yaxes(title_text="Error", row=1, col=1)
     fig.update_yaxes(title_text="Error", row=1, col=2)
     fig.update_traces(mode='lines+markers', line_shape='linear')
-    fig.update_xaxes(
-        title_text=experiment_group[0].upper() + experiment_group[1:] +
-        " - Rot",
-        row=1,
-        col=1)
-    fig.update_xaxes(
-        title_text=experiment_group[0].upper() + experiment_group[1:] +
-        " - Trans",
-        row=1,
-        col=2)
-    fig.update_layout(
-        title="{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
-            experiment, dataset, scene[:-2], scene[-1:], "mc"
-            if motion_constraint else "!mc", experiment_group, noise,
-            str(res[0]) + "x" + str(res[1]), opt_version),
-        font=dict(
-            family="Courier New, monospace",
-            size=14,
-        ))
+    fig.update_xaxes(title_text=experiment_group[0].upper() +
+                     experiment_group[1:] + " - Rot",
+                     row=1,
+                     col=1)
+    fig.update_xaxes(title_text=experiment_group[0].upper() +
+                     experiment_group[1:] + " - Trans",
+                     row=1,
+                     col=2)
+    fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
+        experiment, dataset, scene[:-2], scene[-1:],
+        "mc" if motion_constraint else "!mc", experiment_group, noise,
+        str(res[0]) + "x" + str(res[1]), opt_version),
+                      font=dict(
+                          family="Courier New, monospace",
+                          size=14,
+                      ))
 
     # fig.show()
 
@@ -300,19 +292,18 @@ if __name__ == '__main__':
         # ! Save .html
         fig.write_html(
             output_dir + "/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}.html".format(
-                experiment, dataset, scene, scene[:-2], scene[-1:], "mc"
-                if motion_constraint else "!mc", experiment_group, noise,
+                experiment, dataset, scene, scene[:-2], scene[-1:],
+                "mc" if motion_constraint else "!mc", experiment_group, noise,
                 str(res[0]) + "x" + str(res[1]), opt_version))
-        
+
         # ! Save .png
         fig.update_layout(width=1000, height=500)
         fig.write_image(
             output_dir + "/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}.png".format(
-                experiment, dataset, scene, scene[:-2], scene[-1:], "mc"
-                if motion_constraint else "!mc", experiment_group, noise,
+                experiment, dataset, scene, scene[:-2], scene[-1:],
+                "mc" if motion_constraint else "!mc", experiment_group, noise,
                 str(res[0]) + "x" + str(res[1]), opt_version),
             scale=2)
-
         '''
         # ! Save .svg
         fig.write_image(

@@ -25,26 +25,27 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
     g8p = g8p()
 
     # ! Getting a PCL from the dataset
-    pcl = data_scene.get_pcl_from_key_features(
-        idx=idx_frame,
-        extractor=feat_extractor,
-        mask=get_mask_map_by_res_loc(data_scene.shape, res=res, loc=loc))
+    pcl = data_scene.get_pcl_from_key_features(idx=idx_frame,
+                                               extractor=feat_extractor,
+                                               mask=get_mask_map_by_res_loc(
+                                                   data_scene.shape,
+                                                   res=res,
+                                                   loc=loc))
     # pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
     pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl, loc=loc, res=res)
     np.random.seed(100)
 
     # Output directory
-    create_dir(
-        output_dir + "/{}/{}/{}/{}/{}/{}/{}/{}".format(
-            experiment, dataset, scene, str(idx_frame), "mc"
-            if motion_constraint else "!mc", noise,
-            str(res[0]) + "x" + str(res[1]), point),
-        delete_previous=False)
+    create_dir(output_dir + "/{}/{}/{}/{}/{}/{}/{}/{}".format(
+        experiment, dataset, scene, str(idx_frame),
+        "mc" if motion_constraint else "!mc", noise,
+        str(res[0]) + "x" + str(res[1]), point),
+               delete_previous=False)
 
     # ! Output file
     filename = output_dir + "/{}/{}/{}/{}/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}.csv".format(
-        experiment, dataset, scene, str(idx_frame), "mc"
-        if motion_constraint else "!mc", noise,
+        experiment, dataset, scene, str(idx_frame),
+        "mc" if motion_constraint else "!mc", noise,
         str(res[0]) + "x" + str(res[1]), point, scene[:-2], scene[-1:],
         str(idx_frame), "mc" if motion_constraint else "!mc", noise,
         str(res[0]) + "x" + str(res[1]), point, opt_version)
@@ -64,8 +65,8 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
 
         pcl_a = extend_array_to_homogeneous(pcl)
         # ! pcl at "b" location + noise
-        pcl_b = add_noise_to_pcl(
-            np.linalg.inv(cam_a2b).dot(pcl_a), param=noise)
+        pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
+                                 param=noise)
         # ! We expect that there are 1% outliers besides of the noise
         # pcl_b = add_outliers_to_pcl(pcl_b.copy(),
         #                             outliers=int(0.05 * pcl_a.shape[1]))
@@ -73,8 +74,8 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_a2b_8p = g8p.recover_pose_from_matches(
-            x1=bearings_a.copy(), x2=bearings_b.copy())
+        cam_a2b_8p = g8p.recover_pose_from_matches(x1=bearings_a.copy(),
+                                                   x2=bearings_b.copy())
 
         if motion_constraint:
             # # ! prior motion
@@ -111,33 +112,33 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
             continue
 
         error_n8p.append(
-            evaluate_error_in_transformation(
-                transform_gt=cam_a2b, transform_est=cam_a2b_n8p))
+            evaluate_error_in_transformation(transform_gt=cam_a2b,
+                                             transform_est=cam_a2b_n8p))
         error_8p.append(
-            evaluate_error_in_transformation(
-                transform_gt=cam_a2b, transform_est=cam_a2b_8p))
+            evaluate_error_in_transformation(transform_gt=cam_a2b,
+                                             transform_est=cam_a2b_8p))
 
         print(
             "====================================================================="
         )
         # ! Ours' method
-        print("Q1-ours:{} - {}".format(
-            np.quantile(error_n8p, 0.25, axis=0), len(error_n8p)))
-        print("Q2-ours:{} - {}".format(
-            np.median(error_n8p, axis=0), len(error_n8p)))
-        print("Q3-ours:{} - {}".format(
-            np.quantile(error_n8p, 0.75, axis=0), len(error_n8p)))
+        print("Q1-ours:{} - {}".format(np.quantile(error_n8p, 0.25, axis=0),
+                                       len(error_n8p)))
+        print("Q2-ours:{} - {}".format(np.median(error_n8p, axis=0),
+                                       len(error_n8p)))
+        print("Q3-ours:{} - {}".format(np.quantile(error_n8p, 0.75, axis=0),
+                                       len(error_n8p)))
 
         print(
             "====================================================================="
         )
         # ! 8PA
-        print("Q1-8PA:{} - {}".format(
-            np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
-        print("Q2-8PA:{} - {}".format(
-            np.median(error_8p, axis=0), len(error_8p)))
-        print("Q3-8PA:{} - {}".format(
-            np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
+        print("Q1-8PA:{} - {}".format(np.quantile(error_8p, 0.25, axis=0),
+                                      len(error_8p)))
+        print("Q2-8PA:{} - {}".format(np.median(error_8p, axis=0),
+                                      len(error_8p)))
+        print("Q3-8PA:{} - {}".format(np.quantile(error_8p, 0.75, axis=0),
+                                      len(error_8p)))
         print(
             "====================================================================="
         )
@@ -172,8 +173,9 @@ if __name__ == '__main__':
                     data.get_pcl_from_key_features(
                         idx=idx_frame,
                         extractor=Shi_Tomasi_Extractor(),
-                        mask=get_mask_map_by_res_loc(
-                            data.shape, res=res, loc=(0, 0)))[0]), point)
+                        mask=get_mask_map_by_res_loc(data.shape,
+                                                     res=res,
+                                                     loc=(0, 0)))[0]), point)
         print("Features: {}".format(point))
         with open("../../config.py", "a") as config:
             config.write("point = {}\n".format(point))
@@ -181,40 +183,37 @@ if __name__ == '__main__':
 
     if experiment_group == "noise":
         for noise in noises:
-            eval_error(
-                res=res,
-                noise=noise,
-                loc=(0, 0),
-                data_scene=data,
-                idx_frame=idx_frame,
-                opt_version=opt_version,
-                scene=scene,
-                motion_constraint=motion_constraint,
-                feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint,
+                       feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
     elif experiment_group == "fov":
         for res in ress:
-            eval_error(
-                res=res,
-                noise=noise,
-                loc=(0, 0),
-                data_scene=data,
-                idx_frame=idx_frame,
-                opt_version=opt_version,
-                scene=scene,
-                motion_constraint=motion_constraint,
-                feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint,
+                       feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
     elif experiment_group == "point":
         for point in points:
-            eval_error(
-                res=res,
-                noise=noise,
-                loc=(0, 0),
-                data_scene=data,
-                idx_frame=idx_frame,
-                opt_version=opt_version,
-                scene=scene,
-                motion_constraint=motion_constraint,
-                feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
+            eval_error(res=res,
+                       noise=noise,
+                       loc=(0, 0),
+                       data_scene=data,
+                       idx_frame=idx_frame,
+                       opt_version=opt_version,
+                       scene=scene,
+                       motion_constraint=motion_constraint,
+                       feat_extractor=Shi_Tomasi_Extractor(maxCorners=point))
 
     # ! Plot results using plotly
     print("Plotting results...")

@@ -9,13 +9,12 @@ class ORBExtractor:
                  nlevels=2,
                  edgeThreshold=2,
                  patchSize=2):
-        self.orb = cv2.ORB_create(
-            nfeatures=nfeatures,
-            scaleFactor=scaleFactor,
-            nlevels=nlevels,
-            edgeThreshold=edgeThreshold,
-            patchSize=patchSize,
-            scoreType=cv2.ORB_HARRIS_SCORE)
+        self.orb = cv2.ORB_create(nfeatures=nfeatures,
+                                  scaleFactor=scaleFactor,
+                                  nlevels=nlevels,
+                                  edgeThreshold=edgeThreshold,
+                                  patchSize=patchSize,
+                                  scoreType=cv2.ORB_HARRIS_SCORE)
 
     def get_features_descriptors(self, image, mask=None):
         if len(image.shape) > 2:
