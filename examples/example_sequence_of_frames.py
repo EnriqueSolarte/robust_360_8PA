@@ -83,7 +83,7 @@ if __name__ == '__main__':
     i = 0
 
     for idx in range(dt.number_frames):
-        frame_curr = Frame(**dt.get_frame(idx, return_dict=True))
+        frame_curr = Frame(**dt.get_frame(idx, return_dict=True), **dict(idx=idx))
 
         if idx == i:
             tracker.set_initial_frame(initial_frame=frame_curr,

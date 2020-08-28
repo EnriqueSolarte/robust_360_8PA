@@ -29,9 +29,6 @@ def pcl_creation(**kwargs):
         pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
                                             loc=kwargs["loc"],
                                             res=kwargs["res"])
-
-        samples = np.random.randint(0, pcl.shape[1], kwargs["pts"])
-        pcl = pcl[:, samples]
     else:
         mask = get_mask_map_by_res_loc(data_scene.shape,
                                        res=kwargs["res"],
@@ -40,9 +37,10 @@ def pcl_creation(**kwargs):
             idx=kwargs["idx_frame"],
             extractor=kwargs["feat_extractor"],
             mask=mask)
-        if pcl.shape[1] > kwargs["pts"]:
-            samples = np.random.randint(0, pcl.shape[1], kwargs["pts"])
-            pcl = pcl[:, samples]
+
+    if pcl.shape[1] > kwargs["max_pts"]:
+        samples = np.random.randint(0, pcl.shape[1], kwargs["max_pts"])
+        pcl = pcl[:, samples]
 
     return pcl
 
@@ -51,7 +49,7 @@ def get_file_name(**kwargs):
     scene = os.path.dirname(kwargs["data_scene"].scene)
     filename = scene + "_fr_" + str(kwargs["idx_frame"])
     filename += "_fov_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
-    filename += "_" + kwargs["pcl"]
+    filename += "_plc_" + kwargs["pcl"]
     filename += "_noise_" + str(kwargs["noise"]) + "." + str(
         kwargs["outliers"])
     filename += "_grid_" + str(kwargs["grid"][0])
@@ -77,7 +75,7 @@ def msk(eval, quantile):
     return eval
 
 
-def eval_methods(**kwargs):
+def eval_error_surface(**kwargs):
     g8p_norm = norm_8pa(version=kwargs["opt_version"])
     pcl = pcl_creation(**kwargs)
 
@@ -192,7 +190,7 @@ def plot_contours(**kwargs):
         min_val = np.unravel_index(np.argmin(results, axis=None),
                                    results.shape)
         kwargs["minimum"][eval] = kwargs["v_grid"][
-            min_val[1]], kwargs["v_grid"][min_val[0]], results.min()
+                                      min_val[1]], kwargs["v_grid"][min_val[0]], results.min()
         if eval in kwargs["mask_results"]:
             results = msk(results, kwargs["mask_quantile"])
         loc = np.squeeze(np.where(idxs == i))
@@ -206,22 +204,22 @@ def plot_contours(**kwargs):
 
         fig.update_xaxes(title_text="S", row=loc[0] + 1, col=loc[1] + 1)
         fig.update_yaxes(title_text="K", row=loc[0] + 1, col=loc[1] + 1)
-        fig.add_trace(go.Scatter(x=(1, ),
-                                 y=(1, ),
+        fig.add_trace(go.Scatter(x=(1,),
+                                 y=(1,),
                                  mode='markers',
                                  marker=dict(size=8, color=_8PA_COLOR),
                                  name="8PA"),
                       row=loc[0] + 1,
                       col=loc[1] + 1)
-        fig.add_trace(go.Scatter(x=(kwargs["minimum"][eval][0], ),
-                                 y=(kwargs["minimum"][eval][1], ),
+        fig.add_trace(go.Scatter(x=(kwargs["minimum"][eval][0],),
+                                 y=(kwargs["minimum"][eval][1],),
                                  name="min",
                                  mode='markers',
                                  marker=dict(size=10, color=MIN_COLOR)),
                       row=loc[0] + 1,
                       col=loc[1] + 1)
-        fig.add_trace(go.Scatter(x=(kwargs["Ours"]["S"], ),
-                                 y=(kwargs["Ours"]["K"], ),
+        fig.add_trace(go.Scatter(x=(kwargs["Ours"]["S"],),
+                                 y=(kwargs["Ours"]["K"],),
                                  name="Ours",
                                  mode='markers',
                                  marker=dict(size=8, color=OURS_COLOR)),
@@ -250,15 +248,15 @@ def plot_surfaces(**kwargs):
                         }, {
                             'is_3d': True
                         }],
-                               [{
-                                   'is_3d': True
-                               }, {
-                                   'is_3d': True
-                               }, {
-                                   'is_3d': True
-                               }, {
-                                   'is_3d': True
-                               }]])
+                            [{
+                                'is_3d': True
+                            }, {
+                                'is_3d': True
+                            }, {
+                                'is_3d': True
+                            }, {
+                                'is_3d': True
+                            }]])
 
     idxs = np.linspace(0, 7, 8).reshape(2, -1)
     for i, eval in enumerate(titles):
@@ -276,23 +274,23 @@ def plot_surfaces(**kwargs):
                       col=loc[1] + 1)
 
         if eval in ("error_rot", "error_tran"):
-            fig.add_trace(go.Scatter3d(x=(kwargs["Ours"]["S"], ),
-                                       y=(kwargs["Ours"]["K"], ),
-                                       z=(kwargs["Ours"][eval], ),
+            fig.add_trace(go.Scatter3d(x=(kwargs["Ours"]["S"],),
+                                       y=(kwargs["Ours"]["K"],),
+                                       z=(kwargs["Ours"][eval],),
                                        marker=dict(color=OURS_COLOR, size=5),
                                        name="Ours"),
                           row=loc[0] + 1,
                           col=loc[1] + 1)
-            fig.add_trace(go.Scatter3d(x=(1, ),
-                                       y=(1, ),
-                                       z=(kwargs["8PA"][eval], ),
+            fig.add_trace(go.Scatter3d(x=(1,),
+                                       y=(1,),
+                                       z=(kwargs["8PA"][eval],),
                                        marker=dict(color=_8PA_COLOR, size=5),
                                        name="8PA"),
                           row=loc[0] + 1,
                           col=loc[1] + 1)
-            fig.add_trace(go.Scatter3d(x=(kwargs["minimum"][eval][0], ),
-                                       y=(kwargs["minimum"][eval][1], ),
-                                       z=(kwargs["minimum"][eval][2], ),
+            fig.add_trace(go.Scatter3d(x=(kwargs["minimum"][eval][0],),
+                                       y=(kwargs["minimum"][eval][1],),
+                                       z=(kwargs["minimum"][eval][2],),
                                        marker=dict(color=MIN_COLOR, size=5),
                                        name="min"),
                           row=loc[0] + 1,
@@ -328,35 +326,36 @@ def plot_surfaces(**kwargs):
 if __name__ == '__main__':
     np.random.seed(50)
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    # scene = "2azQ1b91cZZ/0"
+    scene = "2azQ1b91cZZ/0"
     # scene = "1LXtFkjw3qL/0"
-    scene = "759xd9YjKW5/0"
+    # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=62,
-        pts=150,
+        idx_frame=549,
+        max_pts=150,
         res=(65.5, 46.4),
         # res=(180, 180),
         loc=(0, 0),
-        pcl="by_k_features",
-        # pcl="by_sampling",
         # feat_extractor=ORBExtractor(),
         feat_extractor=Shi_Tomasi_Extractor())
 
-    pcl_settings = dict(t_vector=get_random_vector_R3(1, 1, 1),
-                        r_vector=get_random_vector_R3(10, 10, 10),
-                        noise=500,
-                        outliers=0.00)
+    pcl_settings = dict(
+        pcl="by_k_features",
+        # pcl="by_sampling",
+        t_vector=(0.01, 0, 0.5),
+        r_vector=(10, 10, 10),
+        noise=500,
+        outliers=0.05)
 
     model_settings = dict(
         opt_version="v1",
         grid=(-1, 1, 100),
-        mask_results=("loss", "loss_delta", "loss_c"),
+        mask_results=("loss", "loss_delta", "loss_c", "error_rot", "error_tran"),
         # mask_results=(None,),
         mask_quantile=0.25,
         optimal_parameters=None)
 
-    eval_methods(**scene_settings, **pcl_settings, **model_settings)
+    eval_error_surface(**scene_settings, **pcl_settings, **model_settings)
