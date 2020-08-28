@@ -267,7 +267,7 @@ if __name__ == '__main__':
             x=errs,
             y=error_8p[:, 1],
             line=dict(width=2, dash='dot'),
-            name='8p-trans'),
+            name='8pa-trans'),
         row=1,
         col=2)
 
