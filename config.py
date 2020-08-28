@@ -7,9 +7,8 @@ dataset = "minos"
 output_dir = "/home/justin/slam/optimal8PA/report"
 
 if dataset == "minos":
-    # path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+    basedir = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/3dv2020"
-    path = "/home/kike/Documents/datasets/MP3D_VO"
     scene = "2azQ1b91cZZ" + "/0"
     idx_frame = 549
 elif dataset == "tum_rgbd":
@@ -30,14 +29,14 @@ noises = [500, 1000, 2000, 10000]
 # noises = [i for i in range(100, 10000 + 1, 500)]
 
 # ! Point
-points = [8, 150, 500, 1000]
-# points = list(range(8, 101, 10))
+# points = [8, 150, 500, 1000]
+points = list(range(8, 100, 10))
 # points = [i for i in range(10, 1000 + 1, 10)]
 # degs = [3.21, 2.27, 1.60, 0.72]
 
 # ! Choices: "noise", "fov", "point"
 experiment_group_choices = ["noise", "fov", "point", "frame"]
-experiment_group = experiment_group_choices[3]
+experiment_group = experiment_group_choices[2]
 
 noise = noises[0] if experiment_group != "noise" else None
 res = ress[1] if experiment_group != "fov" else None

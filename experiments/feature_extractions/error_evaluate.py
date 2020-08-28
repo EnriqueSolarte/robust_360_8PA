@@ -57,9 +57,15 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
 
     for _ in range(100):
         # ! relative camera pose from a to b
+        # cam_a2b = get_homogeneous_transform_from_vectors(
+        #     t_vector=(np.random.uniform(-1, 1), np.random.uniform(-1, 1),
+        #               np.random.uniform(-1, 1)),
+        #     r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
+        #               np.random.uniform(-10, 10)))
+
         cam_a2b = get_homogeneous_transform_from_vectors(
-            t_vector=(np.random.uniform(-1, 1), np.random.uniform(-1, 1),
-                      np.random.uniform(-1, 1)),
+            t_vector=(np.random.uniform(0, 0.01), np.random.uniform(0, 0.01),
+                      np.random.uniform(0, 0.5)),
             r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
                       np.random.uniform(-10, 10)))
 
@@ -68,8 +74,8 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
         pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
                                  param=noise)
         # ! We expect that there are 1% outliers besides of the noise
-        # pcl_b = add_outliers_to_pcl(pcl_b.copy(),
-        #                             outliers=int(0.05 * pcl_a.shape[1]))
+        pcl_b = add_outliers_to_pcl(pcl_b.copy(),
+                                    outliers=int(0.10 * pcl_a.shape[1]))
 
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
@@ -157,11 +163,11 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
 
 
 if __name__ == '__main__':
-    assert experiment_group != experiment_group_choices[3]
-    assert experiment == experiment_choices[1]
+    assert experiment_group != experiment_group_choices[3] and \
+           experiment == experiment_choices[1]
 
     if dataset == "minos":
-        data = MP3D_VO(path=path, scene=scene)
+        data = MP3D_VO(basedir=basedir, scene=scene)
 
     if experiment_group != experiment_group_choices[2]:
         if experiment_group == experiment_group_choices[1]:
