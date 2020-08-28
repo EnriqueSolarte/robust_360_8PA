@@ -44,6 +44,3 @@ point = points[1] if experiment_group != "point" else None
 
 experiment_choices = ["sample", "feature"]
 experiment = experiment_choices[1]
-
-point = 99
-point = 99

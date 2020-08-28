@@ -259,7 +259,7 @@ if __name__ == '__main__':
             x=errs,
             y=error_8p[:, 0],
             line=dict(width=2, dash='dot'),
-            name='8p-rot'),
+            name='8pa-rot'),
         row=1,
         col=1)
     fig.add_trace(
