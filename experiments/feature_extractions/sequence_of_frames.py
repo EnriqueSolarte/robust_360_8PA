@@ -1,19 +1,15 @@
-from read_datasets.MP3D_VO import MP3D_VO
-
 import cv2
+
+from config import *
+from geometry_utilities import *
+from image_utilities import get_mask_map_by_res_loc
+from pcl_utilities import *
+from read_datasets.MP3D_VO import MP3D_VO
 
 # ! Feature extractor
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-
-from tracker import LKTracker
-from frame import Frame
-from geometry_utilities import *
-from file_utilities import create_dir, write_report, create_file
-
-from config import *
-from pcl_utilities import *
-
-from image_utilities import get_mask_map_by_res_loc
+from structures.frame import Frame
+from structures.tracker import LKTracker
 
 error_n8p, error_8p = [], []
 
@@ -94,7 +90,7 @@ if __name__ == '__main__':
     assert experiment == experiment_choices[1]
 
     if dataset == "minos":
-        data = MP3D_VO(basedir=path, scene=scene)
+        data = MP3D_VO(basedir=basedir, scene=scene)
 
     tracker = LKTracker()
     threshold_camera_distance = 0.5

@@ -57,9 +57,15 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
 
     for _ in range(100):
         # ! relative camera pose from a to b
+        # cam_a2b = get_homogeneous_transform_from_vectors(
+        #     t_vector=(np.random.uniform(-1, 1), np.random.uniform(-1, 1),
+        #               np.random.uniform(-1, 1)),
+        #     r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
+        #               np.random.uniform(-10, 10)))
+
         cam_a2b = get_homogeneous_transform_from_vectors(
-            t_vector=(np.random.uniform(-1, 1), np.random.uniform(-1, 1),
-                      np.random.uniform(-1, 1)),
+            t_vector=(np.random.uniform(0, 0.5), np.random.uniform(0, 0.5),
+                      np.random.uniform(0, 0.5)),
             r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
                       np.random.uniform(-10, 10)))
 
@@ -157,11 +163,11 @@ def eval_error(res, noise, loc, data_scene, idx_frame, opt_version, scene,
 
 
 if __name__ == '__main__':
-    assert experiment_group != experiment_group_choices[3]
-    assert experiment == experiment_choices[1]
+    assert experiment_group != experiment_group_choices[3] and \
+           experiment == experiment_choices[1]
 
     if dataset == "minos":
-        data = MP3D_VO(path=path, scene=scene)
+        data = MP3D_VO(basedir=basedir, scene=scene)
 
     if experiment_group != experiment_group_choices[2]:
         if experiment_group == experiment_group_choices[1]:

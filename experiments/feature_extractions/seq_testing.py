@@ -1,19 +1,14 @@
-from read_datasets.MP3D_VO import MP3D_VO
-
 import cv2
 
-# ! Feature extractor
-from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-
-from tracker import LKTracker
+from config import *
 from frame import Frame
 from geometry_utilities import *
-from file_utilities import create_dir, write_report, create_file
-
-from config import *
-from pcl_utilities import *
-
 from image_utilities import get_mask_map_by_res_loc
+from pcl_utilities import *
+from read_datasets.MP3D_VO import MP3D_VO
+# ! Feature extractor
+from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
+from structures.tracker import LKTracker
 
 error_n8p, error_8p = [], []
 
@@ -77,24 +72,14 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
     print(
         "====================================================================="
     )
-    # cv2.waitKey(0)
-    '''
-        line = [
-            error_n8p[-1][0],
-            error_8p[-1][0],
-            error_n8p[-1][1],
-            error_8p[-1][1],
-        ]
-        write_report(os.path.join(output_dir, file), line)
-    '''
 
 
 if __name__ == '__main__':
-    assert experiment_group == experiment_group_choices[3]
-    assert experiment == experiment_choices[1]
+    assert experiment_group == experiment_group_choices[3] and \
+           experiment == experiment_choices[1]
 
     if dataset == "minos":
-        data = MP3D_VO(path=path, scene=scene)
+        data = MP3D_VO(basedir=basedir, scene=scene)
 
     tracker = LKTracker()
     threshold_camera_distance = 0.5
@@ -102,36 +87,14 @@ if __name__ == '__main__':
     i = 0
 
     save = True
-    '''
-    output_dir = os.path.join(OUTPUT_MP3D_SAMPLES, "camera_pose", scene, path)
-    create_dir(output_dir)
-
-    # ! Output file
-    file = "camera_pose_estimation.csv"
-
-    # ! Print fieldnames
-    authors = ["Ours", "8PA"]
-    oris = ["rot", "trans"]
-    terms = ["Q1", "Q2", "Q3", "Mean", "STD"]
-
-    fieldnames = []
-    for ori in oris:
-        for author in authors:
-            fieldnames.append(author + "-" + ori)
-
-    create_file(os.path.join(output_dir, file))
-    write_report(os.path.join(output_dir, file), fieldnames)
-    '''
-
     file = None
     mask = None
 
     res = ress[0]
 
     # data.number_frames
-    # tmp = 500
     errs = []
-    for idx in range(i, 10):
+    for idx in range(i, 100):
         frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
 
         if idx == i:
@@ -161,55 +124,9 @@ if __name__ == '__main__':
             errs.append(idx)
 
         tracked_img = tracker.track(frame=frame_curr)
-        # print("Camera Distance       {}".format(camera_distance))
-        # print("Tracked features      {}".format(len(tracker.tracks)))
-        # prinerror_8p[-1][0],t("KeyFrame/CurrFrame:   {}-{}".format(tracker.initial_frame.idx, frame_curr.idx))
         cv2.namedWindow("preview")
         cv2.imshow("preview", tracked_img[:, :, ::-1])
         cv2.waitKey(1)
-
-    # # ! Print fieldnames
-    # fieldnames = []
-    # for term in terms:
-    #     for ori in oris:
-    #         for author in authors:
-    #             fieldnames.append(author + "-" + term + "-" + ori)
-    # write_report(os.path.join(output_dir, file), fieldnames)
-    '''
-    line = [
-        np.quantile(error_n8p, 0.25, axis=0)[0],
-        np.quantile(error_8p, 0.25, axis=0)[0],
-        np.quantile(error_n8p, 0.25, axis=0)[1],
-        np.quantile(error_8p, 0.25, axis=0)[1],
-        # np.quantile(geo_error_n8p, 0.25, axis=0),
-        # np.quantile(geo_error_8p, 0.25, axis=0),
-        np.median(error_n8p, axis=0)[0],
-        np.median(error_8p, axis=0)[0],
-        np.median(error_n8p, axis=0)[1],
-        np.median(error_8p, axis=0)[1],
-        # np.median(geo_error_n8p, axis=0),
-        # np.median(geo_error_8p, axis=0),
-        np.quantile(error_n8p, 0.75, axis=0)[0],
-        np.quantile(error_8p, 0.75, axis=0)[0],
-        np.quantile(error_n8p, 0.75, axis=0)[1],
-        np.quantile(error_8p, 0.75, axis=0)[1],
-        # np.quantile(geo_error_n8p, 0.75, axis=0),
-        # np.quantile(geo_error_8p, 0.75, axis=0),
-        np.mean(error_n8p, axis=0)[0],
-        np.mean(error_8p, axis=0)[0],
-        np.mean(error_n8p, axis=0)[1],
-        np.mean(error_8p, axis=0)[1],
-        # np.mean(geo_error_n8p, axis=0),
-        # np.mean(geo_error_8p, axis=0),
-        np.std(error_n8p, axis=0)[0],
-        np.std(error_8p, axis=0)[0],
-        np.std(error_n8p, axis=0)[1],
-        np.std(error_8p, axis=0)[1],
-        # np.std(geo_error_n8p, axis=0),
-        # np.std(geo_error_8p, axis=0)
-    ]
-    write_report(os.path.join(output_dir, file), line)
-    '''
 
     print(
         "====================================================================="
@@ -286,7 +203,7 @@ if __name__ == '__main__':
                           size=14,
                       ))
 
-    # fig.show()
+    fig.show()
 
     if save:
         # ! Save .html
@@ -304,15 +221,3 @@ if __name__ == '__main__':
                 "mc" if motion_constraint else "!mc", experiment_group, noise,
                 str(res[0]) + "x" + str(res[1]), opt_version),
             scale=2)
-        '''
-        # ! Save .svg
-        fig.write_image(
-            output_dir + "/{}/{}/{}/{}/{}_{}_{}_{}_{}_{}_{}_{}_{}.svg".format(
-                experiment, dataset, scene, str(idx_frame), scene[:-2], scene[-1:],
-                str(idx_frame), "mc"
-                if motion_constraint else "!mc", experiment_group, noise
-                if experiment_group != "noise" else "",
-                str(res[0]) + "x" + str(res[1])
-                if experiment_group != "fov" else "", point
-                if experiment_group != "point" else "", opt_version))
-        '''
