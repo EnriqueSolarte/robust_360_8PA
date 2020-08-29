@@ -11,7 +11,13 @@ from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 from structures.frame import Frame
 
+import plotly.graph_objects as go
+
 error_n8p, error_8p = [], []
+matches_list = []
+
+# ! Plot features
+fig = go.Figure()
 
 
 def eval_camera_pose(tracker, cam_gt, output_dir, file):
@@ -24,11 +30,9 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
     g8p = g8p()
 
     cam = Sphere(shape=tracker.initial_frame.shape)
-    matches = tracker.get_matches()
+    matches = np.array(tracker.get_matches())
+    matches_list.append(matches)
 
-    matches = np.array(matches)
-    import plotly.graph_objects as go
-    fig = go.Figure()
     fig.add_trace(
         go.Scatter(x=matches[0, :, 0],
                    y=matches[0, :, 1],
@@ -39,9 +43,16 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
                    y=matches[1, :, 1],
                    mode='markers',
                    name='Key'))
-    fig.update_xaxes(tickvals=list(range(0, 1024, 128)))
-    fig.update_yaxes(tickvals=list(range(0, 512, 128)))
-    fig.show()
+    fig['layout']['xaxis'].update(title='', range=[0, 1024], dtick=128, autorange=False)
+    fig.update_xaxes(
+        ticktext=list(range(-180, 180 + 1, 45)),
+        tickvals=list(range(0, 1024 + 1, 128)),
+    )
+    fig['layout']['yaxis'].update(title='', range=[0, 512], dtick=128, autorange=False)
+    fig.update_yaxes(
+        ticktext=list(np.arange(-90, 90 + 1, 22.5)),
+        tickvals=list(range(0, 512 + 1, 64)),
+    )
 
     # rot = get_rot_from_directional_vectors((0, 0, 1), (0, 0, 1))
     bearings_kf = cam.pixel2normalized_vector(matches[0])
@@ -105,15 +116,13 @@ if __name__ == '__main__':
     camera_distance = 0
     i = 0
 
-    save = True
+    save = False
     file = None
     mask = None
 
-    res = ress[0]
-
     # data.number_frames
     errs = []
-    for idx in range(i, 10):
+    for idx in range(i, data.number_frames):
         frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
 
         if idx == i:
@@ -146,6 +155,29 @@ if __name__ == '__main__':
         cv2.namedWindow("preview")
         cv2.imshow("preview", tracked_img[:, :, ::-1])
         cv2.waitKey(1)
+
+    fig.data[len(matches_list)].visible = True
+    # Create and add slider
+    steps = []
+    for i in range(len(matches_list)):
+        step = dict(
+            method="update",
+            args=[{"visible": [False] * len(matches_list)},
+                  {"title": str(i)}],  # layout attribute
+        )
+        step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
+        steps.append(step)
+
+    sliders = [dict(
+        active=len(matches_list),
+        steps=steps
+    )]
+
+    fig.update_layout(
+        sliders=sliders
+    )
+
+    fig.show()
 
     print(
         "====================================================================="
@@ -206,23 +238,23 @@ if __name__ == '__main__':
     fig.update_yaxes(title_text="Error", row=1, col=2)
     fig.update_traces(mode='lines+markers', line_shape='linear')
     fig.update_xaxes(title_text=experiment_group[0].upper() +
-                     experiment_group[1:] + " - Rot",
+                                experiment_group[1:] + " - Rot",
                      row=1,
                      col=1)
     fig.update_xaxes(title_text=experiment_group[0].upper() +
-                     experiment_group[1:] + " - Trans",
+                                experiment_group[1:] + " - Trans",
                      row=1,
                      col=2)
     fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
         experiment, dataset, scene[:-2], scene[-1:],
         "mc" if motion_constraint else "!mc", experiment_group, noise,
         str(res[0]) + "x" + str(res[1]), opt_version),
-                      font=dict(
-                          family="Courier New, monospace",
-                          size=14,
-                      ))
+        font=dict(
+            family="Courier New, monospace",
+            size=14,
+        ))
 
-    fig.show()
+    # fig.show()
 
     if save:
         # ! Save .html

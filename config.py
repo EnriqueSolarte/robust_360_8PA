@@ -36,7 +36,7 @@ points = list(range(8, 100, 10))
 
 # ! Choices: "noise", "fov", "point"
 experiment_group_choices = ["noise", "fov", "point", "frame"]
-experiment_group = experiment_group_choices[2]
+experiment_group = experiment_group_choices[3]
 
 noise = noises[0] if experiment_group != "noise" else None
 res = ress[1] if experiment_group != "fov" else None
