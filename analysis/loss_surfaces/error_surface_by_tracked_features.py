@@ -10,6 +10,8 @@ import plotly.io as pio
 import os
 from structures.extractor.orb_extractor import ORBExtractor
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
+from structures.tracker import LKTracker
+from structures.frame import Frame
 import cv2
 from analysis.delta_bound import get_frobenius_norm
 
@@ -20,38 +22,58 @@ _8PA_COLOR = (0, 0, 154)
 MIN_COLOR = (0, 255, 50)
 
 
-def pcl_creation(**kwargs):
-    data_scene = kwargs["data_scene"]
-    assert kwargs["pcl"] in ("by_sampling", "by_k_features")
-    if kwargs["pcl"] == "by_sampling":
-        pcl_dense, pcl_dense_color, _ = data_scene.get_pcl(
-            idx=kwargs["idx_frame"])
-        pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
-                                            loc=kwargs["loc"],
-                                            res=kwargs["res"])
-    else:
-        mask = get_mask_map_by_res_loc(data_scene.shape,
-                                       res=kwargs["res"],
-                                       loc=kwargs["loc"])
-        pcl = data_scene.get_pcl_from_key_features(
-            idx=kwargs["idx_frame"],
-            extractor=kwargs["feat_extractor"],
-            mask=mask)
+def track_features(**kwargs):
+    initial_frame = kwargs["idx_frame"]
+    idx = initial_frame
+    while True:
+        frame_curr = Frame(**kwargs["data_scene"].get_frame(idx, return_dict=True),
+                           **dict(idx=idx))
+        if idx == initial_frame:
+            kwargs["tracker"].set_initial_frame(initial_frame=frame_curr,
+                                                extractor=kwargs["feat_extractor"],
+                                                mask=kwargs["mask"])
+            idx += 1
+            continue
+        idx += 1
+        relative_pose = frame_curr.get_relative_pose(
+            key_frame=kwargs["tracker"].initial_frame)
+        camera_distance = np.linalg.norm(relative_pose[0:3, 3])
 
-    if pcl.shape[1] > kwargs["pts"]:
-        samples = np.random.randint(0, pcl.shape[1], kwargs["pts"])
-        pcl = pcl[:, samples]
+        tracked_img = kwargs["tracker"].track(frame=frame_curr)
+        if kwargs["show_tracked_features"]:
+            print("Camera Distance       {}".format(camera_distance))
+            print("Tracked features      {}".format(len(kwargs["tracker"].tracks)))
+            print("KeyFrame/CurrFrame:   {}-{}".format(kwargs["tracker"].initial_frame.idx, frame_curr.idx))
+            cv2.imshow("preview", tracked_img[:, :, ::-1])
+            cv2.waitKey(10)
 
-    return pcl
+        if camera_distance > kwargs["distance_threshold"]:
+            break
+
+    relative_pose = frame_curr.get_relative_pose(
+        key_frame=kwargs["tracker"].initial_frame)
+    cam = Sphere(shape=kwargs["tracker"].initial_frame.shape)
+    matches = kwargs["tracker"].get_matches()
+    bearings_kf = cam.pixel2normalized_vector(matches[0])
+    bearings_frm = cam.pixel2normalized_vector(matches[1])
+    return bearings_kf, bearings_frm, relative_pose, kwargs
 
 
 def get_file_name(**kwargs):
     scene = os.path.dirname(kwargs["data_scene"].scene)
-    filename = scene + "_fr_" + str(kwargs["idx_frame"])
+    filename = scene + "_tracking_features"
+    if kwargs["useOnlyTrackedFeatures"]:
+        filename += "_onlyFeatures_"
+    else:
+        filename += "_using_KF_features_"
+        filename += "_noise_" + str(kwargs["noise"])
+        filename += "_outliers_" + str(kwargs["outliers"])
+
     filename += "_fov_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
-    filename += "_" + kwargs["pcl"]
-    filename += "_noise_" + str(kwargs["noise"]) + "." + str(
-        kwargs["outliers"])
+    filename += "_kfr" + str(kwargs["tracker"].initial_frame.idx)
+    filename += "_fr" + str(kwargs["tracker"].tracked_frame.idx)
+    filename += "_d" + str(kwargs["distance_threshold"])
+    filename += "_feat" + str(len(kwargs["tracker"].tracks))
     filename += "_grid_" + str(kwargs["grid"][0])
     filename += "." + str(kwargs["grid"][1])
     filename += "." + str(kwargs["grid"][2])
@@ -60,9 +82,9 @@ def get_file_name(**kwargs):
         pass
     else:
         filename += "_masking_"
-        for mask in kwargs["mask_results"]:
-            filename += mask + "_"
-        filename += str(kwargs["mask_quantile"])
+    for mask in kwargs["mask_results"]:
+        filename += mask + "_Q"
+    filename += str(kwargs["mask_quantile"])
 
     return filename
 
@@ -77,10 +99,24 @@ def msk(eval, quantile):
 
 def eval_error_surface(**kwargs):
     g8p_norm = norm_8pa(version=kwargs["opt_version"])
+    kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
+                                             res=kwargs["res"],
+                                             loc=kwargs["loc"])
+    bearings_a, bearings_b, cam_a2b, kwargs = track_features(**kwargs)
+    if not kwargs["useOnlyTrackedFeatures"]:
+        pcl = kwargs["data_scene"].get_pcl_from_key_features(
+            idx=kwargs["idx_frame"],
+            extractor=kwargs["feat_extractor"],
+            mask=kwargs["mask"])
+        bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(
+            pcl=pcl,
+            t_vector=cam_a2b[0:3, 3],
+            rotation=cam_a2b[0:3, 0:3],
+            noise=kwargs["noise"],
+            outliers=kwargs["outliers"] * bearings_a.shape[1])
 
-    bearings_a, bearings_b, cam_a2b = track_features(**kwargs)
-
-    plot_pcl_and_cameras(bearings_a[0:3, :].T, cam2=cam_a2b)
+    if kwargs["show_3D_cameras"]:
+        plot_pcl_and_cameras(bearings_a[0:3, :].T, cam2=cam_a2b)
 
     e = g8p_norm.build_E_by_cam_pose(cam_a2b)
     v = np.linspace(start=kwargs["grid"][0],
@@ -328,21 +364,33 @@ if __name__ == '__main__':
     data = MP3D_VO(scene=scene, basedir=path)
 
     scene_settings = dict(data_scene=data,
-                          range_frames=(549, -1),
+                          idx_frame=549,
                           distance_threshold=0.5,
                           max_pts=150,
                           res=(65.5, 46.4),
                           # res=(180, 180),
                           loc=(0, 0),
-                          # feat_extractor=ORBExtractor(),
-                          feat_extractor=Shi_Tomasi_Extractor())
+                          )
+
+    features_setting = dict(
+        # feat_extractor=ORBExtractor(),
+        feat_extractor=Shi_Tomasi_Extractor(),
+        tracker=LKTracker(),
+        useOnlyTrackedFeatures=False,
+        noise=500,
+        outliers=0.0
+    )
 
     model_settings = dict(
         opt_version="v1",
         grid=(-1, 1, 100),
-        mask_results=("loss", "loss_delta", "loss_c"),
-        # mask_results=(None,),
+        # mask_results=("loss", "error_rot", "error_tran"),
+        mask_results=('loss',),
         mask_quantile=0.25,
-        optimal_parameters=None)
-
-    eval_error_surface(**scene_settings, **model_settings)
+        optimal_parameters=None,
+        show_tracked_features=True,
+        show_3D_cameras=False
+    )
+    eval_error_surface(**scene_settings,
+                       **model_settings,
+                       **features_setting)

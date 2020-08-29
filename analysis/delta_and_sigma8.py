@@ -19,7 +19,7 @@ def main(**arg):
     bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(
         pcl=pcl_dense[:, samples],
         t_vector=arg["t_vector"],
-        rot_vector=arg["r_vector"],
+        rotation=arg["r_vector"],
         noise=arg["noise"],
         outliers=arg["outliers"] * len(samples))
 
