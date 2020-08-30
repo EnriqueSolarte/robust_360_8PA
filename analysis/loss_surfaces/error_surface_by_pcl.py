@@ -47,9 +47,8 @@ def pcl_creation(**kwargs):
 
 def get_file_name(**kwargs):
     scene = os.path.dirname(kwargs["data_scene"].scene)
-    filename = scene + "_fr_" + str(kwargs["idx_frame"])
+    filename = scene + "_plc_" + kwargs["pcl"] + "_fr_" + str(kwargs["idx_frame"])
     filename += "_fov_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
-    filename += "_plc_" + kwargs["pcl"]
     filename += "_noise_" + str(kwargs["noise"]) + "." + str(
         kwargs["outliers"])
     filename += "_grid_" + str(kwargs["grid"][0])
@@ -82,7 +81,7 @@ def eval_error_surface(**kwargs):
     bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(
         pcl=pcl,
         t_vector=kwargs["t_vector"],
-        rot_vector=kwargs["r_vector"],
+        rotation=kwargs["r_vector"],
         noise=kwargs["noise"],
         outliers=kwargs["outliers"] * pcl.shape[1])
     plot_pcl_and_cameras(pcl[0:3, :].T, cam2=cam_a2b)
