@@ -43,12 +43,18 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
                    y=matches[1, :, 1],
                    mode='markers',
                    name='Key'))
-    fig['layout']['xaxis'].update(title='', range=[0, 1024], dtick=128, autorange=False)
+    fig['layout']['xaxis'].update(title='',
+                                  range=[0, 1024],
+                                  dtick=128,
+                                  autorange=False)
     fig.update_xaxes(
         ticktext=list(range(-180, 180 + 1, 45)),
         tickvals=list(range(0, 1024 + 1, 128)),
     )
-    fig['layout']['yaxis'].update(title='', range=[0, 512], dtick=128, autorange=False)
+    fig['layout']['yaxis'].update(title='',
+                                  range=[0, 512],
+                                  dtick=128,
+                                  autorange=False)
     fig.update_yaxes(
         ticktext=list(np.arange(-90, 90 + 1, 22.5)),
         tickvals=list(range(0, 512 + 1, 64)),
@@ -162,20 +168,18 @@ if __name__ == '__main__':
     for i in range(len(matches_list)):
         step = dict(
             method="update",
-            args=[{"visible": [False] * len(matches_list)},
-                  {"title": str(i)}],  # layout attribute
+            args=[{
+                "visible": [False] * len(matches_list)
+            }, {
+                "title": str(i)
+            }],  # layout attribute
         )
         step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
         steps.append(step)
 
-    sliders = [dict(
-        active=len(matches_list),
-        steps=steps
-    )]
+    sliders = [dict(active=len(matches_list), steps=steps)]
 
-    fig.update_layout(
-        sliders=sliders
-    )
+    fig.update_layout(sliders=sliders)
 
     fig.show()
 
@@ -238,21 +242,21 @@ if __name__ == '__main__':
     fig.update_yaxes(title_text="Error", row=1, col=2)
     fig.update_traces(mode='lines+markers', line_shape='linear')
     fig.update_xaxes(title_text=experiment_group[0].upper() +
-                                experiment_group[1:] + " - Rot",
+                     experiment_group[1:] + " - Rot",
                      row=1,
                      col=1)
     fig.update_xaxes(title_text=experiment_group[0].upper() +
-                                experiment_group[1:] + " - Trans",
+                     experiment_group[1:] + " - Trans",
                      row=1,
                      col=2)
     fig.update_layout(title="{}_{}_{}_{}_{}_{}_{}_{}_{}".format(
         experiment, dataset, scene[:-2], scene[-1:],
         "mc" if motion_constraint else "!mc", experiment_group, noise,
         str(res[0]) + "x" + str(res[1]), opt_version),
-        font=dict(
-            family="Courier New, monospace",
-            size=14,
-        ))
+                      font=dict(
+                          family="Courier New, monospace",
+                          size=14,
+                      ))
 
     # fig.show()
 

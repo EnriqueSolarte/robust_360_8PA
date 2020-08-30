@@ -16,6 +16,7 @@ def plot_point_distribution(matches):
     fig = px.scatter(x=matches[0, :, 0], y=matches[0, :, 1])
     fig.show()
 
+
 def plot_sk_values(noise, res, point, save=False):
     s1_m, s1_std, s2_m, s2_std = [], [], [], []
     k1_m, k1_std, k2_m, k2_std = [], [], [], []
