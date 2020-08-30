@@ -29,8 +29,8 @@ noises = [500, 1000, 2000, 10000]
 # noises = [i for i in range(100, 10000 + 1, 500)]
 
 # ! Point
-# points = [8, 150, 500, 1000]
-points = list(range(8, 100, 10))
+points = [8, 150, 500, 1000]
+# points = list(range(8, 100, 10))
 # points = [i for i in range(10, 1000 + 1, 10)]
 # degs = [3.21, 2.27, 1.60, 0.72]
 

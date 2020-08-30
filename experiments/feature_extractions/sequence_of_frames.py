@@ -122,7 +122,7 @@ if __name__ == '__main__':
     file = None
     mask = None
 
-    res = ress[0]
+    res = ress[3]
 
     # data.number_frames
     # tmp = 500
