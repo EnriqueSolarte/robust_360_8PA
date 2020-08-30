@@ -258,7 +258,7 @@ if __name__ == '__main__':
                           size=14,
                       ))
 
-    # fig.show()
+    fig.show()
 
     if save:
         # ! Save .html
