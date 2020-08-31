@@ -22,58 +22,21 @@ _8PA_COLOR = (0, 0, 154)
 MIN_COLOR = (0, 255, 50)
 
 
-def track_features(**kwargs):
-    initial_frame = kwargs["idx_frame"]
-    idx = initial_frame
-    while True:
-        frame_curr = Frame(**kwargs["data_scene"].get_frame(idx, return_dict=True),
-                           **dict(idx=idx))
-        if idx == initial_frame:
-            kwargs["tracker"].set_initial_frame(initial_frame=frame_curr,
-                                                extractor=kwargs["feat_extractor"],
-                                                mask=kwargs["mask"])
-            idx += 1
-            continue
-        idx += 1
-        relative_pose = frame_curr.get_relative_pose(
-            key_frame=kwargs["tracker"].initial_frame)
-        camera_distance = np.linalg.norm(relative_pose[0:3, 3])
-
-        tracked_img = kwargs["tracker"].track(frame=frame_curr)
-        if kwargs["show_tracked_features"]:
-            print("Camera Distance       {}".format(camera_distance))
-            print("Tracked features      {}".format(len(kwargs["tracker"].tracks)))
-            print("KeyFrame/CurrFrame:   {}-{}".format(kwargs["tracker"].initial_frame.idx, frame_curr.idx))
-            cv2.imshow("preview", tracked_img[:, :, ::-1])
-            cv2.waitKey(10)
-
-        if camera_distance > kwargs["distance_threshold"]:
-            break
-
-    relative_pose = frame_curr.get_relative_pose(
-        key_frame=kwargs["tracker"].initial_frame)
-    cam = Sphere(shape=kwargs["tracker"].initial_frame.shape)
-    matches = kwargs["tracker"].get_matches()
-    bearings_kf = cam.pixel2normalized_vector(matches[0])
-    bearings_frm = cam.pixel2normalized_vector(matches[1])
-    return bearings_kf, bearings_frm, relative_pose, kwargs
-
-
 def get_file_name(**kwargs):
     scene = os.path.dirname(kwargs["data_scene"].scene)
-    filename = scene + "_tracking_features"
+    filename = scene + "_" + kwargs["opt_version"] + "_tracking_"
     if kwargs["useOnlyTrackedFeatures"]:
-        filename += "_onlyFeatures_"
+        filename += "Kf_fr"
     else:
-        filename += "_using_KF_features_"
-        filename += "_noise_" + str(kwargs["noise"])
-        filename += "_outliers_" + str(kwargs["outliers"])
+        filename += "using_KF_features_"
+        filename += "noise_" + str(kwargs["noise"])
+        filename += "outliers" + str(kwargs["outliers"])
 
     filename += "_fov_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
     filename += "_kfr" + str(kwargs["tracker"].initial_frame.idx)
     filename += "_fr" + str(kwargs["tracker"].tracked_frame.idx)
-    filename += "_d" + str(kwargs["distance_threshold"])
-    filename += "_feat" + str(len(kwargs["tracker"].tracks))
+    filename += "_dist" + str(kwargs["distance_threshold"])
+    filename += "_NoFeat" + str(len(kwargs["tracker"].tracks))
     filename += "_grid_" + str(kwargs["grid"][0])
     filename += "." + str(kwargs["grid"][1])
     filename += "." + str(kwargs["grid"][2])
@@ -270,24 +233,23 @@ def plot_surfaces(**kwargs):
     fig = make_subplots(subplot_titles=titles,
                         rows=2,
                         cols=4,
-                        specs=[[{
-                            'is_3d': True
-                        }, {
-                            'is_3d': True
-                        }, {
-                            'is_3d': True
-                        }, {
-                            'is_3d': True
-                        }],
-                            [{
-                                'is_3d': True
-                            }, {
-                                'is_3d': True
-                            }, {
-                                'is_3d': True
-                            }, {
-                                'is_3d': True
-                            }]])
+                        specs=[[{'is_3d': True
+                                 }, {
+                                    'is_3d': True
+                                }, {
+                                    'is_3d': True
+                                }, {
+                                    'is_3d': True
+                                }],
+                               [{
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }]])
 
     idxs = np.linspace(0, 7, 8).reshape(2, -1)
     for i, eval in enumerate(titles):
@@ -363,33 +325,34 @@ if __name__ == '__main__':
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
 
-    scene_settings = dict(data_scene=data,
-                          idx_frame=549,
-                          distance_threshold=0.5,
-                          max_pts=150,
-                          res=(65.5, 46.4),
-                          # res=(180, 180),
-                          loc=(0, 0),
-                          )
+    scene_settings = dict(
+        data_scene=data,
+        idx_frame=549,
+        distance_threshold=0.5,
+        max_pts=150,
+        # res=(65.5, 46.4),
+        res=(360, 180),
+        loc=(0, 0),
+    )
 
     features_setting = dict(
         # feat_extractor=ORBExtractor(),
         feat_extractor=Shi_Tomasi_Extractor(),
         tracker=LKTracker(),
-        useOnlyTrackedFeatures=False,
+        useOnlyTrackedFeatures=True,
         noise=500,
-        outliers=0.0
+        outliers=0.25
     )
 
     model_settings = dict(
         opt_version="v1",
-        grid=(-1, 1, 100),
+        grid=(-1, 1, 50),
         # mask_results=("loss", "error_rot", "error_tran"),
         mask_results=('loss',),
         mask_quantile=0.25,
         optimal_parameters=None,
         show_tracked_features=True,
-        show_3D_cameras=False
+        show_3D_cameras=True
     )
     eval_error_surface(**scene_settings,
                        **model_settings,
