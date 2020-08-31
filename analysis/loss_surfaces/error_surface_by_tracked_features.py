@@ -26,12 +26,14 @@ def track_features(**kwargs):
     initial_frame = kwargs["idx_frame"]
     idx = initial_frame
     while True:
-        frame_curr = Frame(**kwargs["data_scene"].get_frame(idx, return_dict=True),
-                           **dict(idx=idx))
+        frame_curr = Frame(
+            **kwargs["data_scene"].get_frame(idx, return_dict=True),
+            **dict(idx=idx))
         if idx == initial_frame:
-            kwargs["tracker"].set_initial_frame(initial_frame=frame_curr,
-                                                extractor=kwargs["feat_extractor"],
-                                                mask=kwargs["mask"])
+            kwargs["tracker"].set_initial_frame(
+                initial_frame=frame_curr,
+                extractor=kwargs["feat_extractor"],
+                mask=kwargs["mask"])
             idx += 1
             continue
         idx += 1
@@ -42,8 +44,10 @@ def track_features(**kwargs):
         tracked_img = kwargs["tracker"].track(frame=frame_curr)
         if kwargs["show_tracked_features"]:
             print("Camera Distance       {}".format(camera_distance))
-            print("Tracked features      {}".format(len(kwargs["tracker"].tracks)))
-            print("KeyFrame/CurrFrame:   {}-{}".format(kwargs["tracker"].initial_frame.idx, frame_curr.idx))
+            print("Tracked features      {}".format(
+                len(kwargs["tracker"].tracks)))
+            print("KeyFrame/CurrFrame:   {}-{}".format(
+                kwargs["tracker"].initial_frame.idx, frame_curr.idx))
             cv2.imshow("preview", tracked_img[:, :, ::-1])
             cv2.waitKey(10)
 
@@ -221,7 +225,7 @@ def plot_contours(**kwargs):
         min_val = np.unravel_index(np.argmin(results, axis=None),
                                    results.shape)
         kwargs["minimum"][eval] = kwargs["v_grid"][
-                                      min_val[1]], kwargs["v_grid"][min_val[0]], results.min()
+            min_val[1]], kwargs["v_grid"][min_val[0]], results.min()
         if eval in kwargs["mask_results"]:
             results = msk(results, kwargs["mask_quantile"])
         loc = np.squeeze(np.where(idxs == i))
@@ -235,22 +239,22 @@ def plot_contours(**kwargs):
 
         fig.update_xaxes(title_text="S", row=loc[0] + 1, col=loc[1] + 1)
         fig.update_yaxes(title_text="K", row=loc[0] + 1, col=loc[1] + 1)
-        fig.add_trace(go.Scatter(x=(1,),
-                                 y=(1,),
+        fig.add_trace(go.Scatter(x=(1, ),
+                                 y=(1, ),
                                  mode='markers',
                                  marker=dict(size=8, color=_8PA_COLOR),
                                  name="8PA"),
                       row=loc[0] + 1,
                       col=loc[1] + 1)
-        fig.add_trace(go.Scatter(x=(kwargs["minimum"][eval][0],),
-                                 y=(kwargs["minimum"][eval][1],),
+        fig.add_trace(go.Scatter(x=(kwargs["minimum"][eval][0], ),
+                                 y=(kwargs["minimum"][eval][1], ),
                                  name="min",
                                  mode='markers',
                                  marker=dict(size=10, color=MIN_COLOR)),
                       row=loc[0] + 1,
                       col=loc[1] + 1)
-        fig.add_trace(go.Scatter(x=(kwargs["Ours"]["S"],),
-                                 y=(kwargs["Ours"]["K"],),
+        fig.add_trace(go.Scatter(x=(kwargs["Ours"]["S"], ),
+                                 y=(kwargs["Ours"]["K"], ),
                                  name="Ours",
                                  mode='markers',
                                  marker=dict(size=8, color=OURS_COLOR)),
@@ -279,15 +283,15 @@ def plot_surfaces(**kwargs):
                         }, {
                             'is_3d': True
                         }],
-                            [{
-                                'is_3d': True
-                            }, {
-                                'is_3d': True
-                            }, {
-                                'is_3d': True
-                            }, {
-                                'is_3d': True
-                            }]])
+                               [{
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }]])
 
     idxs = np.linspace(0, 7, 8).reshape(2, -1)
     for i, eval in enumerate(titles):
@@ -305,23 +309,23 @@ def plot_surfaces(**kwargs):
                       col=loc[1] + 1)
 
         if eval in ("error_rot", "error_tran"):
-            fig.add_trace(go.Scatter3d(x=(kwargs["Ours"]["S"],),
-                                       y=(kwargs["Ours"]["K"],),
-                                       z=(kwargs["Ours"][eval],),
+            fig.add_trace(go.Scatter3d(x=(kwargs["Ours"]["S"], ),
+                                       y=(kwargs["Ours"]["K"], ),
+                                       z=(kwargs["Ours"][eval], ),
                                        marker=dict(color=OURS_COLOR, size=5),
                                        name="Ours"),
                           row=loc[0] + 1,
                           col=loc[1] + 1)
-            fig.add_trace(go.Scatter3d(x=(1,),
-                                       y=(1,),
-                                       z=(kwargs["8PA"][eval],),
+            fig.add_trace(go.Scatter3d(x=(1, ),
+                                       y=(1, ),
+                                       z=(kwargs["8PA"][eval], ),
                                        marker=dict(color=_8PA_COLOR, size=5),
                                        name="8PA"),
                           row=loc[0] + 1,
                           col=loc[1] + 1)
-            fig.add_trace(go.Scatter3d(x=(kwargs["minimum"][eval][0],),
-                                       y=(kwargs["minimum"][eval][1],),
-                                       z=(kwargs["minimum"][eval][2],),
+            fig.add_trace(go.Scatter3d(x=(kwargs["minimum"][eval][0], ),
+                                       y=(kwargs["minimum"][eval][1], ),
+                                       z=(kwargs["minimum"][eval][2], ),
                                        marker=dict(color=MIN_COLOR, size=5),
                                        name="min"),
                           row=loc[0] + 1,
@@ -363,14 +367,15 @@ if __name__ == '__main__':
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
 
-    scene_settings = dict(data_scene=data,
-                          idx_frame=549,
-                          distance_threshold=0.5,
-                          max_pts=150,
-                          res=(65.5, 46.4),
-                          # res=(180, 180),
-                          loc=(0, 0),
-                          )
+    scene_settings = dict(
+        data_scene=data,
+        idx_frame=549,
+        distance_threshold=0.5,
+        max_pts=150,
+        res=(65.5, 46.4),
+        # res=(180, 180),
+        loc=(0, 0),
+    )
 
     features_setting = dict(
         # feat_extractor=ORBExtractor(),
@@ -378,19 +383,15 @@ if __name__ == '__main__':
         tracker=LKTracker(),
         useOnlyTrackedFeatures=False,
         noise=500,
-        outliers=0.0
-    )
+        outliers=0.0)
 
     model_settings = dict(
         opt_version="v1",
         grid=(-1, 1, 100),
         # mask_results=("loss", "error_rot", "error_tran"),
-        mask_results=('loss',),
+        mask_results=('loss', ),
         mask_quantile=0.25,
         optimal_parameters=None,
         show_tracked_features=True,
-        show_3D_cameras=False
-    )
-    eval_error_surface(**scene_settings,
-                       **model_settings,
-                       **features_setting)
+        show_3D_cameras=False)
+    eval_error_surface(**scene_settings, **model_settings, **features_setting)

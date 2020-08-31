@@ -12,6 +12,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         super().__init__()
         self.T1 = np.eye(3)
         self.T2 = np.eye(3)
+        self.version = version
         if version == 'v0':
             self.optimize_parameters = self.optimizer_v0
         if version == 'v1':
@@ -116,8 +117,9 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         # delta, C2 = get_delta_bound_by_bearings(x1, x2)
         # pm_norm = np.nanmean(angle_between_vectors_arrays(x1_norm, x2_norm))
         # pm = np.nanmean(angle_between_vectors_arrays(x1, x2))
-        print("S1   :{0:0.3f} - K1        :{1:0.3f}".format(s1, k1))
-        print("S2   :{0:0.3f} - K2        :{1:0.3f}".format(s2, k2))
+
+        # print("S1   :{0:0.3f} - K1        :{1:0.3f}".format(s1, k1))
+        # print("S2   :{0:0.3f} - K2        :{1:0.3f}".format(s2, k2))
         # print("delta:{0:0.3f} - delta_norm:{1:0.3f}".format(delta, delta_norm))
         # print("C2   :{0:0.3f} - C_norm2   :{1:0.5f}".format(C2, C_norm2))
         # print("pm   :{0:0.3f} - pm_norm   :{1:0.5f}".format(pm, pm_norm))
@@ -142,3 +144,59 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         e = np.dot(self.T1.T, np.dot(e, self.T2))
 
         return self.recoverPose(e, x1, x2)
+
+    def compute_essential_matrix(self, x1, x2):
+        """
+        This function compute the Essential matrix of a pair of Nx3 points. The points must be match each other
+        from two geometry views (Epipolar constraint). This general function doesn't assume a homogeneous
+        representation of points.
+        :param x1: Points from the 1st frame (n, 3) [x, y, z]
+        :param x2: Points from the 2st frame (n, 3) [x, y, z]
+        :return: Essential Matrix (3,3)
+        """
+        assert x1.shape == x2.shape, f"Shapes do not match {x1.shape} != {x2.shape}"
+        assert x1.shape[0] in [
+            3, 4
+        ], f"PCL out of shape {x1.shape} != (3, n) or (4, n)"
+
+        A = self.building_matrix_A(x1, x2)
+        # compute linear least square solution
+        U, S, V = np.linalg.svd(A)
+        E = V[-1].reshape(3, 3)
+
+        # ! constraint E
+        # make rank 2 by zeroing out last singular value
+        U, S, V = np.linalg.svd(E)
+        # S[0] = (S[0] + S[1]) / 2.0
+        # S[1] = S[0]
+        S[2] = 0
+        E = np.dot(U, np.dot(np.diag(S), V))
+        return E / np.linalg.norm(E)
+
+    # * Methods needed for RANSAC
+    def estimate(self, *data):
+        x1, x2 = data[0].T, data[1].T
+        x1_norm, x2_norm, self.T1, self.T2 = self.lsq_normalizer(x1, x2)
+        self.params = self.compute_essential_matrix(x1_norm, x2_norm)
+        return True
+
+    def residuals(self, *data):
+        """
+        Compute the Sampson distance.
+        The Sampson distance is the first approximation to the geometric error.
+        Returns
+        -------
+        residuals : Sampson distance.
+        """
+
+        x1, x2 = data[0].T, data[1].T
+        x1_norm, x2_norm, self.T1, self.T2 = self.lsq_normalizer(x1, x2)
+
+        E_dot_x1 = np.matmul(self.params, x1_norm)
+        E_dot_x2 = np.matmul(self.params.T, x2_norm)
+
+        dst = np.sum(x2_norm * E_dot_x1, axis=0)
+
+        return np.abs(dst) / np.sqrt(E_dot_x1[0]**2 + E_dot_x1[1]**2 +
+                                     E_dot_x1[2]**2 + E_dot_x2[0]**2 +
+                                     E_dot_x2[1]**2 + E_dot_x2[2]**2)

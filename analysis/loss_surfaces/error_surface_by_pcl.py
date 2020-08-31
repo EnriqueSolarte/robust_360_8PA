@@ -47,7 +47,8 @@ def pcl_creation(**kwargs):
 
 def get_file_name(**kwargs):
     scene = os.path.dirname(kwargs["data_scene"].scene)
-    filename = scene + "_plc_" + kwargs["pcl"] + "_fr_" + str(kwargs["idx_frame"])
+    filename = scene + "_plc_" + kwargs["pcl"] + "_fr_" + str(
+        kwargs["idx_frame"])
     filename += "_fov_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
     filename += "_noise_" + str(kwargs["noise"]) + "." + str(
         kwargs["outliers"])
