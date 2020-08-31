@@ -5,6 +5,7 @@ from geometry_utilities import *
 from image_utilities import get_mask_map_by_res_loc
 from pcl_utilities import *
 from read_datasets.MP3D_VO import MP3D_VO
+from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
 
 # ! Feature extractor
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
@@ -30,9 +31,25 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
     bearings_frm = cam.pixel2normalized_vector(matches[1])
 
     # cam_gt = extend_SO3_to_homogenous(rot).dot(cam_gt).dot(extend_SO3_to_homogenous(rot.T))
-
+    '''
     cam_8p = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
                                            x2=bearings_frm.copy())
+    '''
+
+    ransac_parm = dict(min_samples=8,
+                       p_succes=0.99,
+                       outliers=0.5,
+                       residual_threshold=0.01,
+                       verbose=True)
+
+    print("Number of matches: {}".format(bearings_kf.shape[1]))
+    cam_8p = RansacEssentialMatrix(**ransac_parm).solve(data=(np.copy(
+        bearings_kf.T), np.copy(bearings_frm.T)),
+                                                        solver="g8p")
+    cam_n8p = RansacEssentialMatrix(**ransac_parm).solve(data=(np.copy(
+        bearings_kf.T), np.copy(bearings_frm.T)),
+                                                         solver="norm_8pa")
+    '''
     if motion_constraint:
         # ! Forward motion constraint
         prior_motion = cam_8p[0:3, 3]
@@ -57,6 +74,7 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
             s2 = g8p_norm.T2[0][0]
             k2 = g8p_norm.T2[2][2]
             print("s2, k2 = ({}, {})".format(s2, k2))
+    '''
 
     error_n8p.append(
         evaluate_error_in_transformation(transform_gt=cam_gt,
@@ -122,7 +140,7 @@ if __name__ == '__main__':
     file = None
     mask = None
 
-    res = ress[0]
+    # res = ress[3]
 
     # data.number_frames
     # tmp = 500
@@ -282,7 +300,7 @@ if __name__ == '__main__':
                           size=14,
                       ))
 
-    # fig.show()
+    fig.show()
 
     if save:
         # ! Save .html
