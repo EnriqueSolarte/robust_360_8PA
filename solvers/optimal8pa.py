@@ -8,6 +8,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     This Class is the VSLAB implementation of the optimal 8PA
     for perspective and spherical projection models
     """
+
     def __init__(self, version='v1'):
         super().__init__()
         self.T1 = np.eye(3)
@@ -177,26 +178,6 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     def estimate(self, *data):
         x1, x2 = data[0].T, data[1].T
         x1_norm, x2_norm, self.T1, self.T2 = self.lsq_normalizer(x1, x2)
-        self.params = self.compute_essential_matrix(x1_norm, x2_norm)
+        e = self.compute_essential_matrix(x1_norm, x2_norm)
+        self.params = np.dot(self.T1.T, np.dot(e, self.T2))
         return True
-
-    def residuals(self, *data):
-        """
-        Compute the Sampson distance.
-        The Sampson distance is the first approximation to the geometric error.
-        Returns
-        -------
-        residuals : Sampson distance.
-        """
-
-        x1, x2 = data[0].T, data[1].T
-        x1_norm, x2_norm, self.T1, self.T2 = self.lsq_normalizer(x1, x2)
-
-        E_dot_x1 = np.matmul(self.params, x1_norm)
-        E_dot_x2 = np.matmul(self.params.T, x2_norm)
-
-        dst = np.sum(x2_norm * E_dot_x1, axis=0)
-
-        return np.abs(dst) / np.sqrt(E_dot_x1[0]**2 + E_dot_x1[1]**2 +
-                                     E_dot_x1[2]**2 + E_dot_x2[0]**2 +
-                                     E_dot_x2[1]**2 + E_dot_x2[2]**2)

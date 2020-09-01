@@ -7,6 +7,7 @@ from sphere import Sphere
 def track_features(**kwargs):
     initial_frame = kwargs["idx_frame"]
     idx = initial_frame
+
     while True:
         frame_curr = Frame(**kwargs["data_scene"].get_frame(idx, return_dict=True),
                            **dict(idx=idx))
