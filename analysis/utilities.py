@@ -2,6 +2,7 @@ import cv2
 from structures.frame import Frame
 import numpy as np
 from sphere import Sphere
+from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
 
 
 def track_features(**kwargs):
@@ -17,7 +18,7 @@ def track_features(**kwargs):
                                                 mask=kwargs["mask"])
             idx += 1
             continue
-        idx += 1
+
         relative_pose = frame_curr.get_relative_pose(
             key_frame=kwargs["tracker"].initial_frame)
         camera_distance = np.linalg.norm(relative_pose[0:3, 3])
@@ -32,6 +33,10 @@ def track_features(**kwargs):
 
         if camera_distance > kwargs["distance_threshold"]:
             break
+        idx += 1
+        if not idx < kwargs["data_scene"].number_frames:
+            break
+
 
     relative_pose = frame_curr.get_relative_pose(
         key_frame=kwargs["tracker"].initial_frame)
@@ -44,3 +49,4 @@ def track_features(**kwargs):
     bearings_kf = cam.pixel2normalized_vector(matches[0])
     bearings_frm = cam.pixel2normalized_vector(matches[1])
     return bearings_kf, bearings_frm, relative_pose, kwargs
+

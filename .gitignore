@@ -1,5 +1,6 @@
 .idea
 *.pyc
 analysis/loss_surfaces/plots
+analysis/error_loss/plots
 report
 report_backup
