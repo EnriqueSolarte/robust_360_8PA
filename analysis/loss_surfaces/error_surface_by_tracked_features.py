@@ -15,6 +15,7 @@ from structures.frame import Frame
 import cv2
 from analysis.delta_bound import get_frobenius_norm
 from analysis.utilities import track_features
+from analysis.utilities import *
 
 pio.renderers.default = "browser"
 
@@ -51,14 +52,6 @@ def get_file_name(**kwargs):
     filename += str(kwargs["mask_quantile"])
 
     return filename
-
-
-def msk(eval, quantile):
-    pivot = np.quantile(eval, quantile)
-    # pivot = np.inf
-    mask = eval > pivot
-    eval[mask] = pivot
-    return eval
 
 
 def eval_error_surface(**kwargs):

@@ -143,9 +143,9 @@ if __name__ == '__main__':
                        residual_threshold=1e-5,
                        verbose=True,
                        use_ransac=True,
-                       # extra="projected_distance",
+                       extra="projected_distance",
                        # extra="sampson_distance",
-                       extra="tangential_distance"
+                       # extra="tangential_distance"
                        )
 
     features_setting = dict(
