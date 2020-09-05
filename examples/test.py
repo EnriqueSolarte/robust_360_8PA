@@ -14,11 +14,12 @@ pcl_b = np.linalg.inv(cam_gt).dot(pcl_a)
 # plot_color_plc(pcl_b[0:3, :].T)
 
 from solvers.pnp import PnP
+
 pnp = PnP()
 bearings_b = sph.sphere_normalization(pcl_b)
 cam_pnp = pnp.recoverPose(
-            w=pcl_a.copy(),
-            x=bearings_b.copy())
+    w=pcl_a.copy(),
+    x=bearings_b.copy())
 
 err = evaluate_error_in_transformation(transform_gt=cam_gt,
                                        transform_est=cam_pnp)
