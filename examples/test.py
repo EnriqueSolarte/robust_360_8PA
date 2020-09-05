@@ -9,12 +9,7 @@ pcl_a = pcl_a.reshape(4, 30)
 pcl_a[0:3, :] = np.array(np.random.random((3, 30)) * 10)
 
 # plot_color_plc(pcl_a[0:3, :].T)
-
-R = np.random.random((3, 3))
-t = np.random.random((3, 1))
-cam_gt = np.eye(4)
-cam_gt[0:3, 0:3] = R
-cam_gt[0:3, 3] = np.reshape(t, (3))
+cam_gt = get_homogeneous_transform_from_vectors(r_vector=(0, 0, 0), t_vector=(1, 0, 0))
 
 pcl_b = np.linalg.inv(cam_gt).dot(pcl_a)
 
