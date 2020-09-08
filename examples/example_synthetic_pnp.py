@@ -28,12 +28,12 @@ def evaluate_synthetic_points(theta_roi, phi_roi, n_pts, min_d, max_d,
                                              transform_est=cam_pnp))
 
         # ! 8PA
-        print("Q1-8PA:{} - {}".format(np.quantile(error_8p, 0.25, axis=0),
-                                      len(error_8p)))
-        print("Q2-8PA:{} - {}".format(np.median(error_8p, axis=0),
-                                      len(error_8p)))
-        print("Q3-8PA:{} - {}".format(np.quantile(error_8p, 0.75, axis=0),
-                                      len(error_8p)))
+        print("Q1-PnP: {} - {}".format(np.quantile(error_8p, 0.25, axis=0),
+                                       len(error_8p)))
+        print("Q2-PnP: {} - {}".format(np.median(error_8p, axis=0),
+                                       len(error_8p)))
+        print("Q3-PnP: {} - {}".format(np.quantile(error_8p, 0.75, axis=0),
+                                       len(error_8p)))
         print(
             "====================================================================="
         )
