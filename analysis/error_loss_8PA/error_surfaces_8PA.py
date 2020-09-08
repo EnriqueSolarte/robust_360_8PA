@@ -84,7 +84,7 @@ def eval_function(**kwargs):
                                              loc=kwargs["loc"])
     # ! Getting initial data
     bearings_kf_all, bearings_frm_all, cam_gt, kwargs = track_features(**kwargs)
-    e_gt = g8p_norm.build_E_by_cam_pose(cam_gt)
+    e_gt = g8p_norm.build_e_by_cam_pose(cam_gt)
 
     v = np.linspace(start=kwargs["grid"][0],
                     stop=kwargs["grid"][1],
@@ -141,12 +141,12 @@ def eval_function(**kwargs):
         e_hat = g8p.compute_essential_matrix(bearings_kf_norm_all,
                                              bearings_frm_norm_all)
         e_hat = np.dot(T2.T, np.dot(e_hat, T1))
-        cam_hat = g8p_norm.recoverPose(e_hat, bearings_kf_all, bearings_frm_all)
+        cam_hat = g8p_norm.recover_pose_from_e(e_hat, bearings_kf_all, bearings_frm_all)
         error_cam = evaluate_error_in_transformation(cam_hat, cam_gt)
         kwargs["results"]["all_pts_error_rot"][i] = error_cam[0]
         kwargs["results"]["all_pts_error_tran"][i] = error_cam[1]
         kwargs["results"]["all_pts_error_e"][i] = evaluate_error_in_essential_matrix(e_gt, e_hat)
-        kwargs["results"]["all_pts_error_residual"][i] = np.sum(g8p.loss_function_evaluation(
+        kwargs["results"]["all_pts_error_residual"][i] = np.sum(g8p.residual_function_evaluation(
             e=e_hat,
             x1=bearings_kf_norm_all,
             x2=bearings_frm_norm_all))
@@ -156,12 +156,12 @@ def eval_function(**kwargs):
         e_hat = g8p.compute_essential_matrix(bearings_kf_norm_inliers,
                                              bearings_frm_norm_inliers)
         e_hat = np.dot(T1.T, np.dot(e_hat, T2))
-        cam_hat = g8p_norm.recoverPose(e_hat, bearings_kf_inliers, bearings_frm_inliers)
+        cam_hat = g8p_norm.recover_pose_from_e(e_hat, bearings_kf_inliers, bearings_frm_inliers)
         error_cam = evaluate_error_in_transformation(cam_hat, cam_gt)
         kwargs["results"]["inliers_pts_error_rot"][i] = error_cam[0]
         kwargs["results"]["inliers_pts_error_tran"][i] = error_cam[1]
         kwargs["results"]["inliers_pts_error_e"][i] = evaluate_error_in_essential_matrix(e_gt, e_hat)
-        kwargs["results"]["inliers_pts_error_residual"][i] = np.sum(g8p.loss_function_evaluation(
+        kwargs["results"]["inliers_pts_error_residual"][i] = np.sum(g8p.residual_function_evaluation(
             e=e_hat,
             x1=bearings_kf_inliers,
             x2=bearings_frm_inliers))
@@ -171,7 +171,7 @@ def eval_function(**kwargs):
         print("{}: {}".format(get_file_name(**kwargs), i / ss.size))
 
     kwargs["filename"] = get_file_name(**kwargs)
-    save_results(**kwargs)
+    save_surface_results(**kwargs)
     plot_surfaces(**kwargs)
     print("done")
 

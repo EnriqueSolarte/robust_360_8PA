@@ -11,7 +11,7 @@ from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from solvers.optimal8pa import Optimal8PA as norm_8pa
 from geometry_utilities import *
-from analysis.error_loss.error_surfaces_8PA import plot_surfaces
+from analysis.error_loss_8PA.error_surfaces_8PA import plot_surfaces
 import os
 
 

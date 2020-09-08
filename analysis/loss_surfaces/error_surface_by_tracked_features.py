@@ -75,7 +75,7 @@ def eval_error_surface(**kwargs):
     if kwargs["show_3D_cameras"]:
         plot_pcl_and_cameras(bearings_a[0:3, :].T, cam2=cam_a2b)
 
-    e = g8p_norm.build_E_by_cam_pose(cam_a2b)
+    e = g8p_norm.build_e_by_cam_pose(cam_a2b)
     v = np.linspace(start=kwargs["grid"][0],
                     stop=kwargs["grid"][1],
                     num=kwargs["grid"][2])
@@ -104,7 +104,7 @@ def eval_error_surface(**kwargs):
         e_hat = g8p_norm.compute_essential_matrix(bearings_a_norm,
                                                   bearings_b_norm)
         e_hat = np.dot(T1.T, np.dot(e_hat, T2))
-        cam_a2b_hat = g8p_norm.recoverPose(e_hat, bearings_a, bearings_b)
+        cam_a2b_hat = g8p_norm.recover_pose_from_e(e_hat, bearings_a, bearings_b)
         error_cam = evaluate_error_in_transformation(cam_a2b_hat, cam_a2b)
         kwargs["losses"]["error_rot"][i] = error_cam[0]
         kwargs["losses"]["error_tran"][i] = error_cam[1]
@@ -119,7 +119,7 @@ def eval_error_surface(**kwargs):
                                   return_A=True)
         kwargs["losses"]["loss_c"][i] = C
         kwargs["losses"]["loss_pm"][i] = np.nanmean(
-            angle_between_vectors_arrays(bearings_a_norm, bearings_b_norm))
+            get_angle_between_vectors_arrays(bearings_a_norm, bearings_b_norm))
         u, sigma, v = np.linalg.svd(A)
         kwargs["losses"]["loss_delta"][i] = sigma[-2]
         kwargs["losses"]["error_e"][i] = evaluate_error_in_essential_matrix(
