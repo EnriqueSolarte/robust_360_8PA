@@ -1,7 +1,7 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from analysis.utilities import track_features
+from analysis.utilities import *
 from image_utilities import get_mask_map_by_res_loc
 from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8p
 from solvers.epipolar_constraint import sampson_distance, projected_distance
@@ -51,21 +51,13 @@ def plot(**kwargs):
         fig.update_xaxes(title_text="Kfrm idx", row=row, col=col)
         fig.update_yaxes(title_text=dt, row=row, col=col)
 
-    fig_file = "eval_8PA_{}.html".format(get_file_name(**kwargs))
+    fig_file = "{}.html".format(kwargs["filename"])
     fig.update_layout(title_text=fig_file, height=800, width=1800)
     fig.show()
     fig.write_html("plots/{}".format(fig_file))
 
 
-def save_results(**kwargs):
-    pass
-
-
 def eval_function(**kwargs):
-    kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
-                                             res=kwargs["res"],
-                                             loc=kwargs["loc"])
-
     # ! We are saving these variables for every Kf-frm pair
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
@@ -77,8 +69,9 @@ def eval_function(**kwargs):
     ransac = RansacEssentialMatrix(**kwargs)
     solver = g8p()
     while True:
-        bearings_kf, bearings_frm, cam_gt, kwargs = track_features(**kwargs)
-
+        bearings_kf, bearings_frm, cam_gt, kwargs, ret = track_features(**kwargs)
+        if not ret:
+            break
         if kwargs.get("use_ransac", False):
             # ! Solving by using RANSAC
             cam_8pa = ransac.solve(data=(
@@ -112,12 +105,10 @@ def eval_function(**kwargs):
         ))
         print("Error-rot: {}".format(np.median(kwargs["results"]["error_rot"], axis=0)))
         print("Error-tran: {}".format(np.median(kwargs["results"]["error_tran"], axis=0)))
-        if not kwargs["tracker"].frame_idx + 1 < kwargs["data_scene"].number_frames:
-            break
-        kwargs["idx_frame"] = kwargs["tracker"].frame_idx
 
+    kwargs["filename"] = "error_8PA_seq_frames_{}.html".format(get_file_name(**kwargs))
     plot(**kwargs)
-    # save_results(**kwargs)
+    save_results(**kwargs)
 
 
 if __name__ == '__main__':
