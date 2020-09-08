@@ -1,7 +1,8 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from analysis.utilities import *
+from utilities.data_utilities import *
+from utilities.optmization_utilities import *
 import levmar
 import time
 
@@ -14,7 +15,7 @@ def eval_normalizer(parameters, bearings_kf, bearings_frm):
 
     bearings_kf_norm, t1 = normalizer_s_k(x=bearings_kf, s=s, k=k)
     bearings_frm_norm, t2 = normalizer_s_k(x=bearings_frm, s=s, k=k)
-    # bearings_kf_norm, t1 = normalizer_s(x=bearings_kf, s=s)
+    # # bearings_kf_norm, t1 = normalizer_s(x=bearings_kf, s=s)
     # bearings_frm_norm, t2 = normalizer_s(x=bearings_frm, s=s)
 
     e_norm = solver.compute_essential_matrix(
@@ -54,9 +55,9 @@ def reprojection_error_S_K(parameters, bearings_kf, bearings_frm):
     cam_hat = eval_normalizer(parameters, bearings_kf, bearings_frm)
     landmarks_kf_hat = g8p.triangulate_points_from_cam_pose(
         cam_pose=cam_hat,
-        x1=bearings_kf.T,
-        x2=bearings_frm.T
-    ).T
+        x1=bearings_kf,
+        x2=bearings_frm
+    )
     landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf_hat
     error = get_angle_between_vectors_arrays(
         array_ref=bearings_frm,
@@ -86,9 +87,9 @@ def run_estimation(**kwargs):
     )
     landmarks_8p_kf = g8p.triangulate_points_from_cam_pose(
         cam_pose=cam_8p,
-        x1=kwargs["bearings"]["kf"].T,
-        x2=kwargs["bearings"]["frm"].T
-    ).T
+        x1=kwargs["bearings"]["kf"],
+        x2=kwargs["bearings"]["frm"]
+    )
     time_8p = time.time() - tic
     print("opt 8p: {}".format(time_8p))
 
@@ -104,12 +105,12 @@ def run_estimation(**kwargs):
     time_rt = time.time() - tic + time_8p
     print("opt R, t: {}".format(time_rt))
 
-    initial_k_s = np.array((0.2, 10))
+    initial_k_s = np.array((1, 1))
     tic = time.time()
     _ = g8p.triangulate_points_from_cam_pose(
         cam_pose=cam_8p,
-        x1=kwargs["bearings"]["kf"].T,
-        x2=kwargs["bearings"]["frm"].T
+        x1=kwargs["bearings"]["kf"],
+        x2=kwargs["bearings"]["frm"]
     ).T
     opt_k_s, p_cov, info = levmar.levmar(
         reprojection_error_S_K_const_lm,
@@ -180,8 +181,8 @@ if __name__ == '__main__':
         data_scene=data,
         idx_frame=10,
         distance_threshold=0.5,
-        res=(360, 180),
-        # res=(180, 180),
+        # res=(360, 180),
+        res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
     )

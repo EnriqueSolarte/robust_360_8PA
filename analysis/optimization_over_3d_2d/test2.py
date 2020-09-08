@@ -1,7 +1,8 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from analysis.utilities import *
+from utilities.data_utilities import *
+from utilities.optmization_utilities import *
 import levmar
 import time
 
@@ -56,9 +57,9 @@ def reprojection_error_S_K(parameters, bearings_kf, bearings_frm):
     cam_hat = eval_normalizer(parameters, bearings_kf, bearings_frm)
     landmarks_kf_hat = g8p.triangulate_points_from_cam_pose(
         cam_pose=cam_hat,
-        x1=bearings_kf.T,
-        x2=bearings_frm.T
-    ).T
+        x1=bearings_kf,
+        x2=bearings_frm
+    )
     landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf_hat
     error = get_angle_between_vectors_arrays(
         array_ref=bearings_frm,
@@ -88,9 +89,9 @@ def run_estimation(**kwargs):
     )
     landmarks_8p_kf = g8p.triangulate_points_from_cam_pose(
         cam_pose=cam_8p,
-        x1=kwargs["bearings"]["kf"].T,
-        x2=kwargs["bearings"]["frm"].T
-    ).T
+        x1=kwargs["bearings"]["kf"],
+        x2=kwargs["bearings"]["frm"]
+    )
     time_8p = time.time() - tic
     print("opt 8p: {}".format(time_8p))
 
@@ -101,25 +102,25 @@ def run_estimation(**kwargs):
     opt_R_t, p_cov, info = levmar.levmar(
         reprojection_error_R_T,
         initial_R_t,
-        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        np.ones_like(kwargs["bearings"]["frm"][0, :]),
         args=(kwargs["bearings"]["frm"], landmarks_8p_kf))
     time_rt = time.time() - tic + time_8p
     print("opt R, t: {}".format(time_rt))
 
     initial_k_s = np.array((1, 1, 1, 1))
-    tic = time.time()
-    _ = g8p.triangulate_points_from_cam_pose(
-        cam_pose=cam_8p,
-        x1=kwargs["bearings"]["kf"].T,
-        x2=kwargs["bearings"]["frm"].T
-    ).T
-    opt_k_s, p_cov, info = levmar.levmar(
-        reprojection_error_S_K_const_lm,
-        initial_k_s,
-        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
-        args=(kwargs["bearings"]["kf"],
-              kwargs["bearings"]["frm"],
-              landmarks_8p_kf))
+    # tic = time.time()
+    # _ = g8p.triangulate_points_from_cam_pose(
+    #     cam_pose=cam_8p,
+    #     x1=kwargs["bearings"]["kf"],
+    #     x2=kwargs["bearings"]["frm"]
+    # )
+    # opt_k_s, p_cov, info = levmar.levmar(
+    #     reprojection_error_S_K_const_lm,
+    #     initial_k_s,
+    #     np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+    #     args=(kwargs["bearings"]["kf"],
+    #           kwargs["bearings"]["frm"],
+    #           landmarks_8p_kf))
     # opt_k_s, p_cov, info = levmar.levmar(
     #     reprojection_error_S_K,
     #     initial_k_s,
@@ -135,11 +136,11 @@ def run_estimation(**kwargs):
         kwargs["bearings"]["frm"])
     )))
 
-    print("Final projection error by Opt(s,k) : {}".format(np.sum(reprojection_error_S_K(
-        opt_k_s,
-        kwargs["bearings"]["kf"],
-        kwargs["bearings"]["frm"])
-    )))
+    # print("Final projection error by Opt(s,k) : {}".format(np.sum(reprojection_error_S_K(
+    #     opt_k_s,
+    #     kwargs["bearings"]["kf"],
+    #     kwargs["bearings"]["frm"])
+    # )))
 
     print("Final projection error by Opt(R,t): {}".format(np.sum(reprojection_error_R_T(
         opt_R_t,
@@ -154,16 +155,16 @@ def run_estimation(**kwargs):
         )
     ))
 
-    print("Final camera error by Opt(s,k): {}".format(
-        evaluate_error_in_transformation(
-            transform_gt=kwargs["cam_gt"],
-            transform_est=eval_normalizer(
-                parameters=opt_k_s,
-                bearings_kf=kwargs["bearings"]["kf"],
-                bearings_frm=kwargs["bearings"]["frm"],
-            )
-        )
-    ))
+    # print("Final camera error by Opt(s,k): {}".format(
+    #     evaluate_error_in_transformation(
+    #         transform_gt=kwargs["cam_gt"],
+    #         transform_est=eval_normalizer(
+    #             parameters=opt_k_s,
+    #             bearings_kf=kwargs["bearings"]["kf"],
+    #             bearings_frm=kwargs["bearings"]["frm"],
+    #         )
+    #     )
+    # ))
 
     cam_final = eulerAnglesToRotationMatrix(opt_R_t[0:3])
     cam_final[0:3, 3] = opt_R_t[3:]
@@ -177,8 +178,8 @@ def run_estimation(**kwargs):
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    scene = "2azQ1b91cZZ/0"
-    # scene = "1LXtFkjw3qL/0"
+    # scene = "2azQ1b91cZZ/0"
+    scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
@@ -187,8 +188,8 @@ if __name__ == '__main__':
         data_scene=data,
         idx_frame=0,
         distance_threshold=0.5,
-        res=(360, 180),
-        # res=(180, 180),
+        # res=(360, 180),
+        res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
     )
