@@ -43,10 +43,10 @@ def plot(**kwargs):
     for i, dt in enumerate(titles):
         loc = np.squeeze(np.where(idxs == i))
         row, col = loc[0] + 1, loc[1] + 1
-        fig.add_trace(go.Scatter(
-            x=kwargs["results"]["kf"],
-            y=kwargs["results"][dt]),
-            row=row, col=col)
+        fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
+                                 y=kwargs["results"][dt]),
+                      row=row,
+                      col=col)
 
         fig.update_xaxes(title_text="Kfrm idx", row=row, col=col)
         fig.update_yaxes(title_text=dt, row=row, col=col)
@@ -81,38 +81,36 @@ def eval_function(**kwargs):
 
         if kwargs.get("use_ransac", False):
             # ! Solving by using RANSAC
-            cam_8pa = ransac.solve(data=(
-                bearings_kf.copy().T,
-                bearings_frm.copy().T)
-            )
+            cam_8pa = ransac.solve(data=(bearings_kf.copy().T,
+                                         bearings_frm.copy().T))
             num_inliers = sum(ransac.current_inliers)
             num_of_samples = len(ransac.current_inliers)
-            kwargs["results"]["rejections"].append(1 - (num_inliers / num_of_samples))
+            kwargs["results"]["rejections"].append(1 - (num_inliers /
+                                                        num_of_samples))
             kwargs["results"]["residuals"].append(ransac.current_residual)
         else:
             # ! SOLVING USING ALL MATCHES
             cam_8pa = solver.recover_pose_from_matches(
                 x1=bearings_kf.copy(),
                 x2=bearings_frm.copy(),
-                eval_current_solution=True
-            )
+                eval_current_solution=True)
             kwargs["results"]["features"].append(solver.current_count_features)
             kwargs["results"]["residuals"].append(solver.current_residual)
 
-        error = evaluate_error_in_transformation(
-            transform_gt=cam_gt,
-            transform_est=cam_8pa)
+        error = evaluate_error_in_transformation(transform_gt=cam_gt,
+                                                 transform_est=cam_8pa)
         kwargs["results"]["error_rot"].append(error[0])
         kwargs["results"]["error_tran"].append(error[1])
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
 
         print("8PA evaluation - Kf:{} - frm:{}".format(
-            kwargs["tracker"].initial_frame.idx,
-            kwargs["tracker"].frame_idx
-        ))
-        print("Error-rot: {}".format(np.median(kwargs["results"]["error_rot"], axis=0)))
-        print("Error-tran: {}".format(np.median(kwargs["results"]["error_tran"], axis=0)))
-        if not kwargs["tracker"].frame_idx + 1 < kwargs["data_scene"].number_frames:
+            kwargs["tracker"].initial_frame.idx, kwargs["tracker"].frame_idx))
+        print("Error-rot: {}".format(
+            np.median(kwargs["results"]["error_rot"], axis=0)))
+        print("Error-tran: {}".format(
+            np.median(kwargs["results"]["error_tran"], axis=0)))
+        if not kwargs["tracker"].frame_idx + 1 < kwargs[
+                "data_scene"].number_frames:
             break
         kwargs["idx_frame"] = kwargs["tracker"].frame_idx
 
@@ -136,24 +134,19 @@ if __name__ == '__main__':
         loc=(0, 0),
     )
 
-    ransac_parm = dict(min_samples=8,
-                       max_trials=RansacEssentialMatrix.get_number_of_iteration(
-                           p_success=0.99, outliers=0.5, min_constraint=8
-                       ),
-                       residual_threshold=1e-5,
-                       verbose=True,
-                       use_ransac=True,
-                       # extra="projected_distance",
-                       # extra="sampson_distance",
-                       extra="tangential_distance"
-                       )
+    ransac_parm = dict(
+        min_samples=8,
+        max_trials=RansacEssentialMatrix.get_number_of_iteration(
+            p_success=0.99, outliers=0.5, min_constraint=8),
+        residual_threshold=1e-5,
+        verbose=True,
+        use_ransac=True,
+        # extra="projected_distance",
+        # extra="sampson_distance",
+        extra="tangential_distance")
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False
-    )
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
-    eval_function(**scene_settings,
-                  **features_setting,
-                  **ransac_parm)
+    eval_function(**scene_settings, **features_setting, **ransac_parm)

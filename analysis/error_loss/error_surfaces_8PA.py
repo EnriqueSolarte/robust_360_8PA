@@ -19,24 +19,19 @@ if __name__ == '__main__':
         loc=(0, 0),
     )
 
-    ransac_parm = dict(min_samples=8,
-                       max_trials=RansacEssentialMatrix.get_number_of_iteration(
-                           p_success=0.99, outliers=0.5, min_constraint=8
-                       ),
-                       residual_threshold=1e-5,
-                       verbose=True,
-                       use_ransac=True,
-                       # extra="projected_distance",
-                       # extra="sampson_distance",
-                       extra="tangential_distance"
-                       )
+    ransac_parm = dict(
+        min_samples=8,
+        max_trials=RansacEssentialMatrix.get_number_of_iteration(
+            p_success=0.99, outliers=0.5, min_constraint=8),
+        residual_threshold=1e-5,
+        verbose=True,
+        use_ransac=True,
+        # extra="projected_distance",
+        # extra="sampson_distance",
+        extra="tangential_distance")
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False
-    )
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
-    eval_function(**scene_settings,
-                  **features_setting,
-                  **ransac_parm)
+    eval_function(**scene_settings, **features_setting, **ransac_parm)

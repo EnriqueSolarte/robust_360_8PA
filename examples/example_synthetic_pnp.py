@@ -21,9 +21,7 @@ def evaluate_synthetic_points(theta_roi, phi_roi, n_pts, min_d, max_d,
         pcl_b = np.linalg.inv(cam_gt).dot(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_pnp = pnp.recoverPose(
-            w=pcl_a.copy(),
-            x=bearings_b.copy())
+        cam_pnp = pnp.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
 
         error_8p.append(
             evaluate_error_in_transformation(transform_gt=cam_gt,
@@ -51,11 +49,12 @@ if __name__ == '__main__':
 
     delta_theta = -0
     delta_phi = -0
-    cfg = dict(theta_roi=(-180 + delta_theta, 180 + delta_theta),
-               phi_roi=(-90 + delta_phi, 90 + delta_phi),
-               n_pts=100,
-               min_d=2,
-               max_d=20,
-               relative_cam_pose=cam_pose,
-               )
+    cfg = dict(
+        theta_roi=(-180 + delta_theta, 180 + delta_theta),
+        phi_roi=(-90 + delta_phi, 90 + delta_phi),
+        n_pts=100,
+        min_d=2,
+        max_d=20,
+        relative_cam_pose=cam_pose,
+    )
     evaluate_synthetic_points(**cfg)
