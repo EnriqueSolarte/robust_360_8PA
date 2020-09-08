@@ -1,5 +1,4 @@
 import numpy as np
-from geometry_utilities import *
 
 
 def Normalization(nd, x):
@@ -31,7 +30,7 @@ def Normalization(nd, x):
     return Tr, x
 
 
-def DLTcalib(nd, xyz, uvw):
+def DLTcalib(nd, xyz, uv):
     '''
     Camera calibration by DLT using known object points and their image points.
 
@@ -55,15 +54,15 @@ def DLTcalib(nd, xyz, uvw):
 
     # Converting all variables to numpy array
     xyz = np.asarray(xyz)
-    uvw = np.asarray(uvw)
+    uv = np.asarray(uv)
 
     n = xyz.shape[0]
 
     # Validating the parameters:
-    if uvw.shape[0] != n:
+    if uv.shape[0] != n:
         raise ValueError(
             'Object (%d points) and image (%d points) have different number of points.'
-            % (n, uvw.shape[0]))
+            % (n, uv.shape[0]))
 
     if (xyz.shape[1] != 3):
         raise ValueError(
@@ -79,26 +78,15 @@ def DLTcalib(nd, xyz, uvw):
     # This is relevant when there is a considerable perspective distortion.
     # Normalization: mean position at origin and mean distance equals to 1 at each direction.
     Txyz, xyzn = Normalization(nd, xyz)
-    Tuvw, uvwn = Normalization(3, uvw)
+    Tuv, uvn = Normalization(2, uv)
 
     A = []
 
     for i in range(n):
         x, y, z = xyzn[i, 0], xyzn[i, 1], xyzn[i, 2]
-        u, v, w = uvwn[i, 0], uvwn[i, 1], uvwn[i, 2]
-        A.append(
-            [x, y, z, 1, 0, 0, 0, 0, 0, 0, 0, 0, -u * x, -u * y, -u * z, -u])
-        A.append(
-            [0, 0, 0, 0, x, y, z, 1, 0, 0, 0, 0, -v * x, -v * y, -v * z, -v])
-        A.append(
-            [0, 0, 0, 0, 0, 0, 0, 0, x, y, z, 1, -w * x, -w * y, -w * z, -w])
-
-        #     JUST FOR TESTING
-        # bearing = uvwn[i, :]
-        # matrix_vector = vector2skew_matrix(bearing)
-        # p_3d_vector = np.ones((4, 1))
-        # p_3d_vector[0:3, 0] = xyzn[i, :]
-        # print("done")
+        u, v = uvn[i, 0], uvn[i, 1]
+        A.append([x, y, z, 1, 0, 0, 0, 0, -u * x, -u * y, -u * z, -u])
+        A.append([0, 0, 0, 0, x, y, z, 1, -v * x, -v * y, -v * z, -v])
 
     # Convert A to array
     A = np.asarray(A)
@@ -108,51 +96,44 @@ def DLTcalib(nd, xyz, uvw):
 
     # The parameters are in the last line of Vh and normalize them
     L = V[-1, :] / V[-1, -1]
-    # print(L)
+    print(L)
     # Camera projection matrix
-    H = L.reshape(4, nd + 1)
-    # print(H)
+    H = L.reshape(3, nd + 1)
+    print(H)
 
     # Denormalization
     # pinv: Moore-Penrose pseudo-inverse of a matrix, generalized inverse of a matrix using its SVD
-    H = np.dot(np.dot(np.linalg.pinv(Tuvw), H), Txyz)
-    # print(H)
+    H = np.dot(np.dot(np.linalg.pinv(Tuv), H), Txyz)
+    print(H)
     H = H / H[-1, -1]
-    # print(H)
+    print(H)
     L = H.flatten()
-    # print(L)
+    print(L)
 
     # Mean error of the DLT (mean residual of the DLT transformation in units of camera coordinates):
-    uvw2 = np.dot(H, np.concatenate((xyz.T, np.ones((1, xyz.shape[0])))))
-    uvw2 = uvw2 / uvw2[3, :]
-
+    uv2 = np.dot(H, np.concatenate((xyz.T, np.ones((1, xyz.shape[0])))))
+    uv2 = uv2 / uv2[2, :]
     # Mean distance:
-    err = np.sqrt(np.mean(np.sum((uvw2[0:3, :].T - uvw)**2, 1)))
-
-    # from geometry_utilities import evaluate_error_in_transformation
-    # err = evaluate_error_in_transformation(transform_gt=uvw,
-    #                                        transform_est=uvw2)
+    err = np.sqrt(np.mean(np.sum((uv2[0:2, :].T - uv)**2, 1)))
 
     return L, err
 
 
-def DLT(xyz, uvw):
-    nd = 3
-    P, err = DLTcalib(nd, xyz, uvw)
-    print('Matrix')
-    print(P)
-    print('\nError')
-    print(err)
-    return P
-
-
-if __name__ == "__main__":
+def DLT():
     # Known 3D coordinates
     xyz = [[-875, 0, 9.755], [442, 0, 9.755], [1921, 0, 9.755],
            [2951, 0.5, 9.755], [-4132, 0.5, 23.618], [-876, 0, 23.618]]
     # Known pixel coordinates
-    # uvw = [[76, 706, 1], [702, 706, 1], [1440, 706, 1], [1867, 706, 1], [264, 523, 1], [625, 523, 1]]
-    uvw = [[76, 706, 1], [702, 706, 1], [1440, 706, 1], [1867, 706, 1],
-           [264, 523, 1], [625, 523, 1]]
+    uv = [[76, 706], [702, 706], [1440, 706], [1867, 706], [264, 523],
+          [625, 523]]
 
-    DLT(xyz=xyz, uvw=uvw)
+    nd = 3
+    P, err = DLTcalib(nd, xyz, uv)
+    print('Matrix')
+    print(P)
+    print('\nError')
+    print(err)
+
+
+if __name__ == "__main__":
+    DLT()

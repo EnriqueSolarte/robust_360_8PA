@@ -72,12 +72,14 @@ def run_sequence_of_frames(**kwargs):
     initial_frame = kwargs["idx_frame"]
     idx = initial_frame
     while True:
-        frame_curr = Frame(**kwargs["data_scene"].get_frame(idx, return_dict=True),
-                           **dict(idx=idx))
+        frame_curr = Frame(
+            **kwargs["data_scene"].get_frame(idx, return_dict=True),
+            **dict(idx=idx))
         if idx == initial_frame:
-            kwargs["tracker"].set_initial_frame(initial_frame=frame_curr,
-                                                extractor=kwargs["feat_extractor"],
-                                                mask=kwargs["mask"])
+            kwargs["tracker"].set_initial_frame(
+                initial_frame=frame_curr,
+                extractor=kwargs["feat_extractor"],
+                mask=kwargs["mask"])
             idx += 1
             continue
         idx += 1
@@ -89,7 +91,8 @@ def run_sequence_of_frames(**kwargs):
 
         print("Camera Distance       {}".format(camera_distance))
         print("Tracked features      {}".format(len(kwargs["tracker"].tracks)))
-        print("KeyFrame/CurrFrame:   {}-{}".format(kwargs["tracker"].initial_frame.idx, frame_curr.idx))
+        print("KeyFrame/CurrFrame:   {}-{}".format(
+            kwargs["tracker"].initial_frame.idx, frame_curr.idx))
         cv2.imshow("preview", tracked_img[:, :, ::-1])
         cv2.waitKey(10)
 

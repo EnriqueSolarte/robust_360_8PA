@@ -30,7 +30,7 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
                       np.random.uniform(-10, 10)))
 
         # cam_a2b = get_homogeneous_transform_from_vectors(t_vector=(0, 1, 0),
-        #                                                  r_vector=(0, 0, 0))
+        #                                                  r_vector=(0, 30, 0))
 
         samples = np.random.randint(0, pcl_dense.shape[1], point)
         pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
@@ -45,9 +45,7 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_pnp = pnp.recoverPose(
-            w=pcl_a.copy(),
-            x=bearings_b.copy())
+        cam_pnp = pnp.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
 
         error_8p.append(
             evaluate_error_in_transformation(transform_gt=cam_gt,
@@ -56,13 +54,13 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
         print(
             "====================================================================="
         )
-        # ! 8PA
-        print("Q1-8PA:{}-  {}".format(np.quantile(error_8p, 0.25, axis=0),
-                                      len(error_8p)))
-        print("Q2-8PA:{}-  {}".format(np.median(error_8p, axis=0),
-                                      len(error_8p)))
-        print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
-                                      len(error_8p)))
+        # ! PnP
+        print("Q1-PnP: {} - {}".format(np.quantile(error_8p, 0.25, axis=0),
+                                       len(error_8p)))
+        print("Q2-PnP: {} - {}".format(np.median(error_8p, axis=0),
+                                       len(error_8p)))
+        print("Q3-PnP: {} - {}".format(np.quantile(error_8p, 0.75, axis=0),
+                                       len(error_8p)))
         print(
             "====================================================================="
         )
