@@ -1,6 +1,7 @@
 .idea
 *.pyc
 analysis/loss_surfaces/plots
-analysis/error_loss/plots
+analysis/error_loss_8PA/plots
+analysis/performance_comparisons/plots
 report
 report_backup
