@@ -1,75 +1,8 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from utilities.data_utilities import *
-from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
 from analysis.sequence_of_frames.camera_recovering import *
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-
-def get_file_name(**kwargs):
-    scene_ = os.path.dirname(kwargs["data_scene"].scene)
-    filename = "Seq_frames_" + scene_
-    filename += "_res_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
-    filename += "_dist" + str(kwargs["distance_threshold"])
-    if kwargs["use_ransac"]:
-        filename += "_RANSAC_thr" + str(kwargs["residual_threshold"])
-        filename += "_trials" + str(kwargs["max_trials"])
-    filename += "_" + kwargs["extra"]
-
-    return filename
-
-
-def plot(**kwargs):
-    results = list(kwargs["results"].keys())
-    titles = [dt for dt in results if dt not in ("kf",)]
-
-    fig = make_subplots(subplot_titles=["Rotation Error", "Trans Error"],
-                        rows=2,
-                        cols=1,
-                        specs=[[{}], [{}]])
-
-    idxs = np.linspace(0, 1, 2).reshape(2, -1)
-
-    dt_results = list()
-    dt_results.append([dt for dt in titles if "rot" in dt])
-    dt_results.append([dt for dt in titles if "tran" in dt])
-    # dt_results.append([dt for dt in titles if "residuals" in dt])
-
-    for i, dt in enumerate(dt_results):
-        loc = np.squeeze(np.where(idxs == i))
-        row, col = loc[0] + 1, loc[1] + 1
-        y_label = dt[0]
-        for dt_r in dt:
-            if "norm" in dt_r:
-                color = COLOR_NORM_8PA
-            elif "8pa" in dt_r:
-                color = COLOR_8PA
-            elif "opt_rpj" in dt_r:
-                color = COLOR_OPT_RPJ_RT
-            elif "opt_res" in dt_r:
-                color = COLOR_OPT_RES_RT
-
-            fig.add_trace(go.Scatter(
-                x=kwargs["results"]["kf"],
-                y=kwargs["results"][dt_r],
-                name=dt_r,
-                line=dict(color=color)
-                ),
-                row=row, col=col)
-            if "rot" in dt_r:
-                y_label = "Rotation Error"
-            elif "tran" in dt_r:
-                y_label = "Translation Error"
-
-        fig.update_xaxes(title_text="Kfrm idx", row=row, col=col)
-        fig.update_yaxes(title_text=y_label, row=row, col=col)
-
-    fig_file = "{}.html".format(kwargs["filename"])
-    fig.update_layout(title_text=fig_file, height=800, width=1800)
-    fig.show()
-    fig.write_html("plots/{}".format(fig_file))
+from analysis.sequence_of_frames.utils import *
 
 
 def run_sequence(**kwargs):
@@ -135,9 +68,9 @@ def run_sequence(**kwargs):
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    # scene = "2azQ1b91cZZ/0"
+    scene = "2azQ1b91cZZ/0"
     # scene = "1LXtFkjw3qL/0"
-    scene = "759xd9YjKW5/0"
+    # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
 
@@ -149,7 +82,7 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="test1"
+        extra="only_bearings"
     )
 
     features_setting = dict(
