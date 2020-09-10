@@ -77,7 +77,7 @@ def reprojection_error_S_K_const_lm(parameters, bearings_kf, bearings_frm, landm
 
 
 def run_estimation(**kwargs):
-    kwargs = get_bearings(**kwargs)
+    kwargs, ret = get_bearings(**kwargs)
 
     # ! Getting initial data
     tic = time.time()
@@ -179,10 +179,10 @@ if __name__ == '__main__':
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=10,
+        idx_frame=0,
         distance_threshold=0.5,
-        # res=(360, 180),
-        res=(180, 180),
+        res=(360, 180),
+        # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
     )
@@ -207,7 +207,7 @@ if __name__ == '__main__':
     features_setting = dict(
         feat_extractor=Shi_Tomasi_Extractor(),
         tracker=LKTracker(),
-        show_tracked_features=True
+        show_tracked_features=False
     )
 
     run_estimation(**scene_settings,

@@ -84,7 +84,7 @@ def eval_function(**kwargs):
                                              loc=kwargs["loc"])
     # ! Getting initial data
     bearings_kf_all, bearings_frm_all, cam_gt, kwargs = track_features(**kwargs)
-    e_gt = g8p_norm.build_e_by_cam_pose(cam_gt)
+    e_gt = g8p_norm.get_e_from_cam_pose(cam_gt)
 
     v = np.linspace(start=kwargs["grid"][0],
                     stop=kwargs["grid"][1],

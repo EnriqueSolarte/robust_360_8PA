@@ -84,7 +84,6 @@ def run_sequence(**kwargs):
     # ! Getting initial data
     ransac = RansacEssentialMatrix(**kwargs)
     g8p = EightPointAlgorithmGeneralGeometry()
-    norm_8pa = Optimal8PA(kwargs["opt_version"], kwargs.get("residual_function", projected_distance))
 
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
@@ -124,9 +123,11 @@ def run_sequence(**kwargs):
             kwargs["results"]["features"].append(g8p.current_count_features)
             kwargs["results"]["8pa_residuals"].append(g8p.current_residual)
 
-        cam_norm_8pa = norm_8pa.recover_pose_from_matches(x1=bearings_kf.copy(),
-                                                          x2=bearings_frm.copy(),
-                                                          eval_current_solution=True)
+        norm_8pa = Optimal8PA(kwargs["opt_version"])
+        cam_norm_8pa = norm_8pa.recover_pose_and_optimize(
+            x1=bearings_kf.copy(),
+            x2=bearings_frm.copy(),
+            eval_current_solution=True)
 
         kwargs["results"]["norm_8pa_residuals"].append(norm_8pa.current_residual)
 
@@ -173,18 +174,19 @@ if __name__ == '__main__':
         data_scene=data,
         idx_frame=0,
         distance_threshold=0.5,
-        # res=(360, 180),
-        res=(180, 180),
+        res=(360, 180),
+        # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
     )
 
     model_settings = dict(
-        opt_version="v1.1",
+        opt_version="v1.0.1",
         # extra="epipolar_constraint"
-        extra="projected_distance_C_Sigma_last",
+        # extra="projected_distance_C_Sigma_last",
         # extra="sampson_distance",
         # extra="tangential_distance"
+        extra="optimal_test"
     )
 
     ransac_parm = dict(min_samples=8,
@@ -193,7 +195,7 @@ if __name__ == '__main__':
                        ),
                        residual_threshold=1e-5,
                        verbose=True,
-                       use_ransac=False
+                       use_ransac=True
                        )
 
     features_setting = dict(

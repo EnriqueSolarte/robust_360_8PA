@@ -67,7 +67,7 @@ def eval_error_surface(**kwargs):
     if kwargs["show_3D_cameras"]:
         plot_pcl_and_cameras(bearings_a[0:3, :].T, cam2=cam_a2b)
 
-    e = g8p_norm.build_e_by_cam_pose(cam_a2b)
+    e = g8p_norm.get_e_from_cam_pose(cam_a2b)
     v = np.linspace(start=kwargs["grid"][0],
                     stop=kwargs["grid"][1],
                     num=kwargs["grid"][2])

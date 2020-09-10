@@ -12,13 +12,16 @@ from image_utilities import get_mask_map_by_res_loc
 
 COLOR_8PA = 'rgb(30,144,255)'
 COLOR_NORM_8PA = 'rgb(255,127,80)'
+COLOR_OPT_RPJ_RT = 'rgb(0,255,100)'
+COLOR_OPT_RES_RT = 'rgb(0,100,80)'
 
 
 def get_bearings(**kwargs):
     bearings_kf, bearings_frm, cam_gt, kwargs, ret = track_features(**kwargs)
+    if not ret:
+        return kwargs, False
     # ! 8PA Evaluation
     kwargs["bearings"] = dict()
-
     if kwargs.get("use_ransac", False):
         # ! Solving by using RANSAC
         ransac = RansacEssentialMatrix(**kwargs)
@@ -37,7 +40,7 @@ def get_bearings(**kwargs):
         kwargs["bearings"]["frm"] = bearings_frm
 
     kwargs["cam_gt"] = cam_gt
-    return kwargs
+    return kwargs, ret
 
 
 def single_eval_cam_pose_error(_print=True, **kwargs):
@@ -80,12 +83,16 @@ def save_surface_results(**kwargs):
 
 
 def track_features(**kwargs):
+    # ! It stops at the end of the sequence
     if not kwargs["tracker"].frame_idx + 1 < kwargs["data_scene"].number_frames:
         return None, None, None, kwargs, False
 
-    kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
-                                             res=kwargs["res"],
-                                             loc=kwargs["loc"])
+    if 'mask' not in kwargs.keys():
+        kwargs["mask"] = get_mask_map_by_res_loc(
+            kwargs["data_scene"].shape,
+            res=kwargs["res"],
+            loc=kwargs["loc"])
+
     initial_frame = kwargs["idx_frame"]
     idx = initial_frame
     ret = True
