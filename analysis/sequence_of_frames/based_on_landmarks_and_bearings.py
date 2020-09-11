@@ -143,18 +143,14 @@ def run_sequence(**kwargs):
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
-    scene = "2azQ1b91cZZ/0"
-    # scene = "1LXtFkjw3qL/0"
-    # scene = "759xd9YjKW5/0"
-    # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=scene, basedir=path)
+    from config import *
+    data = MP3D_VO(scene=scene, basedir=basedir)
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=0,
+        idx_frame=idx_frame,
         distance_threshold=0.5,
-        res=(360, 180),
+        res=ress[3],
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),

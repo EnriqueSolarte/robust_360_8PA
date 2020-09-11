@@ -56,7 +56,7 @@ def plot(**kwargs):
                 y=kwargs["results"][dt_r],
                 name=dt_r,
                 line=dict(color=color)
-                ),
+            ),
                 row=row, col=col)
             if "rot" in dt_r:
                 y_label = "Rotation Error"
@@ -73,6 +73,7 @@ def plot(**kwargs):
 
 
 def run_sequence(**kwargs):
+    print("IN")
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
     kwargs["results"]["8pa_error_rot"] = []
@@ -86,6 +87,7 @@ def run_sequence(**kwargs):
     kwargs["results"]["norm_8pa_residuals"] = []
     kwargs["results"]["opt_res_residuals"] = []
 
+    # for _ in range(3):
     while True:
         kwargs, ret = get_bearings(**kwargs)
         if not ret:
@@ -129,23 +131,21 @@ def run_sequence(**kwargs):
         print("Opt Rt res Error-tran:   {}".format(np.median(kwargs["results"]["opt_res_error_tran"], axis=0)))
 
     kwargs["filename"] = "error_8PA_seq_frames_{}".format(get_file_name(**kwargs))
-    plot(**kwargs)
-    save_results(**kwargs)
+    return kwargs
+    # plot(**kwargs)
+    # save_results(**kwargs)
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
-    # scene = "2azQ1b91cZZ/0"
-    # scene = "1LXtFkjw3qL/0"
-    scene = "759xd9YjKW5/0"
-    # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=scene, basedir=path)
+    from config import *
+
+    data = MP3D_VO(scene=scene, basedir=basedir)
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=0,
+        idx_frame=idx_frame,
         distance_threshold=0.5,
-        res=(360, 180),
+        res=ress[3],
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),

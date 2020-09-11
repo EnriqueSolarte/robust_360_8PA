@@ -12,9 +12,9 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
     # ! relative camera pose from a to b
     error_n8p, error_8p = [], []
 
-    from solvers.pnp import PnP
+    from solvers.pnp import PnP_DLT
 
-    pnp = PnP()
+    pnp_dlt = PnP_DLT()
 
     # ! Getting a PCL from the dataset
     pcl_dense, pcl_dense_color, _, _ = data_scene.get_pcl(idx=idx_frame)
@@ -45,7 +45,7 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_pnp = pnp.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
+        cam_pnp = pnp_dlt.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
 
         error_8p.append(
             evaluate_error_in_transformation(transform_gt=cam_gt,

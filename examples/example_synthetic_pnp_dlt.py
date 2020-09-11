@@ -8,8 +8,8 @@ def evaluate_synthetic_points(theta_roi, phi_roi, n_pts, min_d, max_d,
     cam_gt = relative_cam_pose
     error_8p = []
 
-    from solvers.pnp import PnP
-    pnp = PnP()
+    from solvers.pnp import PnP_DLT
+    pnp_dlt = PnP_DLT()
 
     for _ in range(10):
         pcl_a = generate_pcl_by_roi_theta_phi(theta=theta_roi,
@@ -21,7 +21,7 @@ def evaluate_synthetic_points(theta_roi, phi_roi, n_pts, min_d, max_d,
         pcl_b = np.linalg.inv(cam_gt).dot(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_pnp = pnp.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
+        cam_pnp = pnp_dlt.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
 
         error_8p.append(
             evaluate_error_in_transformation(transform_gt=cam_gt,
