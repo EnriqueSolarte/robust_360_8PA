@@ -82,7 +82,7 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="only_bearings"
+        extra="only_bearings",
     )
 
     features_setting = dict(

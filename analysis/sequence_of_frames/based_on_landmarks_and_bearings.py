@@ -82,7 +82,7 @@ if __name__ == '__main__':
                        ),
                        residual_threshold=1e-5,
                        verbose=True,
-                       use_ransac=True
+                       use_ransac=False
                        )
 
     run_sequence(**scene_settings,
