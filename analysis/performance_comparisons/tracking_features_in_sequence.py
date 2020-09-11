@@ -124,7 +124,7 @@ def run_sequence(**kwargs):
             kwargs["results"]["8pa_residuals"].append(g8p.current_residual)
 
         norm_8pa = Optimal8PA(kwargs["opt_version"])
-        cam_norm_8pa = norm_8pa.recover_pose_and_optimize(
+        cam_norm_8pa = norm_8pa.recover_pose_from_matches(
             x1=bearings_kf.copy(),
             x2=bearings_frm.copy(),
             eval_current_solution=True)
