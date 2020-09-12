@@ -10,9 +10,8 @@ def run_sequence(**kwargs):
 
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
-    kwargs["results"]["opt_rpj_8PA_error_tran"] = []
-    kwargs["results"]["norm_8pa_reprojection"] = []
-    kwargs["results"]["opt_rpj_8PA_reprojection"] = []
+    kwargs["results"]["cam_norm_8pa_res_reprojection"] = []
+    kwargs["results"]["cam_PnP_opt_rpj_reprojection"] = []
 
     while True:
         kwargs, ret = get_bearings(**kwargs)
@@ -21,12 +20,18 @@ def run_sequence(**kwargs):
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
 
         # ! Norm 8PA Errors
-        kwargs["cam_norm_8pa_res"], reprojection = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
-        kwargs["results"]["cam_norm_8pa_res_reprojection"].append(np.sum(reprojection ** 2))
+        kwargs[
+            "cam_norm_8pa_res"], reprojection = get_cam_pose_by_opt_rpj_S_K_const_lm(
+                **kwargs)
+        kwargs["results"]["cam_norm_8pa_res_reprojection"].append(
+            np.sum(reprojection**2))
 
         # ! Opt Rt in reprojection 8PA Errors
-        kwargs["cam_PnP_opt_rpj"], reprojection = get_cam_pose_by_opt_rpj_rt_pnp(**kwargs)
-        kwargs["results"]["cam_PnP_opt_rpj_reprojection"].append(np.sum(reprojection ** 2))
+        kwargs[
+            "cam_PnP_opt_rpj"], reprojection = get_cam_pose_by_opt_rpj_rt_pnp(
+                **kwargs)
+        kwargs["results"]["cam_PnP_opt_rpj_reprojection"].append(
+            np.sum(reprojection**2))
 
         kwargs = single_eval_cam_pose_error(**kwargs)
 
@@ -34,12 +39,13 @@ def run_sequence(**kwargs):
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
-    scene = "2azQ1b91cZZ/0"
+    from config import *
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
+    # scene = "2azQ1b91cZZ/0"
     # scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=scene, basedir=path)
+    data = MP3D_VO(scene=scene, basedir=basedir)
 
     scene_settings = dict(
         data_scene=data,
@@ -49,28 +55,21 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="test1"
-    )
+        extra="test1")
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False
-    )
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
-    ransac_parm = dict(min_samples=8,
-                       max_trials=RansacEssentialMatrix.get_number_of_iteration(
-                           p_success=0.99, outliers=0.5, min_constraint=8
-                       ),
-                       residual_threshold=1e-5,
-                       verbose=True,
-                       use_ransac=False
-                       )
+    ransac_parm = dict(
+        min_samples=8,
+        max_trials=RansacEssentialMatrix.get_number_of_iteration(
+            p_success=0.99, outliers=0.5, min_constraint=8),
+        residual_threshold=1e-5,
+        verbose=True,
+        use_ransac=False)
 
-    kwargs = run_sequence(**scene_settings,
-                          **features_setting,
-                          **ransac_parm
-                          )
+    kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm)
 
     plot_errors(**kwargs)
     save_results(**kwargs)
