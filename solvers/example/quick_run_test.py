@@ -1,6 +1,5 @@
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
-from utilities.data_utilities import *
 from read_datasets.MP3D_VO import MP3D_VO
 from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
 

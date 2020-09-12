@@ -2,9 +2,8 @@ from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
-from solvers.epipolar_constraint import projected_distance
 from solvers.optimal8pa import Optimal8PA
-from utilities.data_utilities import *
+from analysis.utilities.data_utilities import *
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 

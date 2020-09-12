@@ -1,6 +1,6 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from pcl_utilities import *
-from utilities.stability_utilities import get_delta_bound_by_bearings
+from analysis.utilities.stability_utilities import get_delta_bound_by_bearings
 from solvers.optimal8pa import Optimal8PA as norm_8pa
 
 

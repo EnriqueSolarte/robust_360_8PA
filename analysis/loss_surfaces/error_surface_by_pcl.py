@@ -8,10 +8,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 import os
-from structures.extractor.orb_extractor import ORBExtractor
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-import cv2
-from utilities.stability_utilities import get_frobenius_norm
+from analysis.utilities.stability_utilities import get_frobenius_norm
 
 pio.renderers.default = "browser"
 

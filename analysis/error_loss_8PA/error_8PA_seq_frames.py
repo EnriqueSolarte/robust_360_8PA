@@ -1,7 +1,7 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from utilities.data_utilities import *
+from analysis.utilities.data_utilities import *
 from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8p
 from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
 from geometry_utilities import evaluate_error_in_transformation

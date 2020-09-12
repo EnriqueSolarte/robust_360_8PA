@@ -2,7 +2,7 @@
 The goal of this script is to visualize what are the error_surfaces for a particular pair of
 frames (Kf-frm) by using both RANSAC and without RANSAC (i.e., with outliers and with inliers only)
 """
-from utilities.data_utilities import *
+from analysis.utilities.data_utilities import *
 from image_utilities import get_mask_map_by_res_loc
 from read_datasets.MP3D_VO import MP3D_VO
 from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix

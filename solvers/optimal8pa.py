@@ -1,8 +1,6 @@
 from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
 from geometry_utilities import *
 from scipy.optimize import least_squares
-from solvers.epipolar_constraint import projected_distance, sampson_distance, tangential_distance
-from utilities.stability_utilities import get_frobenius_norm
 import levmar
 
 
@@ -79,7 +77,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         return s, s, k, k
 
     def optimizer_v1(self, x1, x2):
-        from utilities.stability_utilities import get_frobenius_norm
+        from analysis.utilities.stability_utilities import get_frobenius_norm
 
         def residuals(x):
             x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])
@@ -133,7 +131,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         return s1, s2, k1, k2
 
     def optimizer_v2(self, x1, x2):
-        from utilities.stability_utilities import get_delta_bound_by_bearings
+        from analysis.utilities.stability_utilities import get_delta_bound_by_bearings
 
         def residuals(x):
             x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])
@@ -153,7 +151,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         return s1, s2, k1, k2
 
     def optimizer_v2_1(self, x1, x2):
-        from utilities.stability_utilities import get_frobenius_norm
+        from analysis.utilities.stability_utilities import get_frobenius_norm
 
         def residuals(x):
             x1_norm_, _ = self.normalizer(x1.copy(), s=x[0], k=x[1])

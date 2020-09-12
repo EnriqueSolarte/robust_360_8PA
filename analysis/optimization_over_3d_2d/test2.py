@@ -1,8 +1,8 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from utilities.data_utilities import *
-from utilities.optmization_utilities import *
+from analysis.utilities.data_utilities import *
+from analysis.utilities.optmization_utilities import *
 import levmar
 import time
 

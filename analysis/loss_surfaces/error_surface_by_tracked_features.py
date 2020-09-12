@@ -6,8 +6,8 @@ from plotly.subplots import make_subplots
 import plotly.io as pio
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
-from utilities.stability_utilities import get_frobenius_norm
-from utilities.data_utilities import *
+from analysis.utilities.stability_utilities import get_frobenius_norm
+from analysis.utilities.data_utilities import *
 
 pio.renderers.default = "browser"
 

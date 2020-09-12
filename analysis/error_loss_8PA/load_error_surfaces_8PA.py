@@ -2,7 +2,7 @@
 The goal of this script is to visualize what are the error_surfaces for a particular pair of
 frames (Kf-frm) by using both RANSAC and without RANSAC (i.e., with outliers and with inliers only)
 """
-from utilities.data_utilities import *
+from analysis.utilities.data_utilities import *
 from analysis.error_loss_8PA.error_surfaces_8PA import plot_surfaces
 
 
