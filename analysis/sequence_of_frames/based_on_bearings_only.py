@@ -1,20 +1,15 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from analysis.sequence_of_frames.camera_recovering import *
-from analysis.sequence_of_frames.utils import *
+from analysis.utilities.camera_recovering import *
+from analysis.utilities.plot_utilities import *
 
 
 def run_sequence(**kwargs):
+    kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
+
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
-    kwargs["results"]["8pa_error_rot"] = []
-    kwargs["results"]["8pa_error_tran"] = []
-    kwargs["results"]["norm_8pa_error_rot"] = []
-    kwargs["results"]["norm_8pa_error_tran"] = []
-    kwargs["results"]["opt_res_error_rot"] = []
-    kwargs["results"]["opt_res_error_tran"] = []
-
     kwargs["results"]["8pa_residuals"] = []
     kwargs["results"]["norm_8pa_residuals"] = []
     kwargs["results"]["opt_res_residuals"] = []
@@ -26,50 +21,27 @@ def run_sequence(**kwargs):
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
 
         # ! 8PA Errors
-        cam_hat, residuals = get_cam_pose_by_8pa(**kwargs)
-        error = evaluate_error_in_transformation(
-            transform_gt=kwargs["cam_gt"],
-            transform_est=cam_hat)
-        kwargs["results"]["8pa_error_rot"].append(error[0])
-        kwargs["results"]["8pa_error_tran"].append(error[1])
-        kwargs["results"]["8pa_residuals"].append(np.sum(residuals ** 2))
+        kwargs["cam_8pa"], residuals = get_cam_pose_by_8pa(**kwargs)
+        kwargs["results"]["cam_8pa_residuals"].append(np.sum(residuals ** 2))
 
         # ! Norm 8PA Errors
-        cam_hat, residuals = get_cam_pose_by_opt_res_norm_8pa(**kwargs)
-        error = evaluate_error_in_transformation(
-            transform_gt=kwargs["cam_gt"],
-            transform_est=cam_hat)
-        kwargs["results"]["norm_8pa_error_rot"].append(error[0])
-        kwargs["results"]["norm_8pa_error_tran"].append(error[1])
-        kwargs["results"]["norm_8pa_residuals"].append(np.sum(residuals ** 2))
+        # cam_hat, residuals = get_cam_pose_by_opt_res_norm_8pa(**kwargs)
+        kwargs["cam_norm_8pa_res"], residuals = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
+        kwargs["results"]["cam_norm_8pa_res_residuals"].append(np.sum(residuals ** 2))
 
         # ! Opt Rt residuals 8PA Errors
-        cam_hat, residuals = get_cam_pose_by_opt_res_rt(**kwargs)
-        error = evaluate_error_in_transformation(
-            transform_gt=kwargs["cam_gt"],
-            transform_est=cam_hat)
-        kwargs["results"]["opt_res_error_rot"].append(error[0])
-        kwargs["results"]["opt_res_error_tran"].append(error[1])
-        kwargs["results"]["opt_res_residuals"].append(np.sum(residuals ** 2))
+        kwargs["cam_8pa_opt_res"], residuals = get_cam_pose_by_opt_res_rt_8pa(**kwargs)
+        kwargs["results"]["cam_8pa_opt_res_residuals"].append(np.sum(residuals ** 2))
 
-        print("----------------------------------------------------------------------------")
-        print("8pa Error-rot:           {}".format(np.median(kwargs["results"]["8pa_error_rot"], axis=0)))
-        print("norm 8pa Error-rot:      {}".format(np.median(kwargs["results"]["norm_8pa_error_rot"], axis=0)))
-        print("Opt Rt res Error-tran:   {}".format(np.median(kwargs["results"]["opt_res_error_rot"], axis=0)))
+        kwargs = single_eval_cam_pose_error(**kwargs)
 
-        print("8pa Error-tran:          {}".format(np.median(kwargs["results"]["8pa_error_tran"], axis=0)))
-        print("norm 8pa Error-tran:     {}".format(np.median(kwargs["results"]["norm_8pa_error_tran"], axis=0)))
-        print("Opt Rt res Error-tran:   {}".format(np.median(kwargs["results"]["opt_res_error_tran"], axis=0)))
-
-    kwargs["filename"] = "error_8PA_seq_frames_{}".format(get_file_name(**kwargs))
-    plot(**kwargs)
-    save_results(**kwargs)
+    return kwargs
 
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    scene = "2azQ1b91cZZ/0"
-    # scene = "1LXtFkjw3qL/0"
+    # scene = "2azQ1b91cZZ/0"
+    scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
@@ -82,7 +54,7 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="only_bearings",
+        extra="residuals_sigma_num_condition",
     )
 
     features_setting = dict(
@@ -100,7 +72,10 @@ if __name__ == '__main__':
                        use_ransac=True
                        )
 
-    run_sequence(**scene_settings,
-                 **features_setting,
-                 **ransac_parm
-                 )
+    kwargs = run_sequence(**scene_settings,
+                          **features_setting,
+                          **ransac_parm
+                          )
+
+    plot_errors(**kwargs)
+    save_results(**kwargs)

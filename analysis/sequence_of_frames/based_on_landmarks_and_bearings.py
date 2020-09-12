@@ -1,16 +1,15 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
-from analysis.sequence_of_frames.camera_recovering import *
-from analysis.sequence_of_frames.utils import *
+from analysis.utilities.camera_recovering import *
+from analysis.utilities.plot_utilities import *
 
 
 def run_sequence(**kwargs):
+    kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
+
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
-    kwargs["results"]["norm_8pa_error_rot"] = []
-    kwargs["results"]["norm_8pa_error_tran"] = []
-    kwargs["results"]["opt_rpj_8PA_error_rot"] = []
     kwargs["results"]["opt_rpj_8PA_error_tran"] = []
     kwargs["results"]["norm_8pa_reprojection"] = []
     kwargs["results"]["opt_rpj_8PA_reprojection"] = []
@@ -22,33 +21,16 @@ def run_sequence(**kwargs):
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
 
         # ! Norm 8PA Errors
-        cam_hat, reprojection = get_cam_pose_by_opt_rpj_norm_8pa(**kwargs)
-        error = evaluate_error_in_transformation(
-            transform_gt=kwargs["cam_gt"],
-            transform_est=cam_hat)
-        kwargs["results"]["norm_8pa_error_rot"].append(error[0])
-        kwargs["results"]["norm_8pa_error_tran"].append(error[1])
-        kwargs["results"]["norm_8pa_reprojection"].append(np.sum(reprojection ** 2))
+        kwargs["cam_norm_8pa_res"], reprojection = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
+        kwargs["results"]["cam_norm_8pa_res_reprojection"].append(np.sum(reprojection ** 2))
 
         # ! Opt Rt in reprojection 8PA Errors
-        cam_hat, reprojection = get_cam_pose_by_opt_rpj_8PA_rt(**kwargs)
-        error = evaluate_error_in_transformation(
-            transform_gt=kwargs["cam_gt"],
-            transform_est=cam_hat)
-        kwargs["results"]["opt_rpj_8PA_error_rot"].append(error[0])
-        kwargs["results"]["opt_rpj_8PA_error_tran"].append(error[1])
-        kwargs["results"]["opt_rpj_8PA_reprojection"].append(np.sum(reprojection ** 2))
+        kwargs["cam_PnP_opt_rpj"], reprojection = get_cam_pose_by_opt_rpj_rt_pnp(**kwargs)
+        kwargs["results"]["cam_PnP_opt_rpj_reprojection"].append(np.sum(reprojection ** 2))
 
-        print("----------------------------------------------------------------------------")
-        print("norm 8pa Error-rot:      {}".format(np.median(kwargs["results"]["norm_8pa_error_rot"], axis=0)))
-        print("Opt Rt rpj Error-rot:    {}".format(np.median(kwargs["results"]["opt_rpj_8PA_error_rot"], axis=0)))
+        kwargs = single_eval_cam_pose_error(**kwargs)
 
-        print("norm 8pa Error-tran:     {}".format(np.median(kwargs["results"]["norm_8pa_error_tran"], axis=0)))
-        print("Opt Rt rpj Error-tran:   {}".format(np.median(kwargs["results"]["opt_rpj_8PA_error_tran"], axis=0)))
-
-    kwargs["filename"] = "error_8PA_seq_frames_{}".format(get_file_name(**kwargs))
-    plot(**kwargs)
-    save_results(**kwargs)
+    return kwargs
 
 
 if __name__ == '__main__':
@@ -85,7 +67,10 @@ if __name__ == '__main__':
                        use_ransac=False
                        )
 
-    run_sequence(**scene_settings,
-                 **features_setting,
-                 **ransac_parm
-                 )
+    kwargs = run_sequence(**scene_settings,
+                          **features_setting,
+                          **ransac_parm
+                          )
+
+    plot_errors(**kwargs)
+    save_results(**kwargs)
