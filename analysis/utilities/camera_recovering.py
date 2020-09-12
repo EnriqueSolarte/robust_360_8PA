@@ -151,8 +151,8 @@ def get_cam_pose_by_opt_res_error_S_K(**kwargs):
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_k_s,
-        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
-        # np.array((0, 0)),
+        # np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        np.array((0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()
               ))
