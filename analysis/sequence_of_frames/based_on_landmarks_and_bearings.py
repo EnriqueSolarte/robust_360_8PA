@@ -43,9 +43,9 @@ if __name__ == '__main__':
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=0,
+        idx_frame=idx_frame,
         distance_threshold=0.5,
-        res=(360, 180),
+        res=ress[3],
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),

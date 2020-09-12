@@ -9,8 +9,9 @@ output_dir = "/home/justin/slam/optimal8PA/report"
 if dataset == "minos":
     basedir = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/3dv2020"
+    path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
     scene = "2azQ1b91cZZ" + "/0"
-    idx_frame = 549
+    idx_frame = 0
 elif dataset == "tum_rgbd":
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/undistort_depth/Testing_and_debugging/unzip"
     scene = "rgbd_dataset_freiburg1_xyz"

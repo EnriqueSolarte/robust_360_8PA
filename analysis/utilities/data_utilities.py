@@ -99,7 +99,7 @@ def save_surface_results(**kwargs):
 
 def track_features(**kwargs):
     # ! It stops at the end of the sequence
-    if not kwargs["tracker"].frame_idx + 1 < kwargs["data_scene"].number_frames:
+    if not kwargs["idx_frame"] + 1 < kwargs["data_scene"].number_frames:
         return None, None, None, kwargs, False
 
     if 'mask' not in kwargs.keys():
