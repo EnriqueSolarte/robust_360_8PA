@@ -41,7 +41,7 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="test_all_methods",
+        extra="vamos kikin",
     )
 
     features_setting = dict(
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                        ),
                        residual_threshold=1e-5,
                        verbose=True,
-                       use_ransac=False
+                       use_ransac=True
                        )
 
     kwargs = run_sequence(**scene_settings,

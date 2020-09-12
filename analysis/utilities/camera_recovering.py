@@ -141,8 +141,9 @@ def res_error_S_K(parameters,
     # return np.array((np.sum((residuals_1 + residuals_2)), sigma[-1] / (sigma[0] - sigma[-2])))
     # return np.array((np.sum(error_1 + residuals_1 + residuals_2),))
     # return residuals_1 + residuals_2
-    # return np.array((np.sum(residuals_1), np.sum(residuals_2)))
-    return np.array((np.sum((residuals_1 + residuals_2)), 1 / sigma[-2]))
+    return np.array((np.sum(residuals_1), np.sum(residuals_2)))
+    # return np.array((np.sum((residuals_1 + residuals_2)), 1 / sigma[-2]))
+    # return residuals_1
 
 
 def get_cam_pose_by_opt_res_error_S_K(**kwargs):
@@ -150,8 +151,8 @@ def get_cam_pose_by_opt_res_error_S_K(**kwargs):
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_k_s,
-        # np.zeros_like(kwargs["bearings"]["frm"][0, :]),
-        np.array((0, 0)),
+        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        # np.array((0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()
               ))
@@ -208,7 +209,13 @@ def rpj_S_K_const_lm(
         x2=bearings_frm
     )
 
-    landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf
+    landmarks_kf_ = solver.triangulate_points_from_cam_pose(
+        cam_pose=cam_hat,
+        x1=bearings_kf.copy(),
+        x2=bearings_frm.copy()
+    )
+
+    landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf_
 
     error_1 = get_projection_error_between_vectors_arrays(
         array_ref=bearings_frm,
@@ -227,8 +234,8 @@ def rpj_S_K_const_lm(
     )
     # return np.array((np.sum(1 / error_1), residuals_1, residuals_2))
     # return np.array((np.sum(error_1 + residuals_1 + residuals_2),))
-    return np.array((np.sum((1 / error_1)), 1 / sigma[-2]))
-    # return 1 / error_1 + residuals_1 + residuals_2
+    # return np.array((np.sum((1 / error_1)), (residuals_1 + residuals_2), 1 / sigma[-2]))
+    return 1 / error_1
 
 
 def get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs):
@@ -242,8 +249,8 @@ def get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs):
     opt_k_s, p_cov, info = levmar.levmar(
         rpj_S_K_const_lm,
         initial_k_s,
-        # np.zeros_like(kwargs["bearings"]["frm"][0, :]),
-        np.array((0, 0)),
+        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        # np.array((0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy(),
               landmarks_kf))
