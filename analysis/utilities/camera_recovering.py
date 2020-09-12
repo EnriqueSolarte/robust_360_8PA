@@ -6,18 +6,6 @@ from solvers.epipolar_constraint import *
 solver = g8p()
 
 
-def get_cam_pose_by_8pa(**kwargs):
-    """
-    Returns a camera pose using bearing vectors and the 8PA
-    """
-    cam_pose = solver.recover_pose_from_matches(
-        x1=kwargs["bearings"]['kf'].copy(),
-        x2=kwargs["bearings"]['frm'].copy(),
-        eval_current_solution=True
-    )
-    return cam_pose, solver.current_residual
-
-
 def residuals_error_R_T(parameters, bearings_kf, bearings_frm):
     r0 = parameters[0]
     r1 = parameters[1]
@@ -53,6 +41,18 @@ def reprojection_error_R_T(parameters, bearings, landmarks):
         array_vector=points_hat[0:3, :]
     )
     return 1 / error
+
+
+def get_cam_pose_by_8pa(**kwargs):
+    """
+    Returns a camera pose using bearing vectors and the 8PA
+    """
+    cam_pose = solver.recover_pose_from_matches(
+        x1=kwargs["bearings"]['kf'].copy(),
+        x2=kwargs["bearings"]['frm'].copy(),
+        eval_current_solution=True
+    )
+    return cam_pose, solver.current_residual
 
 
 def get_cam_pose_by_opt_rpj_rt_pnp(**kwargs):
@@ -110,7 +110,7 @@ def get_cam_pose_by_opt_res_rt_8pa(**kwargs):
 
 # * ====================================================================
 # * ====================================================================
-def masking_large_motion_only(all=False, **kwargs):
+def mask_bearings_by_pm(all=False, **kwargs):
     if not all:
         delta = np.linalg.norm((kwargs["bearings"]["kf"] - kwargs["bearings"]["frm"]), axis=0)
         max_value = np.max(delta)
@@ -141,6 +141,7 @@ def res_error_S_K(parameters,
         x2=bearings_frm_norm,
         return_all=True
     )
+    # ! De-normalization
     e_hat = t1.T @ e_norm @ t2
     residuals_1 = projected_distance(
         e=e_hat,
@@ -148,7 +149,7 @@ def res_error_S_K(parameters,
         x2=bearings_frm
     )
 
-    residuals_2 = epipolar_constraint(
+    residuals_2 = projected_distance(
         e=e_norm,
         x1=bearings_kf_norm,
         x2=bearings_frm_norm
@@ -158,25 +159,25 @@ def res_error_S_K(parameters,
     # return residuals_1 + residuals_2
     # return np.array((np.sum(residuals_1), np.sum(residuals_2)))
     # return np.array((np.sum((residuals_1 + residuals_2)), 1 / sigma[-2]))
-    return (residuals_2 + residuals_1) / sigma[-2]
+    return residuals_2 * residuals_1
 
 
 def get_cam_pose_by_opt_res_error_S_K(**kwargs):
     initial_k_s = (1, 1)
     # initial_k_s = (1, 1, 1, 1)
-    mask = masking_large_motion_only(**kwargs)
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_k_s,
-        np.zeros_like(kwargs["bearings"]["frm"][0, mask]),
+        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
         # np.array((0, 0)),
-        args=(kwargs["bearings"]["kf"][:, mask].copy(),
-              kwargs["bearings"]["frm"][:, mask].copy()
+        args=(kwargs["bearings"]["kf"].copy(),
+              kwargs["bearings"]["frm"].copy()
               ))
 
     s = opt_k_s[0]
     k = opt_k_s[1]
     print("S:{} K:{}".format(s, k))
+    print("Iterations: {}".format(info[2]))
     bearings_kf_norm, t1 = normalizer_s_k(x=kwargs["bearings"]["kf"].copy(), s=s, k=k)
     # s = opt_k_s[2]
     # k = opt_k_s[3]
@@ -204,7 +205,10 @@ def get_cam_pose_by_opt_res_error_S_K(**kwargs):
 
 # * ********************************************************************
 # ! OURS - REPROJECTION
-def rpj_S_K_const_lm(parameters, bearings_kf, bearings_frm, mask):
+def rpj_S_K_const_lm(parameters,
+                     bearings_kf,
+                     bearings_frm,
+                     landmarks_kf):
     s = parameters[0]
     k = parameters[1]
 
@@ -216,7 +220,7 @@ def rpj_S_K_const_lm(parameters, bearings_kf, bearings_frm, mask):
         x2=bearings_frm_norm,
         return_all=True
     )
-    c_fro_norm = np.linalg.norm(A.T.dot(A), ord="fro")
+    # c_fro_norm = np.linalg.norm(A.T.dot(A), ord="fro")
 
     e_hat = t1.T @ e_norm @ t2
 
@@ -226,16 +230,16 @@ def rpj_S_K_const_lm(parameters, bearings_kf, bearings_frm, mask):
         x2=bearings_frm
     )
 
-    landmarks_kf_ = solver.triangulate_points_from_cam_pose(
-        cam_pose=cam_hat,
-        x1=bearings_kf[:, mask].copy(),
-        x2=bearings_frm[:, mask].copy()
-    )
+    # landmarks_kf_ = solver.triangulate_points_from_cam_pose(
+    #     cam_pose=cam_hat,
+    #     x1=bearings_kf.copy(),
+    #     x2=bearings_frm.copy()
+    # )
 
-    landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf_
+    landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf
 
     error_1 = get_projection_error_between_vectors_arrays(
-        array_ref=bearings_frm[:, mask],
+        array_ref=bearings_frm,
         array_vector=landmarks_frm_hat[0:3, :]
     )
 
@@ -254,26 +258,32 @@ def rpj_S_K_const_lm(parameters, bearings_kf, bearings_frm, mask):
     # return np.array((np.sum(error_1 + residuals_1 + residuals_2),))
     # return np.array((np.sum((1 / error_1)), (residuals_1 + residuals_2), 1 / sigma[-2]))
     # return 1000 / error_1
-    return c_fro_norm / error_1
+    return 1 / error_1
 
 
 def get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs):
     initial_pose, _ = get_cam_pose_by_8pa(**kwargs)
-    mask = masking_large_motion_only(**kwargs)
     initial_k_s = (1, 1)
+
+    landmarks_kf = solver.triangulate_points_from_cam_pose(
+        cam_pose=initial_pose,
+        x1=kwargs["bearings"]['kf'].copy(),
+        x2=kwargs["bearings"]['frm'].copy(),
+    )
     opt_k_s, p_cov, info = levmar.levmar(
         rpj_S_K_const_lm,
         initial_k_s,
-        np.zeros_like(kwargs["bearings"]["frm"][0, mask]),
+        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
         # np.array((0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy(),
-              mask
+              landmarks_kf
               ))
 
     s = opt_k_s[0]
     k = opt_k_s[1]
     print("S:{} K:{}".format(s, k))
+    print("iterations: {}".format(info[2]))
     bearings_kf_norm, t1 = normalizer_s_k(x=kwargs["bearings"]["kf"].copy(), s=s, k=k)
     bearings_frm_norm, t2 = normalizer_s_k(x=kwargs["bearings"]["frm"].copy(), s=s, k=k)
 
@@ -288,7 +298,7 @@ def get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs):
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy(),
     )
-    landmarks_kf = g8p.triangulate_points_from_cam_pose(
+    landmarks_kf = solver.triangulate_points_from_cam_pose(
         cam_pose=cam_hat,
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy(),

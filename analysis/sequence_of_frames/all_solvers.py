@@ -1,7 +1,6 @@
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
-from analysis.utilities.data_utilities import *
 from analysis.utilities.camera_recovering import *
 from analysis.utilities.plot_utilities import *
 
@@ -16,7 +15,7 @@ def run_sequence(**kwargs):
             break
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
         kwargs["cam_8pa"], _ = get_cam_pose_by_8pa(**kwargs)
-        # kwargs["cam_OURS_opt_res"], _ = get_cam_pose_by_opt_res_error_S_K(**kwargs)
+        kwargs["cam_OURS_opt_res"], _ = get_cam_pose_by_opt_res_error_S_K(**kwargs)
         kwargs["cam_OURS_opt_prj"], _ = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
         kwargs["cam_8pa_opt_res"], _ = get_cam_pose_by_opt_res_rt_8pa(**kwargs)
         kwargs["cam_PnP_opt_rpj"], _ = get_cam_pose_by_opt_rpj_rt_pnp(**kwargs)
@@ -41,7 +40,7 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="only reprojection",
+        extra="",
     )
 
     features_setting = dict(
@@ -56,7 +55,7 @@ if __name__ == '__main__':
                        ),
                        residual_threshold=1e-5,
                        verbose=True,
-                       use_ransac=True
+                       use_ransac=False
                        )
 
     kwargs = run_sequence(**scene_settings,
