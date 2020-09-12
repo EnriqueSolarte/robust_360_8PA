@@ -16,7 +16,7 @@ def run_sequence(**kwargs):
             break
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
         kwargs["cam_8pa"], _ = get_cam_pose_by_8pa(**kwargs)
-        kwargs["cam_OURS_opt_res"], _ = get_cam_pose_by_opt_res_error_S_K(**kwargs)
+        # kwargs["cam_OURS_opt_res"], _ = get_cam_pose_by_opt_res_error_S_K(**kwargs)
         kwargs["cam_OURS_opt_prj"], _ = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
         kwargs["cam_8pa_opt_res"], _ = get_cam_pose_by_opt_res_rt_8pa(**kwargs)
         kwargs["cam_PnP_opt_rpj"], _ = get_cam_pose_by_opt_rpj_rt_pnp(**kwargs)
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="vamos kikin",
+        extra="only reprojection",
     )
 
     features_setting = dict(
