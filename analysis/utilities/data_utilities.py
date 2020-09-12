@@ -48,13 +48,28 @@ def single_eval_cam_pose_error(_print=True, **kwargs):
     cam_gt = kwargs["cam_gt"]
     for cam in cams:
         cam_pose = kwargs[cam]
-        kwargs["error_" + cam] = evaluate_error_in_transformation(
+        error_name = "error_" + cam
+        error = evaluate_error_in_transformation(
             transform_est=cam_pose,
             transform_gt=cam_gt
         )
+        if error_name + "_rot" not in kwargs["results"].keys():
+            kwargs["results"][error_name + "_rot"] = [error[0]]
+            kwargs["results"][error_name + "_tran"] = [error[1]]
+        else:
+            kwargs["results"][error_name + "_rot"].append(error[0])
+            kwargs["results"][error_name + "_tran"].append(error[1])
         if _print:
-            print("{} Error-rot: {}".format(cam, kwargs["error_" + cam][0]))
-            print("{} Error-tran: {}".format(cam, kwargs["error_" + cam][1]))
+            print("--------------------------------------------------------")
+            print("solver:{}".format(cam))
+            # print("75% Error-rot: {}".format(np.quantile(kwargs["results"][error_name + "_rot"], 0.75)))
+            print("50% Error-rot: {}".format(np.quantile(kwargs["results"][error_name + "_rot"], 0.5)))
+            # print("25% Error-rot: {}".format(np.quantile(kwargs["results"][error_name + "_rot"], 0.25)))
+            # print("--------------------------------------------------------")
+            # print("75% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.75)))
+            print("50% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.50)))
+            # print("25% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.25)))
+            # print("--------------------------------------------------------")
     return kwargs
 
 
@@ -68,7 +83,7 @@ def msk(eval, quantile):
 
 def save_results(**kwargs):
     filename = kwargs["filename"]
-    dir_output = os.path.join("plots/{}.data".format(filename))
+    dir_output = os.path.join("{}.data".format(filename))
     save_obj(dir_output, kwargs["results"])
 
 
