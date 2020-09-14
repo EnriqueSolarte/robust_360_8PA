@@ -78,4 +78,4 @@ if __name__ == '__main__':
                           )
 
     plot_errors(**kwargs)
-    save_results(**kwargs)
+    save_info(**kwargs)

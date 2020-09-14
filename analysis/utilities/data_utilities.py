@@ -89,28 +89,6 @@ def msk(eval, quantile):
     return eval
 
 
-def save_results(**kwargs):
-    filename = kwargs["filename"]
-    dir_output = os.path.join("{}.data".format(filename))
-    save_obj(dir_output, kwargs["results"])
-
-
-def save_surfaces(**kwargs):
-    filename = kwargs["filename"]
-    dir_output = os.path.join("{}.data".format(filename))
-    save_obj(dir_output, kwargs["surfaces"])
-
-
-def save_surface_results(**kwargs):
-    filename = kwargs["filename"]
-    dir_output = os.path.join("plots/{}.data".format(filename))
-
-    dt = dict(results=kwargs["results"],
-              v_grid=kwargs["v_grid"],
-              vv_grid=kwargs["vv_grid"])
-    save_obj(dir_output, dt)
-
-
 def track_features(**kwargs):
     # ! It stops at the end of the sequence
     if not kwargs["idx_frame"] + 1 < kwargs["data_scene"].number_frames:

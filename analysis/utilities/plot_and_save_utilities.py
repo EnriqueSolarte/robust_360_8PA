@@ -3,6 +3,7 @@ from plotly.subplots import make_subplots
 from analysis.utilities.data_utilities import *
 from file_utilities import create_dir
 from varname import nameof
+import shutil
 
 
 def get_file_name(**kwargs):
@@ -142,3 +143,36 @@ def get_color(label):
     elif "PnP" in label:
         return COLOR_OPT_RES_RT
 
+
+def save_info(only_results=True, **kwargs):
+    filename = kwargs["filename"]
+    if only_results:
+        dir_output = os.path.join("{}.results".format(filename))
+        save_obj(dir_output, kwargs["results"])
+    else:
+        dir_output = os.path.join("{}.kwargs".format(filename))
+        save_obj(dir_output, kwargs)
+    try:
+        log_dir = os.path.dirname(os.path.dirname(filename))
+        dir_output = os.path.join("{}_log.txt".format(filename))
+        shutil.copyfile(
+            src=os.path.join(log_dir, "log.txt"),
+            dst=dir_output)
+    except:
+        print("Log file was not saved")
+
+
+def save_surface_results(**kwargs):
+    filename = kwargs["filename"]
+    dir_output = os.path.join("plots/{}.data".format(filename))
+
+    dt = dict(results=kwargs["results"],
+              v_grid=kwargs["v_grid"],
+              vv_grid=kwargs["vv_grid"])
+    save_obj(dir_output, dt)
+
+
+def save_surfaces(**kwargs):
+    filename = kwargs["filename"]
+    dir_output = os.path.join("{}.data".format(filename))
+    save_obj(dir_output, kwargs["surfaces"])
