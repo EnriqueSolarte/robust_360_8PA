@@ -37,15 +37,19 @@ if __name__ == '__main__':
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=950,
+        idx_frame=0,
         distance_threshold=0.5,
         res=(360, 180),
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="",
+        extra="1",
     )
-
+    initial_values = dict(
+        iVal_Res_SK=(0.5, 0.5),
+        iVal_Rpj_SK=(0.5, 0.5),
+        iVal_Res_RtSK=(0.5, 0.5)
+    )
     features_setting = dict(
         feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
         tracker=LKTracker(),
@@ -63,7 +67,8 @@ if __name__ == '__main__':
 
     kwargs = run_sequence(**scene_settings,
                           **features_setting,
-                          **ransac_parm
+                          **ransac_parm,
+                          **initial_values
                           )
 
     plot_errors(**kwargs)

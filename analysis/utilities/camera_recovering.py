@@ -115,22 +115,7 @@ def get_cam_pose_by_opt_res_rt_8pa(**kwargs):
 
 # * ====================================================================
 # * ====================================================================
-def mask_bearings_by_pm(all=False, **kwargs):
-    if not all:
-        delta = np.linalg.norm((kwargs["bearings"]["kf"] - kwargs["bearings"]["frm"]), axis=0)
-        max_value = np.max(delta)
-        mask = delta > 0.8 * max_value
-        if np.sum(mask) < 8:
-            mask = delta > 0.5 * max_value
-        else:
-            mask = delta < max_value
-    else:
-        delta = np.linalg.norm((kwargs["bearings"]["kf"] - kwargs["bearings"]["frm"]), axis=0)
-        mask = delta < np.max(delta) + 1
-    return mask
-
-
-# ! OURS - RES
+# ! OURS - OPT SK by RESIDUALS
 def res_error_S_K(parameters,
                   bearings_kf, bearings_frm):
     s = parameters[0]
@@ -146,15 +131,15 @@ def res_error_S_K(parameters,
         x2=bearings_frm_norm,
         return_all=True
     )
-    # # ! De-normalization
-    e_hat = t1.T @ e_norm @ t2
-    # residuals_error = projected_distance(
-    #     e=e_hat,
-    #     x1=bearings_kf,
-    #     x2=bearings_frm
-    # )
+    # # # ! De-normalization
+    # e_hat = t1.T @ e_norm @ t2
+    # # residuals_error = projected_distance(
+    # #     e=e_hat,
+    # #     x1=bearings_kf,
+    # #     x2=bearings_frm
+    # # )
 
-    norm_residuals_error = sampson_distance(
+    norm_residuals_error = projected_distance(
         e=e_norm,
         x1=bearings_kf_norm,
         x2=bearings_frm_norm
@@ -170,7 +155,7 @@ def res_error_S_K(parameters,
 
 
 def get_cam_pose_by_opt_res_error_S_K(**kwargs):
-    initial_s_k = (0.001, 0.001)  # initial_k_s = (0.001, 0.001, 0.001, 0.001)
+    initial_s_k = kwargs["iVal_Res_SK"]  # initial_k_s = (0.001, 0.001, 0.001, 0.001)
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_s_k,
@@ -217,7 +202,7 @@ def get_cam_pose_by_opt_res_error_S_K(**kwargs):
 
 
 # * ********************************************************************
-# ! OURS - REPROJECTION
+# ! OURS - OPT SK by REPROJECTION OF LMK
 def rpj_S_K_const_lm(parameters,
                      bearings_kf,
                      bearings_frm,
@@ -240,12 +225,12 @@ def rpj_S_K_const_lm(parameters,
         x1=bearings_kf,
         x2=bearings_frm
     )
-    landmarks_kf_ = solver.triangulate_points_from_cam_pose(
-        cam_pose=cam_hat,
-        x1=bearings_kf.copy(),
-        x2=bearings_frm.copy()
-    )
-    landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf_
+    # landmarks_kf_ = solver.triangulate_points_from_cam_pose(
+    #     cam_pose=cam_hat,
+    #     x1=bearings_kf.copy(),
+    #     x2=bearings_frm.copy()
+    # )
+    landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf
     reprojection_error = get_projection_error_between_vectors_arrays(
         array_ref=bearings_frm,
         array_vector=landmarks_frm_hat[0:3, :]
@@ -255,28 +240,20 @@ def rpj_S_K_const_lm(parameters,
     #     x1=bearings_kf,
     #     x2=bearings_frm
     # )
-    #
     # norm_residuals_error = projected_distance(
     #     e=e_norm,
     #     x1=bearings_kf_norm,
     #     x2=bearings_frm_norm
     # )
 
-    # return np.array((np.sum(1 / error_1), residuals_1, residuals_2))
-    # return np.array((np.sum(error_1 + residuals_1 + residuals_2),))
-    # return np.array((np.sum((1 / error_1)), (residuals_1 + residuals_2), 1 / sigma[-2]))
-    # return norm_residuals_error / np.max(norm_residuals_error)
-    # return 1 / reprojection_error
     return 1 / reprojection_error
-    # return (norm_residuals_error * np.linalg.norm(reprojection_error)) / (
-    #         reprojection_error * np.linalg.norm(norm_residuals_error))
 
 
 def get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs):
     initial_pose, _ = get_cam_pose_by_8pa(**kwargs)
     # initial_s_k = (0.1, 0.1)
     # initial_k_s = (0.001, 0.001, 0.001, 0.001)
-    initial_s_k = (0.001, 0.001)
+    initial_s_k = kwargs["iVal_Rpj_SK"]
 
     landmarks_kf = solver.triangulate_points_from_cam_pose(
         cam_pose=initial_pose,
@@ -337,6 +314,8 @@ def get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs):
     return cam_hat, reprojection
 
 
+# * ********************************************************************
+
 # ! OPt Rt residuals + Opt KS
 def residuals_error_RT_KS(parameters, bearings_kf, bearings_frm):
     r0 = parameters[0]
@@ -349,8 +328,6 @@ def residuals_error_RT_KS(parameters, bearings_kf, bearings_frm):
     s = parameters[7]
 
     bearings_kf_norm, n1 = normalizer_s_k(x=bearings_kf, s=s, k=k)
-    # s = parameters[2]
-    # k = parameters[3]
     bearings_frm_norm, n2 = normalizer_s_k(x=bearings_frm, s=s, k=k)
 
     cam_pose = eulerAnglesToRotationMatrix((r0, r1, r2))
@@ -367,7 +344,7 @@ def residuals_error_RT_KS(parameters, bearings_kf, bearings_frm):
 
 def get_cam_pose_by_opt_res_error_Rt_SK(**kwargs):
     initial_pose, _ = get_cam_pose_by_8pa(**kwargs)
-    initial_s_k = (1, 1)
+    initial_s_k = kwargs["iVal_Res_RtSK"]
     eu = rotationMatrixToEulerAngles(initial_pose[0:3, 0:3])
     trn = np.copy(initial_pose[0:3, 3])
 

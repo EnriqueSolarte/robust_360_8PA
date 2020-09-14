@@ -21,6 +21,11 @@ def get_file_name(**kwargs):
         filename += "_trials" + str(kwargs["max_trials"])
     filename += "_" + kwargs["extra"]
 
+    initial_val = [dt for dt in kwargs.keys() if "iVal" in dt]
+    if len(initial_val) > 0:
+        for val in initial_val:
+            filename += "_" + val + "." + str(kwargs[val])
+
     return os.path.join(dirname, filename)
 
 

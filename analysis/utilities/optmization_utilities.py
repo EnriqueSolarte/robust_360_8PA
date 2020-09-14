@@ -20,3 +20,19 @@ def normalizer_3dv2020(x, s, k):
                   [0, 0, k ** abs(1 - x_mean[2])]])
     x_norm = np.dot(t, x)
     return x_norm, t
+
+
+def mask_bearings_by_pm(all=False, **kwargs):
+    if not all:
+        delta = np.linalg.norm((kwargs["bearings"]["kf"] - kwargs["bearings"]["frm"]), axis=0)
+        max_value = np.max(delta)
+        mask = delta > 0.8 * max_value
+        if np.sum(mask) < 8:
+            mask = delta > 0.5 * max_value
+        else:
+            mask = delta < max_value
+    else:
+        delta = np.linalg.norm((kwargs["bearings"]["kf"] - kwargs["bearings"]["frm"]), axis=0)
+        mask = delta < np.max(delta) + 1
+    return mask
+
