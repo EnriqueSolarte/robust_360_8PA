@@ -3,7 +3,7 @@ import numpy as np
 
 def normalizer_s_k(x, s, k):
     n_matrix = np.eye(3) * s
-    n_matrix[2, 2] = k
+    n_matrix[2, 2] = 1/k
     return n_matrix @ x, n_matrix
 
 

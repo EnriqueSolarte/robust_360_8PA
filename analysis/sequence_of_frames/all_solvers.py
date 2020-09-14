@@ -2,7 +2,7 @@ from read_datasets.MP3D_VO import MP3D_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 from analysis.utilities.camera_recovering import *
-from analysis.utilities.plot_utilities import *
+from analysis.utilities.plot_and_save_utilities import *
 
 
 def run_sequence(**kwargs):
@@ -19,7 +19,7 @@ def run_sequence(**kwargs):
         kwargs["cam_OURS_opt_prj"], _ = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
         kwargs["cam_8pa_opt_res"], _ = get_cam_pose_by_opt_res_rt_8pa(**kwargs)
         kwargs["cam_PnP_opt_rpj"], _ = get_cam_pose_by_opt_rpj_rt_pnp(**kwargs)
-        kwargs = single_eval_cam_pose_error(**kwargs)
+        kwargs = eval_cam_pose_error(**kwargs)
 
     return kwargs
 
@@ -40,11 +40,11 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="",
+        extra="norm_residuals_error_1_reprojection_error",
     )
 
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
         tracker=LKTracker(),
         show_tracked_features=False
     )

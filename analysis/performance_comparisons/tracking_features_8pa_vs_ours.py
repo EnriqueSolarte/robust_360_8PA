@@ -49,7 +49,7 @@ def plot(**kwargs):
         y_label = dt[0]
         for dt_r in dt:
             if "norm" in dt_r:
-                color = COLOR_NORM_8PA
+                color = COLOR_NORM_8PA_OURS
                 dash = "solid"
             elif "8pa" in dt_r:
                 color = COLOR_8PA

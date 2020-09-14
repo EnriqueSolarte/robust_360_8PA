@@ -9,11 +9,13 @@ from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8
 import os
 from file_utilities import save_obj, load_obj
 from image_utilities import get_mask_map_by_res_loc
+from analysis.utilities.camera_recovering import *
 
 COLOR_8PA = 'rgb(30,144,255)'
-COLOR_NORM_8PA = 'rgb(255,127,80)'
-COLOR_OPT_RPJ_RT = 'rgb(0,255,100)'
+COLOR_NORM_8PA_OURS = 'rgb(255,127,80)'
+COLOR_OPT_RPJ_RT_PNP = 'rgb(0,255,100)'
 COLOR_OPT_RES_RT = 'rgb(0,100,80)'
+COLOR_GENERAL = 'red'
 
 
 def get_bearings(**kwargs):
@@ -40,10 +42,16 @@ def get_bearings(**kwargs):
         kwargs["bearings"]["frm"] = bearings_frm
 
     kwargs["cam_gt"] = cam_gt
+    kwargs["e_gt"] = g8p.get_e_from_cam_pose(cam_gt)
+    kwargs["landmarks_kf"] = g8p.triangulate_points_from_cam_pose(
+        cam_pose=get_cam_pose_by_8pa(**kwargs)[0],
+        x1=kwargs["bearings"]['kf'].copy(),
+        x2=kwargs["bearings"]['frm'].copy(),
+    )
     return kwargs, ret
 
 
-def single_eval_cam_pose_error(_print=True, **kwargs):
+def eval_cam_pose_error(_print=True, **kwargs):
     cams = [cam for cam in kwargs.keys() if "cam" in cam and "gt" not in cam]
     cam_gt = kwargs["cam_gt"]
     for cam in cams:
@@ -85,6 +93,12 @@ def save_results(**kwargs):
     filename = kwargs["filename"]
     dir_output = os.path.join("{}.data".format(filename))
     save_obj(dir_output, kwargs["results"])
+
+
+def save_surfaces(**kwargs):
+    filename = kwargs["filename"]
+    dir_output = os.path.join("{}.data".format(filename))
+    save_obj(dir_output, kwargs["surfaces"])
 
 
 def save_surface_results(**kwargs):

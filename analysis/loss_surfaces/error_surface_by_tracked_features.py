@@ -51,7 +51,7 @@ def eval_error_surface(**kwargs):
     kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
                                              res=kwargs["res"],
                                              loc=kwargs["loc"])
-    bearings_a, bearings_b, cam_a2b, kwargs = track_features(**kwargs)
+    bearings_a, bearings_b, cam_a2b, kwargs, ret = track_features(**kwargs)
     if not kwargs["useOnlyTrackedFeatures"]:
         pcl = kwargs["data_scene"].get_pcl_from_key_features(
             idx=kwargs["idx_frame"],
@@ -314,9 +314,9 @@ if __name__ == '__main__':
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=549,
+        idx_frame=85,
         distance_threshold=0.5,
-        max_pts=150,
+        max_pts=200,
         # res=(65.5, 46.4),
         res=(360, 180),
         loc=(0, 0),
@@ -324,7 +324,8 @@ if __name__ == '__main__':
 
     features_setting = dict(
         # feat_extractor=ORBExtractor(),
-        feat_extractor=Shi_Tomasi_Extractor(),
+        feat_extractor=Shi_Tomasi_Extractor(
+            maxCorners=scene_settings['max_pts']),
         tracker=LKTracker(),
         useOnlyTrackedFeatures=True,
         noise=500,
@@ -332,7 +333,7 @@ if __name__ == '__main__':
 
     model_settings = dict(
         opt_version="v1",
-        grid=(-1, 1, 50),
+        grid=(-1, 1, 5),
         # mask_results=("loss", "error_rot", "error_tran"),
         mask_results=('loss', ),
         mask_quantile=0.25,

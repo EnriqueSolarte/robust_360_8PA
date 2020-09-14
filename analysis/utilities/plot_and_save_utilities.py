@@ -2,6 +2,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from analysis.utilities.data_utilities import *
 from file_utilities import create_dir
+from varname import nameof
 
 
 def get_file_name(**kwargs):
@@ -11,6 +12,7 @@ def get_file_name(**kwargs):
     name = os.path.splitext(name_src)[0]
     scene_ = os.path.dirname(kwargs["data_scene"].scene)
     filename = name + "_" + scene_
+    filename += "_ifrm_{}".format(kwargs["idx_frame"])
     filename += "_res_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
     filename += "_dist" + str(kwargs["distance_threshold"])
     if kwargs["use_ransac"]:
@@ -56,14 +58,7 @@ def plot_bar_errors(**kwargs):
                 kwargs["quartiles"][dt_r + "_" + quartile] = func(
                     kwargs["results"][dt_r], arg)
 
-                if "OURS" in dt_r:
-                    color = COLOR_NORM_8PA
-                elif "8pa" in dt_r:
-                    color = COLOR_8PA
-                elif "opt_rpj" in dt_r:
-                    color = COLOR_OPT_RPJ_RT
-                elif "opt_res" in dt_r:
-                    color = COLOR_OPT_RES_RT
+                color = get_color(dt_r)
 
                 fig.add_trace(go.Bar(
                     x=(dt_r,),
@@ -92,9 +87,9 @@ def plot_errors(**kwargs):
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
     dt_results.append([dt for dt in titles if "tran" in dt])
-    res = [dt for dt in titles if "residuals" in dt or "reprojection" in dt]
+    res = [dt for dt in titles if "residuals_error" in dt or "reprojection" in dt]
     if len(res) > 1:
-        dt_results.append([dt for dt in titles if "residuals" in dt or "reprojection" in dt])
+        dt_results.append([dt for dt in titles if "residuals_error" in dt or "reprojection" in dt])
 
     n = len(dt_results)
     idxs = np.linspace(0, n, n + 1).reshape(-1, 1)
@@ -113,14 +108,7 @@ def plot_errors(**kwargs):
         row, col = loc[0] + 1, loc[1] + 1
         y_label = dt[0]
         for dt_r in dt:
-            if "norm" in dt_r:
-                color = COLOR_NORM_8PA
-            elif "8pa" in dt_r:
-                color = COLOR_8PA
-            elif "opt_rpj" in dt_r:
-                color = COLOR_OPT_RPJ_RT
-            elif "opt_res" in dt_r:
-                color = COLOR_OPT_RES_RT
+            color = get_color(dt_r)
 
             fig.add_trace(go.Scatter(
                 x=kwargs["results"]["kf"],
@@ -141,3 +129,16 @@ def plot_errors(**kwargs):
     fig.update_layout(title_text=fig_file, height=800, width=1800)
     fig.show()
     fig.write_html("{}".format(fig_file))
+
+
+def get_color(label):
+    if "OURS" in label:
+        return COLOR_NORM_8PA_OURS
+    elif "8pa" in label:
+        if "8pa_opt_res" in label:
+            return COLOR_OPT_RPJ_RT_PNP
+        else:
+            return COLOR_8PA
+    elif "PnP" in label:
+        return COLOR_OPT_RES_RT
+
