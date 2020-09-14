@@ -1,0 +1,134 @@
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_950_res_360.180_dist0.5_
+** OURS ** Opt over KS by residuals
+Initials S:0.001 K:0.001
+S:0.0013829404838811704 K:-0.0003651632902127045
+Iterations: 22
+termination: Stop by small Dp
+** OURS **: Opt over Rt KS by reprojection 
+Iterations: 20
+Initials S:1 K:1
+S:1.000567833135078 K:0.019758165056055533
+** OURS ** Opt over KS by reprojection
+Initials S:0.001 K:0.001
+S:-1.0334586288850658 K:-0.0026857158372532892
+iterations: 16
+termination: Stopped by small gradient J^T e
+*Opt over Rt by residuals 
+Iterations: 9
+PnP Opt over Rt by reprojection 
+Iterations: 32
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0007325175182302789
+50% Error-tran: 0.00993563494599444
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0007033925145978799
+50% Error-tran: 0.009753056673373648
+--------------------------------------------------------
+solver:cam_OURS_opt_res_Rtks
+50% Error-rot: 0.0016616233098819904
+50% Error-tran: 0.02892816093980221
+--------------------------------------------------------
+solver:cam_OURS_opt_prj_ks
+50% Error-rot: 0.0007472229385172578
+50% Error-tran: 0.009815023927690063
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.001213897261284528
+50% Error-tran: 0.009917890207965418
+--------------------------------------------------------
+solver:cam_PnP_opt_rpj_Rt
+50% Error-rot: 0.0006714431026056712
+50% Error-tran: 0.009936586040126177
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_950_res_360.180_dist0.5_
+** OURS ** Opt over KS by residuals
+Initials S:0.001 K:0.001
+S:0.0009996435387677669 K:0.0010086376537453057
+Iterations: 16
+termination: Stop by small Dp
+** OURS **: Opt over Rt KS by reprojection 
+Iterations: 16
+Initials S:1 K:1
+S:1.0081701092948083 K:0.019426802102589378
+** OURS ** Opt over KS by reprojection
+Initials S:0.001 K:0.001
+S:0.0006281498646635007 K:0.5139125029160946
+iterations: 28
+termination: Stop by small Dp
+*Opt over Rt by residuals 
+Iterations: 11
+PnP Opt over Rt by reprojection 
+Iterations: 205
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0022509838277895346
+50% Error-tran: 0.02273500045862117
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0018068039143621845
+50% Error-tran: 0.020903630606057176
+--------------------------------------------------------
+solver:cam_OURS_opt_res_Rtks
+50% Error-rot: 0.0032856040024539426
+50% Error-tran: 0.01772360660201634
+--------------------------------------------------------
+solver:cam_OURS_opt_prj_ks
+50% Error-rot: 0.001831077222013681
+50% Error-tran: 0.020948690576455386
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0017547258886394942
+50% Error-tran: 0.01212070227148569
+--------------------------------------------------------
+solver:cam_PnP_opt_rpj_Rt
+50% Error-rot: 0.0018742929999385457
+50% Error-tran: 0.020491959673027534
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_950_res_360.180_dist0.5_
+** OURS ** Opt over KS by residuals
+Initials S:0.001 K:0.001
+S:0.001031324665766378 K:0.0009588054947526067
+Iterations: 23
+termination: Stop by small Dp
+** OURS **: Opt over Rt KS by reprojection 
+Iterations: 13
+Initials S:1 K:1
+S:1.0502564224806634 K:0.05291725679410286
+** OURS ** Opt over KS by reprojection
+Initials S:0.001 K:0.001
+S:0.001 K:0.001
+iterations: 10
+termination: Stop by small Dp
+*Opt over Rt by residuals 
+Iterations: 16
+PnP Opt over Rt by reprojection 
+Iterations: 35
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.001227831964167224
+50% Error-tran: 0.0355343659712479
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0010473538268646516
+50% Error-tran: 0.03205420453874071
+--------------------------------------------------------
+solver:cam_OURS_opt_res_Rtks
+50% Error-rot: 0.0016616233098819904
+50% Error-tran: 0.02892816093980221
+--------------------------------------------------------
+solver:cam_OURS_opt_prj_ks
+50% Error-rot: 0.00103042766972228
+50% Error-tran: 0.03208235722522071
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.001213897261284528
+50% Error-tran: 0.014323514335005963
+--------------------------------------------------------
+solver:cam_PnP_opt_rpj_Rt
+50% Error-rot: 0.0012883784812523027
+50% Error-tran: 0.03104733330592889
+done
+obj /home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_950_res_360.180_dist0.5_.results saved
