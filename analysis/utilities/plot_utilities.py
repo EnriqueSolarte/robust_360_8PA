@@ -115,21 +115,27 @@ def plot_errors(**kwargs):
         row, col = loc[0] + 1, loc[1] + 1
         y_label = dt[0]
         for dt_r in dt:
-            if "norm" in dt_r:
-                color = COLOR_NORM_8PA
-            elif "8pa" in dt_r:
-                color = COLOR_8PA
-            elif "opt_rpj" in dt_r:
-                color = COLOR_OPT_RPJ_RT
-            elif "opt_res" in dt_r:
-                color = COLOR_OPT_RES_RT
-
-            fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
-                                     y=kwargs["results"][dt_r],
-                                     name=dt_r,
-                                     line=dict(color=color)),
-                          row=row,
-                          col=col)
+            if "norm" or "8pa" or "opt_rpj" or "opt_res" in dt_r:
+                if "norm" in dt_r:
+                    color = COLOR_NORM_8PA
+                elif "8pa" in dt_r:
+                    color = COLOR_8PA
+                elif "opt_rpj" in dt_r:
+                    color = COLOR_OPT_RPJ_RT
+                elif "opt_res" in dt_r:
+                    color = COLOR_OPT_RES_RT
+                fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
+                                         y=kwargs["results"][dt_r],
+                                         name=dt_r,
+                                         line=dict(color=color)),
+                              row=row,
+                              col=col)
+            else:
+                fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
+                                         y=kwargs["results"][dt_r],
+                                         name=dt_r),
+                              row=row,
+                              col=col)
             if "rot" in dt_r:
                 y_label = "Rotation Error"
             elif "tran" in dt_r:

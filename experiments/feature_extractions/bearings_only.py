@@ -3,7 +3,7 @@ from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
 
-from analysis.sequence_of_frames.based_on_bearings_only import plot, run_sequence, save_results
+from analysis.sequence_of_frames.based_on_bearings_only import plot_errors, plot_bar_errors, run_sequence, save_results
 
 import numpy as np
 
@@ -77,5 +77,6 @@ if __name__ == '__main__':
                 tmps[j]["results"]["opt_res_error_tran"][i] for j in range(n)
             ]))
 
-    plot(**mean_error)
+    plot_errors(**mean_error)
+    plot_bar_errors(**mean_error)
     save_results(**mean_error)

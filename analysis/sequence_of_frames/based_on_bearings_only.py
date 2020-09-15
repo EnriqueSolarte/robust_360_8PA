@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     from config import *
-    data = MP3D_VO(scene=scene, basedir=path)
+    data = MP3D_VO(scene=scene, basedir=basedir)
 
     scene_settings = dict(
         data_scene=data,

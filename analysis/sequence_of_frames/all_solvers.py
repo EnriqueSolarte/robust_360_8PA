@@ -10,10 +10,13 @@ def run_sequence(**kwargs):
     kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
+
+    # for i in range(10):
     while True:
         kwargs, ret = get_bearings(**kwargs)
         if not ret:
             break
+        print("Frame: " + str(kwargs["tracker"].initial_frame.idx))
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
         kwargs["cam_8pa"], _ = get_cam_pose_by_8pa(**kwargs)
         kwargs["cam_OURS_opt_res"], _ = get_cam_pose_by_opt_res_error_S_K(
@@ -34,13 +37,14 @@ if __name__ == '__main__':
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     from config import *
+
     data = MP3D_VO(scene=scene, basedir=basedir)
 
     scene_settings = dict(
         data_scene=data,
         idx_frame=0,
         distance_threshold=0.5,
-        res=(360, 180),
+        res=ress[3],
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
@@ -59,8 +63,30 @@ if __name__ == '__main__':
         verbose=True,
         use_ransac=True)
 
-    kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm)
+    tmps = []
+    n = 3
+    for i in range(n):
+        print("Iteration: " + str(i))
+        scene_settings["idx_frame"] = idx_frame
+        tmp = run_sequence(**scene_settings, **features_setting, **ransac_parm)
+        save_results(**tmp)
+        tmps.append(tmp)
 
-    plot_errors(**kwargs)
-    plot_bar_errors(**kwargs)
-    save_results(**kwargs)
+    mean_error = dict()
+    mean_error["results"] = dict()
+    mean_error["results"]["kf"] = list(
+        range(len(tmps[0]["results"]["error_cam_8pa_rot"])))
+    for key in {keys for keys in tmps[0]["results"] if keys != "kf"}:
+        mean_error["results"][key] = []
+    mean_error["filename"] = tmps[0]["filename"]
+
+    for i in range(len(tmps[0]["results"]["error_cam_8pa_rot"])):
+        for key in {keys for keys in tmps[0]["results"] if keys != "kf"}:
+            mean_error["results"][key].append(
+                np.mean([tmps[j]["results"][key][i]
+                         for j in range(n)]))
+
+    save_results(**mean_error)
+    plot_errors(**mean_error)
+    plot_bar_errors(**mean_error)
+
