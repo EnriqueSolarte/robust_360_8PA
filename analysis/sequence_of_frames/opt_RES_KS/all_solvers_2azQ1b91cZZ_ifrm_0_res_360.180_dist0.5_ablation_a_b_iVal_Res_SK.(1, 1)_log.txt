@@ -1,0 +1,3100 @@
+ablation using both residuals and C**2 a-b-c
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.000930789291138017 K:0.11034407815757981
+Iterations: 75
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005451175722439199
+50% Error-tran: 0.032613629740940175
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004421206634018874
+50% Error-tran: 0.027127290258972037
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0015380445080287245
+50% Error-tran: 0.005481424910184503
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0008755793319764963 K:0.12213324382757033
+Iterations: 76
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006065248068212506
+50% Error-tran: 0.03419397489263178
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00461632070511425
+50% Error-tran: 0.025753357106882018
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0015190541520776098
+50% Error-tran: 0.007230776576104105
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0016581821954087075 K:0.13637623664737974
+Iterations: 84
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 14
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.03577432004432339
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004811434776209625
+50% Error-tran: 0.027127290258972037
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0015380445080287245
+50% Error-tran: 0.005481424910184503
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.015107880879579762 K:-0.014409494578440731
+Iterations: 108
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007935341259186858
+50% Error-tran: 0.03419397489263178
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006962171941900989
+50% Error-tran: 0.025753357106882018
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0029272898762295954
+50% Error-tran: 0.004384049496854309
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.001307275027193491 K:0.11861044458469747
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.032613629740940175
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004811434776209625
+50% Error-tran: 0.024379423954792
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0016424303549412449
+50% Error-tran: 0.003376089754279929
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.003445977017340745 K:0.1224926254506162
+Iterations: 74
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006065248068212506
+50% Error-tran: 0.019550931127076173
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00461632070511425
+50% Error-tran: 0.015292546195227996
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0015902374314849847
+50% Error-tran: 0.004304376261281807
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0007887551093851527 K:0.12446746616046614
+Iterations: 75
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005451175722439199
+50% Error-tran: 0.008892270121243892
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004421206634018874
+50% Error-tran: 0.008902053123928241
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0016424303549412449
+50% Error-tran: 0.005232662768283686
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0016679855643244633 K:0.11218500981274913
+Iterations: 74
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.004262193856677109
+50% Error-tran: 0.009678424699316155
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.003798459141008256
+50% Error-tran: 0.009695878332364453
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0015902374314849847
+50% Error-tran: 0.004696390052726988
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.003387533699693469 K:0.1036059277481332
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0030732119909150186
+50% Error-tran: 0.009482494561714508
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0031757116479976377
+50% Error-tran: 0.010363730988564098
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.001613501868848099
+50% Error-tran: 0.005232662768283686
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0014406117180012872 K:0.1176504140000632
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.004262193856677109
+50% Error-tran: 0.0091873823414792
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.003798459141008256
+50% Error-tran: 0.00963289205624617
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.001627966111894672
+50% Error-tran: 0.005357043839234094
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0008112897839394663 K:0.13705622560202024
+Iterations: 79
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005451175722439199
+50% Error-tran: 0.009482494561714508
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004421206634018874
+50% Error-tran: 0.010363730988564098
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0016424303549412449
+50% Error-tran: 0.005481424910184503
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.014909983006497245 K:0.027642449919819394
+Iterations: 371
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006065248068212506
+50% Error-tran: 0.009973536919551461
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00461632070511425
+50% Error-tran: 0.010426717264682382
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0024481703224697613
+50% Error-tran: 0.005561122584996486
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0002943961847097197 K:0.1488147047882395
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.010464579277388416
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004811434776209625
+50% Error-tran: 0.010489703540800664
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0032539102899982776
+50% Error-tran: 0.005640820259808469
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0002312926640753183 K:0.15121593681413137
+Iterations: 105
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007935341259186858
+50% Error-tran: 0.021539104509164297
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006962171941900989
+50% Error-tran: 0.017434563747796332
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.003785222767214372
+50% Error-tran: 0.006530611628189413
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.016822340321640653 K:0.06320205748895218
+Iterations: 130
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 22
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.009191362104387904
+50% Error-tran: 0.032613629740940175
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.009112909107592354
+50% Error-tran: 0.024379423954792
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004316535244430466
+50% Error-tran: 0.007420402996570357
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0009035394416535886 K:0.13715152045180787
+Iterations: 88
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.010644467323921093
+50% Error-tran: 0.03419397489263178
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.009985286535303896
+50% Error-tran: 0.025753357106882018
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.006470545746325669
+50% Error-tran: 0.00794675846791036
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.025124906875804705 K:0.03916976366207894
+Iterations: 114
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 8
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.01019552280244829
+50% Error-tran: 0.03577432004432339
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.009112909107592354
+50% Error-tran: 0.027127290258972037
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005622478548029544
+50% Error-tran: 0.008473113939250362
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.01275196740036279 K:-0.02117123295774695
+Iterations: 102
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 12
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.011146547672951286
+50% Error-tran: 0.05320176623771733
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.009985286535303896
+50% Error-tran: 0.04358614025701655
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.007123517398125208
+50% Error-tran: 0.008726621090637035
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02229706633992391 K:0.019210992091015157
+Iterations: 706
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 14
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.012097572543454282
+50% Error-tran: 0.07062921243111127
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.010857663963015438
+50% Error-tran: 0.06004499025506106
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.008624556248220873
+50% Error-tran: 0.008980128242023707
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.006466572087145954 K:0.05692276019479091
+Iterations: 68
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.011146547672951286
+50% Error-tran: 0.05320176623771733
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.009985286535303896
+50% Error-tran: 0.04358614025701655
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.007123517398125208
+50% Error-tran: 0.008726621090637035
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.022652404928926794 K:-0.015823841903476174
+Iterations: 142
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 5
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.01019552280244829
+50% Error-tran: 0.03577432004432339
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.009112909107592354
+50% Error-tran: 0.027127290258972037
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005622478548029544
+50% Error-tran: 0.008980128242023707
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.03237481555923225 K:0.01440644618167559
+Iterations: 134
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.009693442453418098
+50% Error-tran: 0.03419397489263178
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.008875210137011622
+50% Error-tran: 0.025753357106882018
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005561226538094603
+50% Error-tran: 0.008726621090637035
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0024731703176146397 K:0.09623352028486233
+Iterations: 70
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.009191362104387904
+50% Error-tran: 0.032613629740940175
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00863751116643089
+50% Error-tran: 0.024379423954792
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.008473113939250362
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0026514714297517492 K:0.0957035095261629
+Iterations: 71
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007935341259186858
+50% Error-tran: 0.027573910010405607
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.007000637524400766
+50% Error-tran: 0.023830460036672538
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004908254886295064
+50% Error-tran: 0.008726621090637035
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.002776490369014962 K:0.09475624844718773
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.02253419027987104
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.02328149611855308
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004316535244430466
+50% Error-tran: 0.008479513076730269
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0023295025173940033 K:0.09434937403213192
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00647583589394737
+50% Error-tran: 0.021548523218114343
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005087599329290133
+50% Error-tran: 0.017287523291835322
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.003785222767214372
+50% Error-tran: 0.008729820659376988
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0036361762181192606 K:0.10391743134865936
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006272351373908928
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004811434776209625
+50% Error-tran: 0.011293550465117564
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0032539102899982776
+50% Error-tran: 0.00897537664677025
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.003099214427702262 K:0.10362095387317073
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005925046325070322
+50% Error-tran: 0.019466147325606947
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00461632070511425
+50% Error-tran: 0.012175022864909887
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0032450852724456103
+50% Error-tran: 0.00897775244439698
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0012250178660528758 K:0.10272162865443686
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005577741276231716
+50% Error-tran: 0.018369438494856248
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004421206634018874
+50% Error-tran: 0.011293550465117564
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0032362602548929426
+50% Error-tran: 0.00897537664677025
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.002831420438305863 K:0.09352352706360897
+Iterations: 70
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005514458499335457
+50% Error-tran: 0.015732867248896422
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004228522265439714
+50% Error-tran: 0.010891627002959113
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.003120276110718115
+50% Error-tran: 0.008727444861750259
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.003637071470380259 K:0.09032364133135239
+Iterations: 66
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005451175722439199
+50% Error-tran: 0.013096296002936594
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004035837896860552
+50% Error-tran: 0.010489703540800664
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.003004291966543288
+50% Error-tran: 0.008479513076730269
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.025480427951282268 K:-0.017553219669147923
+Iterations: 131
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005514458499335457
+50% Error-tran: 0.015732867248896422
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004228522265439714
+50% Error-tran: 0.010891627002959113
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.003120276110718115
+50% Error-tran: 0.008727444861750259
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.041361894056972326 K:-0.026387857394433084
+Iterations: 100
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 21
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005577741276231716
+50% Error-tran: 0.018369438494856248
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004421206634018874
+50% Error-tran: 0.011293550465117564
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0032362602548929426
+50% Error-tran: 0.00897537664677025
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.00014838604377060425 K:0.0955602493368148
+Iterations: 68
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 5
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005514458499335457
+50% Error-tran: 0.016253613521194782
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00461632070511425
+50% Error-tran: 0.012175022864909887
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0032450852724456103
+50% Error-tran: 0.00897775244439698
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.016650769111464264 K:-0.020837406040234197
+Iterations: 148
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 11
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005577741276231716
+50% Error-tran: 0.014137788547533314
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004811434776209625
+50% Error-tran: 0.011544141486279963
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0032539102899982776
+50% Error-tran: 0.008980128242023707
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.00034912615165105397 K:0.17934380861911703
+Iterations: 109
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 27
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005925046325070322
+50% Error-tran: 0.016253613521194782
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005040636128650404
+50% Error-tran: 0.012300318375491087
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.003785222767214372
+50% Error-tran: 0.009192851674593095
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.01898996605276701 K:-0.05858056903552546
+Iterations: 306
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 16
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006272351373908928
+50% Error-tran: 0.018369438494856248
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005269837481091183
+50% Error-tran: 0.013056495264702211
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004316535244430466
+50% Error-tran: 0.009405575107162483
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02009049389721178 K:0.05151290039123137
+Iterations: 244
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 16
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006279489948930812
+50% Error-tran: 0.019466147325606947
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005316800681730913
+50% Error-tran: 0.01340639597673192
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004908254886295064
+50% Error-tran: 0.009645187633854382
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.013587316260245475 K:0.015943548158639798
+Iterations: 622
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 11
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006286628523952695
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.01375629668876163
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.009884800160546282
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.013435676549172541 K:0.026468979033270806
+Iterations: 224
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 15
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006482974468969253
+50% Error-tran: 0.021548523218114343
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005976683241787869
+50% Error-tran: 0.018518896403657354
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005561226538094603
+50% Error-tran: 0.010503556179914848
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.002540719940987924 K:0.10387845753007723
+Iterations: 64
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.01375629668876163
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.009884800160546282
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02355958794967519 K:0.00990745102773733
+Iterations: 173
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006482974468969253
+50% Error-tran: 0.019466147325606947
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00576318068793428
+50% Error-tran: 0.01340639597673192
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.00494431332521478
+50% Error-tran: 0.009645187633854382
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0006036163309013354 K:0.12543345709200843
+Iterations: 84
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.01375629668876163
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.009884800160546282
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0010740667970563886 K:0.1112054461936107
+Iterations: 66
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006482974468969253
+50% Error-tran: 0.021548523218114343
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00576318068793428
+50% Error-tran: 0.018518896403657354
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.00494431332521478
+50% Error-tran: 0.009822337748194567
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0007310815714866275 K:0.09825654232769404
+Iterations: 68
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006286628523952695
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.014339414959914044
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004388652122269898
+50% Error-tran: 0.009884800160546282
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.00013790318385543813 K:0.08363166535166702
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 7
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006482974468969253
+50% Error-tran: 0.021548523218114343
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00576318068793428
+50% Error-tran: 0.01881045553923356
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.00494431332521478
+50% Error-tran: 0.010138370781696781
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0007235264995156345 K:0.10568793461135231
+Iterations: 84
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 7
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.02253419027987104
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02328149611855308
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0006996060761143625 K:0.11372408416290761
+Iterations: 105
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.023819528993176103
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006376100047351507
+50% Error-tran: 0.023482794324103166
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.010757126801065347
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:4.7115801796243295e-06 K:-0.024911895278593853
+Iterations: 83
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 29
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.025104867706481168
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02328149611855308
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.011122312199283413
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.00192828619534348 K:0.08282640367162683
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.024233577150523863
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006376100047351507
+50% Error-tran: 0.022294223433414494
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005572979963938608
+50% Error-tran: 0.01167620548973995
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0006945323514230869 K:0.08236314192997221
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.023362286594566562
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02130695074827591
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.011122312199283413
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0015226534100028235 K:0.12501648906569438
+Iterations: 74
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 15
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.024233577150523863
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006376100047351507
+50% Error-tran: 0.022294223433414494
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.01167620548973995
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:1.920346883577676e-05 K:0.12347349240294837
+Iterations: 89
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006914285258441161
+50% Error-tran: 0.025104867706481168
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02328149611855308
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.00028311059517933213 K:0.12662319310519493
+Iterations: 117
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 15
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0075437816128979315
+50% Error-tran: 0.025437819662454002
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006376100047351507
+50% Error-tran: 0.023482794324103166
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005572979963938608
+50% Error-tran: 0.01274124946196015
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.013525320907806958 K:0.0075001020656376635
+Iterations: 182
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006914285258441161
+50% Error-tran: 0.025104867706481168
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02328149611855308
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.009214401440356181 K:0.012803512495931601
+Iterations: 341
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.024233577150523863
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.022294223433414494
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.01167620548973995
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.00595826974769766 K:0.08881016778588192
+Iterations: 71
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.023362286594566562
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.02130695074827591
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.011122312199283413
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.006195645646531884 K:0.08566114305336633
+Iterations: 67
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.0229482384372188
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005666399728755862
+50% Error-tran: 0.01795440369555245
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005185188704037072
+50% Error-tran: 0.010757126801065347
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.001025482142568251 K:0.1003482063347919
+Iterations: 63
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.02253419027987104
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.014601856642828988
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004870402879914481
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.029005370598303454 K:0.03305995592313552
+Iterations: 82
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.0229482384372188
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005342002240095406
+50% Error-tran: 0.01510843091756359
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005185188704037072
+50% Error-tran: 0.010757126801065347
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.015482073973252814 K:0.010736720229773723
+Iterations: 125
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.02253419027987104
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.014601856642828988
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0005178985611840447 K:0.134278670602866
+Iterations: 67
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.0229482384372188
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005666399728755862
+50% Error-tran: 0.01510843091756359
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.010138370781696781
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0021059688460494524 K:0.09259745785001246
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.02253419027987104
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.014601856642828988
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.009884800160546282
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0032267734413880056 K:0.09634252770424596
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.021548523218114343
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005368903636522581
+50% Error-tran: 0.014470635801371517
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005347816604638518
+50% Error-tran: 0.010138370781696781
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02628328986119667 K:-0.01281313678706687
+Iterations: 145
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00537404339067452
+50% Error-tran: 0.014339414959914044
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.018082596325470577 K:0.012837086049989583
+Iterations: 376
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.019466147325606947
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005368903636522581
+50% Error-tran: 0.014047855824337837
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005347816604638518
+50% Error-tran: 0.01037949450968414
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0002113108860341343 K:0.12811016540579007
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 22
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00537404339067452
+50% Error-tran: 0.014339414959914044
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.001332032315899706 K:0.10259896935841734
+Iterations: 75
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.021548523218114343
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005671539482907801
+50% Error-tran: 0.014470635801371517
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.010757126801065347
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.00012929481187801887 K:0.09551385983632103
+Iterations: 67
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00537404339067452
+50% Error-tran: 0.014339414959914044
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.004136965514908634 K:0.08414816124324222
+Iterations: 67
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.019466147325606947
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005368903636522581
+50% Error-tran: 0.014047855824337837
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005347816604638518
+50% Error-tran: 0.01037949450968414
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.01874262211325647 K:0.011935721462457317
+Iterations: 123
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00537404339067452
+50% Error-tran: 0.014339414959914044
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:7.246691984244959e-05 K:0.09298596409765751
+Iterations: 71
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.019466147325606947
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005368903636522581
+50% Error-tran: 0.014047855824337837
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005347816604638518
+50% Error-tran: 0.01037949450968414
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.001896555717673532 K:0.09406927305965815
+Iterations: 70
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.018369438494856248
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.01375629668876163
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005195658681117374
+50% Error-tran: 0.010367047616521
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.021645761230551085 K:0.008143101113685276
+Iterations: 214
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006482974468969253
+50% Error-tran: 0.018025040666392166
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005342002240095406
+50% Error-tran: 0.013573661717381068
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005033030780515927
+50% Error-tran: 0.01037949450968414
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.025254289532909376 K:0.016396091109927423
+Iterations: 379
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 5
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.017680642837928084
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.01375629668876163
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005195658681117374
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0006227372925869382 K:0.11059126518506862
+Iterations: 75
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006482974468969253
+50% Error-tran: 0.018025040666392166
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005342002240095406
+50% Error-tran: 0.014047855824337837
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005033030780515927
+50% Error-tran: 0.010757126801065347
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02104825805594085 K:0.01765014634182126
+Iterations: 251
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.018369438494856248
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005320240597820169
+50% Error-tran: 0.014339414959914044
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005195658681117374
+50% Error-tran: 0.011122312199283413
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.012912956304668355 K:0.017985244873159667
+Iterations: 598
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 7
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.019466147325606947
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005342002240095406
+50% Error-tran: 0.014470635801371517
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005347816604638518
+50% Error-tran: 0.011460730780679607
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.018477214696888202 K:0.022653962632421042
+Iterations: 833
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 14
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.014601856642828988
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.0117991493620758
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02075602070440682 K:0.01619630617259172
+Iterations: 170
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 35
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.020923259419003047
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005368903636522581
+50% Error-tran: 0.01510843091756359
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.012014624071136144
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02634668257693943 K:-0.029633448657517627
+Iterations: 575
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 58
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006914285258441161
+50% Error-tran: 0.021283662681648444
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00537404339067452
+50% Error-tran: 0.015615005192298193
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.001773678675076907 K:0.1340845785892277
+Iterations: 85
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007010612112207437
+50% Error-tran: 0.02190892648075974
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005671539482907801
+50% Error-tran: 0.01694535906914632
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.012014624071136144
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.010946721011927896 K:0.006593306890406645
+Iterations: 341
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0071069389659737135
+50% Error-tran: 0.02253419027987104
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.018275712945994452
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.000990030185173543 K:0.12905597575419167
+Iterations: 88
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 24
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00713041821184264
+50% Error-tran: 0.0229482384372188
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.018786139196995205
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005572979963938608
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.015222789415949373 K:-0.0227092809555265
+Iterations: 120
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 15
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007153897457711566
+50% Error-tran: 0.023362286594566562
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005622478548029544
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0019919522023228234 K:0.1012660493105253
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00713041821184264
+50% Error-tran: 0.023985538157304316
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.020301758098135936
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005572979963938608
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.012491796781504192 K:0.01539119805625145
+Iterations: 370
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 12
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007153897457711566
+50% Error-tran: 0.024608789720042074
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02130695074827591
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005622478548029544
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.00047179446337035304 K:0.10309378225698516
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00713041821184264
+50% Error-tran: 0.023985538157304316
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.020301758098135936
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005572979963938608
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.03913005208046036 K:0.018338765722557503
+Iterations: 553
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007153897457711566
+50% Error-tran: 0.024608789720042074
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0008445982080716292 K:0.12842629606067263
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 10
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007663587712533134
+50% Error-tran: 0.02485682871326162
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.020301758098135936
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005572979963938608
+50% Error-tran: 0.012435087610728906
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.01637634250394439 K:0.012702678423561072
+Iterations: 603
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 13
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007153897457711566
+50% Error-tran: 0.024990483157234445
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.02107436609693544
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005523481379847672
+50% Error-tran: 0.012519358573982283
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.026502494083435482 K:0.01680054842731801
+Iterations: 334
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 8
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00713041821184264
+50% Error-tran: 0.024799636438638258
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.021190658422605674
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.012435087610728906
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.005637633110062316 K:0.07863927256112684
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0071069389659737135
+50% Error-tran: 0.024608789720042074
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.02107436609693544
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.00014687299315364313 K:0.10370187676761576
+Iterations: 67
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007010612112207437
+50% Error-tran: 0.023985538157304316
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005671539482907801
+50% Error-tran: 0.020185465772465702
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005390084874431203
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0003444207804741921 K:0.0943098782766923
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 11
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0071069389659737135
+50% Error-tran: 0.024608789720042074
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.02107436609693544
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005280195220702744
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.02239675719300341 K:-0.02161636002896707
+Iterations: 122
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 18
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00713041821184264
+50% Error-tran: 0.024799636438638258
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.021190658422605674
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005390084874431203
+50% Error-tran: 0.012435087610728906
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0004033761322576524 K:0.13081160101174322
+Iterations: 76
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007153897457711566
+50% Error-tran: 0.024608789720042074
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02107436609693544
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.012519358573982283
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0010400595938306059 K:0.1309820265359043
+Iterations: 74
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007663587712533134
+50% Error-tran: 0.024557266976986167
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006376100047351507
+50% Error-tran: 0.021190658422605674
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005511727954003667
+50% Error-tran: 0.012885879358853047
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.003411694279325991 K:0.08791325253865008
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007153897457711566
+50% Error-tran: 0.02450574423393026
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02107436609693544
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.012519358573982283
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0012622703749734395 K:0.10852503683634633
+Iterations: 74
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00713041821184264
+50% Error-tran: 0.02393401541424841
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.020185465772465702
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005390084874431203
+50% Error-tran: 0.012435087610728906
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0015096249612422566 K:0.12533736605402504
+Iterations: 84
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 10
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007153897457711566
+50% Error-tran: 0.02450574423393026
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.006162597493497918
+50% Error-tran: 0.02107436609693544
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005499974528159662
+50% Error-tran: 0.012519358573982283
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0006878874566295744 K:0.1279305850794221
+Iterations: 98
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 4
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.00713041821184264
+50% Error-tran: 0.02393401541424841
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0060658165343195
+50% Error-tran: 0.020185465772465702
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005390084874431203
+50% Error-tran: 0.012435087610728906
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0006987222703181454 K:0.10503776327797969
+Iterations: 74
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0071069389659737135
+50% Error-tran: 0.023362286594566562
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005280195220702744
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0021981257605541153 K:0.09670269532766937
+Iterations: 70
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007010612112207437
+50% Error-tran: 0.023229606852397385
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005671539482907801
+50% Error-tran: 0.018786139196995205
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005237926950910059
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.021656484469498208 K:0.012359191549118333
+Iterations: 222
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 24
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0071069389659737135
+50% Error-tran: 0.023362286594566562
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005280195220702744
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.002948116088916821 K:0.09321066835608577
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.007010612112207437
+50% Error-tran: 0.023229606852397385
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059843446890260055
+50% Error-tran: 0.01967682047622579
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005237926950910059
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.00045582637281165454 K:0.1134713654610251
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006914285258441161
+50% Error-tran: 0.023096927110228208
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.019302662887849754
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005195658681117374
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0002954402437353626 K:0.11339311129200608
+Iterations: 68
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.02281555869504962
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005671539482907801
+50% Error-tran: 0.019299614167922856
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005048823086444888
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.031177509104092116 K:-0.01826677455652532
+Iterations: 124
+termination: Stop by small Dp
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 7
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006914285258441161
+50% Error-tran: 0.023096927110228208
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0059690355751410825
+50% Error-tran: 0.019302662887849754
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005195658681117374
+50% Error-tran: 0.01235081664747553
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0011951306884269504 K:0.10870787332619564
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006856442925892322
+50% Error-tran: 0.02281555869504962
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005671539482907801
+50% Error-tran: 0.019299614167922856
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005048823086444888
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0006596220639167223 K:0.104334084870254
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006798600593343482
+50% Error-tran: 0.02253419027987104
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00537404339067452
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0049019874917724015
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0014866850032862903 K:0.14654996337456838
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006738960503664647
+50% Error-tran: 0.022354854191242654
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005368903636522581
+50% Error-tran: 0.019299614167922856
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.005048823086444888
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-8.45389297898393e-05 K:0.11771559149176711
+Iterations: 75
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006679320413985812
+50% Error-tran: 0.022175518102614273
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005363763882370642
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.0049019874917724015
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.002833977344808804 K:0.10615606035680132
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 3
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006482974468969253
+50% Error-tran: 0.02172959039213136
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005342002240095406
+50% Error-tran: 0.018786139196995205
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004886195185843441
+50% Error-tran: 0.012014624071136144
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0048647338474428845 K:0.09159495272514877
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006286628523952695
+50% Error-tran: 0.022175518102614273
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005320240597820169
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004870402879914481
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0005970266039944407 K:0.11198771508412159
+Iterations: 69
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006279489948930812
+50% Error-tran: 0.022354854191242654
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005342002240095406
+50% Error-tran: 0.019299614167922856
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004879233804775275
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.004920097471067093 K:0.0876812332532363
+Iterations: 68
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006272351373908928
+50% Error-tran: 0.022175518102614273
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005320240597820169
+50% Error-tran: 0.01929656544799596
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004870402879914481
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.004582951185816643 K:0.0933717017510004
+Iterations: 67
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006244383634374033
+50% Error-tran: 0.02172959039213136
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005295039039455676
+50% Error-tran: 0.018786139196995205
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004753468828667674
+50% Error-tran: 0.012290457713836009
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0018562662395686103 K:0.08882571733772957
+Iterations: 70
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006216415894839139
+50% Error-tran: 0.021283662681648444
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005269837481091183
+50% Error-tran: 0.018275712945994452
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004636534777420867
+50% Error-tran: 0.012230098780196487
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0021538067079939468 K:0.08913510758738073
+Iterations: 71
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006168925981278864
+50% Error-tran: 0.021047836139073163
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005198761502637438
+50% Error-tran: 0.018086905475784155
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004512593449845382
+50% Error-tran: 0.012014624071136144
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0032494976398439544 K:0.09187148134910962
+Iterations: 73
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006121436067718589
+50% Error-tran: 0.02081200959649788
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005127685524183693
+50% Error-tran: 0.017898098005573862
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004388652122269898
+50% Error-tran: 0.0117991493620758
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.002066605417727 K:0.08753101022435221
+Iterations: 72
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006098473031579346
+50% Error-tran: 0.020687432876427762
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.0051123381503431105
+50% Error-tran: 0.017741732886852993
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004352593683350182
+50% Error-tran: 0.011460730780679607
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0034953739659392574 K:0.08843556504940366
+Iterations: 71
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.006075509995440103
+50% Error-tran: 0.020562856156357646
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005096990776502529
+50% Error-tran: 0.017585367768132125
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004316535244430466
+50% Error-tran: 0.011122312199283413
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0027475887081254806 K:0.08764367038018132
+Iterations: 71
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.0060124749323295056
+50% Error-tran: 0.020224127488944196
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.005069409795720325
+50% Error-tran: 0.01712664457104411
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.00422080838094166
+50% Error-tran: 0.010757126801065347
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.005589024185597559 K:0.08445626438396066
+Iterations: 68
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 1
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005949439869218909
+50% Error-tran: 0.019885398821530745
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.00504182881493812
+50% Error-tran: 0.0166679213739561
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004125081517452854
+50% Error-tran: 0.01039194140284728
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0001338055726852771 K:0.08409414900674538
+Iterations: 68
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005784813289409117
+50% Error-tran: 0.019127418658193496
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004926631795573873
+50% Error-tran: 0.01614146328312715
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004120311079354328
+50% Error-tran: 0.01037949450968414
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0019054203298756913 K:0.08079293168109265
+Iterations: 70
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 2
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005620186709599326
+50% Error-tran: 0.018369438494856248
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004811434776209625
+50% Error-tran: 0.015615005192298193
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004115540641255803
+50% Error-tran: 0.010367047616521
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:-0.0024580003361838352 K:0.10246087540546153
+Iterations: 63
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005598963992915521
+50% Error-tran: 0.019127418658193496
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004747625611295044
+50% Error-tran: 0.01614146328312715
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.004082006447710642
+50% Error-tran: 0.01037949450968414
+=================================================================
+/home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1)
+***********************************
+** OURS RESIDUALS ** Opt over KS 
+Initials S:1 K:1
+S:0.0007845091515692906 K:0.08882650459501476
+Iterations: 67
+termination: Stopped by small gradient J^T e
+***********************************
+Opt RESIDUALS over Rt 
+Iterations: 6
+termination: Stopped by small gradient J^T e
+--------------------------------------------------------
+solver:cam_8pa
+50% Error-rot: 0.005577741276231716
+50% Error-tran: 0.019885398821530745
+--------------------------------------------------------
+solver:cam_OURS_opt_res_ks
+50% Error-rot: 0.004683816446380464
+50% Error-tran: 0.0166679213739561
+--------------------------------------------------------
+solver:cam_8pa_opt_res_Rt
+50% Error-rot: 0.00404847225416548
+50% Error-tran: 0.01039194140284728
+done
+obj /home/kike/Documents/Research/optimal8PA/analysis/sequence_of_frames/plots/all_solvers_2azQ1b91cZZ_ifrm_0_res_360.180_dist0.5_ablation_a_b_d_iVal_Res_SK.(1, 1).results saved
+Log file was not saved
