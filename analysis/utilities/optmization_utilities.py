@@ -1,9 +1,19 @@
 import numpy as np
+from geometry_utilities import *
 
 
 def normalizer_s_k(x, s, k):
     n_matrix = np.eye(3) * s
-    n_matrix[2, 2] = 1/k
+    n_matrix[2, 2] = k
+    return n_matrix @ x, n_matrix
+
+
+def normalizer_Cxyz(x, Cxyz):
+    n_matrix = np.eye(3)
+    n_matrix[0, 0] = Cxyz[0]
+    n_matrix[1, 1] = Cxyz[1]
+    n_matrix[2, 2] = Cxyz[2]
+
     return n_matrix @ x, n_matrix
 
 
@@ -36,3 +46,10 @@ def mask_bearings_by_pm(all=False, **kwargs):
         mask = delta < np.max(delta) + 1
     return mask
 
+
+def normalizer_rsk(x, s, k, r):
+    rot = eulerAnglesToRotationMatrix(r)[0:3, 0:3]
+    n_matrix = np.eye(3) * s
+    n_matrix[2, 2] = k
+    t = rot @ n_matrix
+    return t @ x, t

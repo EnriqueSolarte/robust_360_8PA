@@ -26,11 +26,11 @@ def run_sequence(**kwargs):
 
         # ! Norm 8PA Errors
         # cam_hat, residuals = get_cam_pose_by_opt_res_norm_8pa(**kwargs)
-        kwargs["cam_norm_8pa_res"], residuals = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
+        kwargs["cam_norm_8pa_res"], residuals = get_cam_pose_by_opt_rpj_SK(**kwargs)
         kwargs["results"]["cam_norm_8pa_res_residuals"].append(np.sum(residuals ** 2))
 
         # ! Opt Rt residuals 8PA Errors
-        kwargs["cam_8pa_opt_res"], residuals = get_cam_pose_by_opt_res_rt_8pa(**kwargs)
+        kwargs["cam_8pa_opt_res"], residuals = get_cam_pose_by_opt_res_error_Rt(**kwargs)
         kwargs["results"]["cam_8pa_opt_res_residuals"].append(np.sum(residuals ** 2))
 
         kwargs = eval_cam_pose_error(**kwargs)

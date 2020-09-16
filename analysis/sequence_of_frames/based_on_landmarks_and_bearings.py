@@ -21,11 +21,11 @@ def run_sequence(**kwargs):
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
 
         # ! Norm 8PA Errors
-        kwargs["cam_norm_8pa_res"], reprojection = get_cam_pose_by_opt_rpj_S_K_const_lm(**kwargs)
+        kwargs["cam_norm_8pa_res"], reprojection = get_cam_pose_by_opt_rpj_SK(**kwargs)
         kwargs["results"]["cam_norm_8pa_res_reprojection"].append(np.sum(reprojection ** 2))
 
         # ! Opt Rt in reprojection 8PA Errors
-        kwargs["cam_PnP_opt_rpj"], reprojection = get_cam_pose_by_opt_rpj_rt_pnp(**kwargs)
+        kwargs["cam_PnP_opt_rpj"], reprojection = get_cam_pose_by_opt_rpj_Rt_pnp(**kwargs)
         kwargs["results"]["cam_PnP_opt_rpj_reprojection"].append(np.sum(reprojection ** 2))
 
         kwargs = eval_cam_pose_error(**kwargs)

@@ -93,9 +93,9 @@ def plot_errors(**kwargs):
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
     dt_results.append([dt for dt in titles if "tran" in dt])
-    res = [dt for dt in titles if "residuals_error" in dt or "reprojection" in dt]
+    res = [dt for dt in titles if "loss" in dt]
     if len(res) > 1:
-        dt_results.append([dt for dt in titles if "residuals_error" in dt or "reprojection" in dt])
+        dt_results.append([dt for dt in titles if "loss" in dt])
 
     n = len(dt_results)
     idxs = np.linspace(0, n, n + 1).reshape(-1, 1)
@@ -158,10 +158,9 @@ def save_info(only_results=True, **kwargs):
         dir_output = os.path.join("{}.kwargs".format(filename))
         save_obj(dir_output, kwargs)
     try:
-        log_dir = os.path.dirname(os.path.dirname(filename))
         dir_output = os.path.join("{}_log.txt".format(filename))
-        shutil.copyfile(
-            src=os.path.join(log_dir, "log.txt"),
+        shutil.move(
+            src=os.path.join(os.environ['HOME'], "log.txt"),
             dst=dir_output)
     except:
         print("Log file was not saved")

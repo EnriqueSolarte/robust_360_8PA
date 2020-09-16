@@ -78,6 +78,16 @@ def eval_cam_pose_error(_print=True, **kwargs):
             print("50% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.50)))
             # print("25% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.25)))
             # print("--------------------------------------------------------")
+
+    losses = [loss for loss in kwargs.keys() if "loss" in loss]
+    for loss in losses:
+        ls = kwargs[loss].copy()
+
+        if loss not in kwargs["results"].keys():
+            kwargs["results"][loss] = [ls]
+        else:
+            kwargs["results"][loss].append(ls)
+
     return kwargs
 
 
@@ -142,6 +152,9 @@ def track_features(**kwargs):
     matches = kwargs["tracker"].get_matches()
     bearings_kf = cam.pixel2normalized_vector(matches[0])
     bearings_frm = cam.pixel2normalized_vector(matches[1])
-    kwargs["idx_frame"] = kwargs["tracker"].frame_idx
+    if kwargs.get("special_eval", False):
+        kwargs["idx_frame"] += 1
+    else:
+        kwargs["idx_frame"] = kwargs["tracker"].frame_idx
 
     return bearings_kf, bearings_frm, relative_pose, kwargs, ret
