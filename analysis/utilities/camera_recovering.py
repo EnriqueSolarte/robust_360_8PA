@@ -328,8 +328,8 @@ def get_cam_pose_by_opt_rpj_SK(**kwargs):
 
 # * ********************************************************************
 
-# ! OPt RtKS
-def residuals_error_RT_KS(parameters, bearings_kf, bearings_frm):
+# ! OPTION 2 - OPt RtKS
+def residuals_error_RTKS(parameters, bearings_kf, bearings_frm):
     r0 = parameters[0]
     r1 = parameters[1]
     r2 = parameters[2]
@@ -346,26 +346,52 @@ def residuals_error_RT_KS(parameters, bearings_kf, bearings_frm):
     cam_pose[0:3, 3] = np.array((t0, t1, t2)).copy()
     e_rt = solver.get_e_from_cam_pose(cam_pose)
     e_norm = np.linalg.inv(n1).T @ e_rt @ np.linalg.inv(n2)
-    norm_residuals_error = projected_distance(
+
+    # e_sk, sigma, A = solver.compute_essential_matrix(
+    #     x1=bearings_kf_norm,
+    #     x2=bearings_frm_norm,
+    #     return_all=True
+    # )
+    # C = np.linalg.norm(A.T.dot(A), ord="fro")
+    # ! De-normalization
+    # e_hat = n1.T @ e_sk @ n2
+
+    # error = evaluate_error_in_essential_matrix(
+    #     e_ref=e_rt,
+    #     e_hat=e_hat
+    # )
+    #
+    # residuals_error = projected_distance(
+    #     e=e_rt,
+    #     x1=bearings_kf,
+    #     x2=bearings_frm
+    # )
+
+    norm_residuals_error = epipolar_constraint(
         e=e_norm,
         x1=bearings_kf_norm,
         x2=bearings_frm_norm
     )
-    return norm_residuals_error
+    # residuals_a = residuals_error / np.max(residuals_error)
+    residuals_b = norm_residuals_error / np.max(norm_residuals_error)
+
+    return np.ones_like(bearings_kf[0, :]) * np.sum(abs(residuals_b))
+    # return norm_residuals_error
 
 
-def get_cam_pose_by_opt_res_error_Rt_SK(**kwargs):
+def get_cam_pose_by_opt_res_error_RtSK(**kwargs):
     initial_pose, _ = get_cam_pose_by_8pa(**kwargs)
     initial_s_k = kwargs["iVal_Res_RtSK"]
     eu = rotationMatrixToEulerAngles(initial_pose[0:3, 0:3])
     trn = np.copy(initial_pose[0:3, 3])
 
-    initial_rt_sk = np.hstack((eu, trn, initial_s_k))
+    initial_rtsk = np.hstack((eu, trn, initial_s_k))
     opt_rt_sk, p_cov, info = levmar.levmar(
-        residuals_error_RT_KS,
-        initial_rt_sk,
+        residuals_error_RTKS,
+        initial_rtsk,
         np.zeros_like(kwargs["bearings"]["frm"][0, :]),
-        # np.array((0, 0, 0)),
+        # np.zeros((8,)),
+        # np.array((0, 0, 0, 0, 0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy(),
               ))
@@ -375,15 +401,95 @@ def get_cam_pose_by_opt_res_error_Rt_SK(**kwargs):
     cam_final = eulerAnglesToRotationMatrix(opt_rt_sk[0:3])
     cam_final[0:3, 3] = opt_rt_sk[3:6].copy()
     print("***********************************")
-    print("** OURS RESIDUALS ** Opt over Rt -- KS <<<<<<< ")
+    print("** OURS RESIDUALS ** Opt over RtKS <<<<<<< ")
     print("Initials S:{} K:{}".format(initial_s_k[0], initial_s_k[1]))
     print("S:{} K:{}".format(s, k))
     print("Iterations: {}".format(info[2]))
     print("termination: {}".format(info[3]))
-    residuals = residuals_error_RT_KS(
+    residuals = residuals_error_RTKS(
         parameters=opt_rt_sk,
         bearings_kf=kwargs["bearings"]["kf"].copy(),
         bearings_frm=kwargs["bearings"]["frm"].copy(),
+    )
+
+    return cam_final, np.sum(residuals ** 2)
+
+
+# * ********************************************************************
+
+
+# ! OPTION 1 - OPt KS_RT
+def residuals_error_KS_RT(parameters, bearings_kf, bearings_frm, s, k):
+    r0 = parameters[0]
+    r1 = parameters[1]
+    r2 = parameters[2]
+    t0 = parameters[3]
+    t1 = parameters[4]
+    t2 = parameters[5]
+
+    bearings_kf_norm, n1 = normalizer_s_k(x=bearings_kf, s=s, k=k)
+    bearings_frm_norm, n2 = normalizer_s_k(x=bearings_frm, s=s, k=k)
+
+    cam_pose = eulerAnglesToRotationMatrix((r0, r1, r2))
+    cam_pose[0:3, 3] = np.array((t0, t1, t2)).copy()
+    e_rt = solver.get_e_from_cam_pose(cam_pose)
+    e_norm = np.linalg.inv(n1).T @ e_rt @ np.linalg.inv(n2)
+
+    norm_residuals_error = epipolar_constraint(
+        e=e_norm,
+        x1=bearings_kf_norm,
+        x2=bearings_frm_norm
+    )
+    residuals_b = norm_residuals_error / np.max(norm_residuals_error)
+
+    # return residuals_b
+    return np.ones_like(bearings_kf[0, :]) * np.sum(abs(residuals_b))
+
+
+def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
+    initial_s_k = kwargs["iVal_Res_SK"]  # initial_k_s = (0.001, 0.001, 0.001, 0.001)
+    opt_k_s, p_cov, info = levmar.levmar(
+        res_error_S_K,
+        initial_s_k,
+        # np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        np.array((0, 0, 0, 0)),
+        args=(kwargs["bearings"]["kf"].copy(),
+              kwargs["bearings"]["frm"].copy()
+              ))
+
+    s = opt_k_s[0]
+    k = opt_k_s[1]
+    print("***********************************")
+    print("** OURS RESIDUALS ** Opt over KS-Rt ")
+    print("Initials S:{} K:{}".format(initial_s_k[0], initial_s_k[1]))
+    print("S:{} K:{}".format(s, k))
+    print("Iterations: {}".format(info[2]))
+    print("termination: {}".format(info[3]))
+
+    initial_pose, _ = get_cam_pose_by_8pa(**kwargs)
+    eu = rotationMatrixToEulerAngles(initial_pose[0:3, 0:3])
+    trn = np.copy(initial_pose[0:3, 3])
+
+    initial_rt = np.hstack((eu, trn))
+    opt_rt, p_cov, info = levmar.levmar(
+        residuals_error_KS_RT,
+        initial_rt,
+        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        # np.zeros((8,)),
+        # np.array((0, 0, 0, 0, 0, 0, 0)),
+        args=(kwargs["bearings"]["kf"].copy(),
+              kwargs["bearings"]["frm"].copy(),
+              s, k
+              ))
+
+    cam_final = eulerAnglesToRotationMatrix(opt_rt[0:3])
+    cam_final[0:3, 3] = opt_rt[3:6].copy()
+
+    residuals = residuals_error_KS_RT(
+        parameters=opt_rt,
+        bearings_kf=kwargs["bearings"]["kf"].copy(),
+        bearings_frm=kwargs["bearings"]["frm"].copy(),
+        s=s, k=k
     )
 
     return cam_final, np.sum(residuals ** 2)

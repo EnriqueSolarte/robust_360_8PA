@@ -20,8 +20,9 @@ def run_sequence(**kwargs):
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
         kwargs["cam_8pa"], kwargs["loss_8pa"] = get_cam_pose_by_8pa(**kwargs)
         kwargs["cam_OURS_opt_res_ks"], kwargs["loss_OURS_RES_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+        kwargs["cam_OURS_opt_res_Rtks"], kwargs["loss_OURS_RES_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
+        kwargs["cam_OURS_opt_res_ks_Rt"], kwargs["loss_OURS_RES_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
         kwargs["cam_8pa_opt_res_Rt"], kwargs["loss_RES_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
-        # kwargs["cam_OURS_opt_res_Rtks"], kwargs["loss_OURS_RES_Rtks"] = get_cam_pose_by_opt_res_error_Rt_SK(**kwargs)
         # ! Based on REPROJECTION
         # kwargs["cam_PnP_opt_rpj_Rt"], kwargs["loss_PnP"] = get_cam_pose_by_opt_rpj_Rt_pnp(**kwargs)
         # kwargs["cam_OURS_opt_prj_sk"], kwargs["loss_OURS_RPJ_ks"] = get_cam_pose_by_opt_rpj_SK(**kwargs)
@@ -38,7 +39,7 @@ if __name__ == '__main__':
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
-    print("ablation all")
+    print("__")
     scene_settings = dict(
         data_scene=data,
         idx_frame=0,
@@ -47,16 +48,16 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="ablation_a_b_c_d",
-        special_eval=False
+        extra="sum_residuals_b_sk_rt",
+        special_eval=True
     )
     initial_values = dict(
         iVal_Res_SK=(1, 1),
         # iVal_Rpj_SK=(0.5, 0.5),
-        # iVal_Res_Cxyz=(1, 1, 1),
+        iVal_Res_RtSK=(1, 1),
     )
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=500),
         tracker=LKTracker(),
         show_tracked_features=False
     )
