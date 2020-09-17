@@ -153,19 +153,18 @@ def res_error_S_K(parameters,
         x1=bearings_kf_norm,
         x2=bearings_frm_norm
     )
-    return np.array((
-        np.sum(abs(residuals_error)),
-        np.sum(abs(norm_residuals_error)),
-        sigma[-1],
-        C ** 2
-    ))
+    # TODO EnriqueSolarte
+    residuals_b = np.sum(norm_residuals_error)
+    residuals_b = residuals_b * sigma[-1] * C ** 2
+    return np.ones_like(bearings_kf[0, :]) * residuals_b
 
-    # return np.array((np.sum(error_1 + residuals_1 + residuals_2),))
-    # return residuals_1 + residuals_2
-    # return np.array((np.sum(residuals_1), np.sum(residuals_2)))
-    # return np.array((np.sum((residuals_1 + residuals_2)), 1 / sigma[-2]))
-    # return residuals_error
-    # return norm_residuals_error * sigma[-1] * C**2
+
+    # return np.array((
+    #     # np.sum(abs(residuals_error)),
+    #     np.sum(abs(norm_residuals_error)),
+    #     sigma[-1],
+    #     C ** 2
+    # ))
 
 
 def get_cam_pose_by_opt_res_error_SK(**kwargs):
@@ -173,8 +172,8 @@ def get_cam_pose_by_opt_res_error_SK(**kwargs):
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_s_k,
-        # np.zeros_like(kwargs["bearings"]["frm"][0, :]),
-        np.array((0, 0, 0, 0)),
+        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        # np.array((0, 0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()
               ))
@@ -347,36 +346,42 @@ def residuals_error_RTKS(parameters, bearings_kf, bearings_frm):
     e_rt = solver.get_e_from_cam_pose(cam_pose)
     e_norm = np.linalg.inv(n1).T @ e_rt @ np.linalg.inv(n2)
 
-    # e_sk, sigma, A = solver.compute_essential_matrix(
-    #     x1=bearings_kf_norm,
-    #     x2=bearings_frm_norm,
-    #     return_all=True
-    # )
-    # C = np.linalg.norm(A.T.dot(A), ord="fro")
+    e_sk, sigma, A = solver.compute_essential_matrix(
+        x1=bearings_kf_norm,
+        x2=bearings_frm_norm,
+        return_all=True
+    )
+    C = np.linalg.norm(A.T.dot(A), ord="fro")
     # ! De-normalization
-    # e_hat = n1.T @ e_sk @ n2
+    e_hat = n1.T @ e_sk @ n2
 
     # error = evaluate_error_in_essential_matrix(
     #     e_ref=e_rt,
     #     e_hat=e_hat
     # )
-    #
-    # residuals_error = projected_distance(
-    #     e=e_rt,
-    #     x1=bearings_kf,
-    #     x2=bearings_frm
-    # )
+
+    residuals_error = projected_distance(
+        e=e_rt,
+        x1=bearings_kf,
+        x2=bearings_frm
+    )
 
     norm_residuals_error = epipolar_constraint(
         e=e_norm,
         x1=bearings_kf_norm,
         x2=bearings_frm_norm
     )
-    # residuals_a = residuals_error / np.max(residuals_error)
-    residuals_b = norm_residuals_error / np.max(norm_residuals_error)
+    # TODO EnriqueSolarte
+    residuals_b = np.sum(norm_residuals_error)
+    residuals_b = residuals_b * sigma[-1] * C ** 2
+    return np.ones_like(bearings_kf[0, :]) * residuals_b
 
-    return np.ones_like(bearings_kf[0, :]) * np.sum(abs(residuals_b))
-    # return norm_residuals_error
+
+# residuals_b = norm_residuals_error * sigma[-1]
+# return np.ones_like(bearings_kf[0, :]) * np.sum(abs(residuals_b / np.max(residuals_b)))
+
+
+# return norm_residuals_error
 
 
 def get_cam_pose_by_opt_res_error_RtSK(**kwargs):
@@ -451,8 +456,8 @@ def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_s_k,
-        # np.zeros_like(kwargs["bearings"]["frm"][0, :]),
-        np.array((0, 0, 0, 0)),
+        np.zeros_like(kwargs["bearings"]["frm"][0, :]),
+        # np.array((0, 0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()
               ))

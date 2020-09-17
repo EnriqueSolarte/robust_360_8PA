@@ -180,3 +180,12 @@ def save_surfaces(**kwargs):
     filename = kwargs["filename"]
     dir_output = os.path.join("{}.data".format(filename))
     save_obj(dir_output, kwargs["surfaces"])
+
+
+def print_log_files(list_files):
+    for file in list_files:
+        try:
+            with open(file, 'r') as f:
+                print(f.read())
+        except:
+            print("Could register log file{}".format(file))

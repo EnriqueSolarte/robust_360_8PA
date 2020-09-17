@@ -8,6 +8,7 @@ from analysis.utilities.experimentals_cam_recovering import *
 
 def run_sequence(**kwargs):
     kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
+    print_log_files(kwargs["log_files"])
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
     while True:
@@ -39,7 +40,7 @@ if __name__ == '__main__':
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
-    print("__")
+    print("RES KS: norm_residuals * sigma[-1]/ max(*)")
     scene_settings = dict(
         data_scene=data,
         idx_frame=0,
@@ -48,8 +49,8 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="sum_residuals_b_sk_rt",
-        special_eval=True
+        extra="Initial eval",
+        special_eval=False
     )
     initial_values = dict(
         iVal_Res_SK=(1, 1),
@@ -68,13 +69,20 @@ if __name__ == '__main__':
                        ),
                        residual_threshold=1e-5,
                        verbose=True,
-                       use_ransac=False
+                       use_ransac=True
                        )
+
+    log_settings = dict(
+        log_files=(
+            "/home/kike/Documents/Research/optimal8PA/analysis/utilities/camera_recovering.py",
+        )
+    )
 
     kwargs = run_sequence(**scene_settings,
                           **features_setting,
                           **ransac_parm,
-                          **initial_values
+                          **initial_values,
+                          **log_settings
                           )
 
     plot_errors(**kwargs)
