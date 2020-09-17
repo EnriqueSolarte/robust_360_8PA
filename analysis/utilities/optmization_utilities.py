@@ -25,9 +25,7 @@ def normalizer_s(x, s):
 
 def normalizer_3dv2020(x, s, k):
     x_mean = np.mean(x, axis=1)
-    t = np.array([[s, 0, 1],
-                  [0, s, 1],
-                  [0, 0, k ** abs(1 - x_mean[2])]])
+    t = np.array([[s, 0, 1], [0, s, 1], [0, 0, k**abs(1 - x_mean[2])]])
     x_norm = np.dot(t, x)
     return x_norm, t
 

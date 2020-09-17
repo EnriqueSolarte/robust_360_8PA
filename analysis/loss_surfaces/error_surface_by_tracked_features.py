@@ -96,7 +96,8 @@ def eval_error_surface(**kwargs):
         e_hat = g8p_norm.compute_essential_matrix(bearings_a_norm,
                                                   bearings_b_norm)
         e_hat = np.dot(T1.T, np.dot(e_hat, T2))
-        cam_a2b_hat = g8p_norm.recover_pose_from_e(e_hat, bearings_a, bearings_b)
+        cam_a2b_hat = g8p_norm.recover_pose_from_e(e_hat, bearings_a,
+                                                   bearings_b)
         error_cam = evaluate_error_in_transformation(cam_a2b_hat, cam_a2b)
         kwargs["losses"]["error_rot"][i] = error_cam[0]
         kwargs["losses"]["error_tran"][i] = error_cam[1]

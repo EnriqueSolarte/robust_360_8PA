@@ -9,7 +9,6 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     This Class is the VSLAB implementation of the norm 8PA with optimal K,S
     for spherical projection models
     """
-
     def __init__(self, version='v1'):
         super().__init__()
         self.T1 = np.eye(3)
@@ -103,7 +102,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             e = np.dot(t1, np.dot(e_norm, t2))
             # C, A = get_frobenius_norm(x1_norm_, x2_norm_, return_A=True)
             # _, sigma, _ = np.linalg.svd(A)
-            return np.sum(self.residual_function_evaluation(e=e, x1=x1, x2=x2) ** 2)
+            return np.sum(
+                self.residual_function_evaluation(e=e, x1=x1, x2=x2)**2)
 
         initial = [1, 1]
         lsq = least_squares(residuals, initial)
@@ -119,7 +119,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             e = np.dot(t1, np.dot(e_norm, t2))
             # C, A = get_frobenius_norm(x1_norm_, x2_norm_, return_A=True)
             # _, sigma, _ = np.linalg.svd(A)
-            return np.sum(self.residual_function_evaluation(e=e, x1=x1, x2=x2) ** 2)
+            return np.sum(
+                self.residual_function_evaluation(e=e, x1=x1, x2=x2)**2)
 
         initial = [1, 0.1, 0.1, 0.1]
         lsq = least_squares(residuals, initial, method="lm")
@@ -139,7 +140,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
             delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
             pm = np.degrees(
-                np.nanmean(get_angle_between_vectors_arrays(x1_norm_, x2_norm_)))
+                np.nanmean(get_angle_between_vectors_arrays(
+                    x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
             return C / delta_
@@ -170,7 +172,6 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         return s1, s2, k1, k2
 
     def optimizer_v1_0_1(self, x1, x2):
-
         def reprojection_error(parameters, x1, x2):
             s1, k1 = parameters[0], parameters[1]
             s2, k2 = parameters[2], parameters[3]
@@ -178,39 +179,25 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             x1_norm_, t1 = self.normalizer(x1.copy(), s=s1, k=k1)
             x2_norm_, t2 = self.normalizer(x2.copy(), s=s2, k=k2)
 
-            e_norm = self.compute_essential_matrix(
-                x1=x1_norm_,
-                x2=x2_norm_
-            )
+            e_norm = self.compute_essential_matrix(x1=x1_norm_, x2=x2_norm_)
             e_hat = t1.T @ e_norm @ t2
-            self.cam_hat = self.recover_pose_from_e(
-                E=e_hat,
-                x1=x1,
-                x2=x2
-            )
+            self.cam_hat = self.recover_pose_from_e(E=e_hat, x1=x1, x2=x2)
             # if self.landmarks_kf is not None:
             self.landmarks_kf = self.triangulate_points_from_cam_pose(
-                cam_pose=self.cam_hat,
-                x1=x1,
-                x2=x2
-            )
+                cam_pose=self.cam_hat, x1=x1, x2=x2)
 
             # sample = np.random.randint(0, self.landmarks_kf.shape[1], 8)
             landmarks_frm_hat = np.linalg.inv(self.cam_hat) @ self.landmarks_kf
             error = get_angle_between_vectors_arrays(
-                array_ref=x2,
-                array_vector=landmarks_frm_hat[0:3, :]
-            )
+                array_ref=x2, array_vector=landmarks_frm_hat[0:3, :])
             return error
 
         initial_parameters = np.array((1, 1, 1, 1))
         self.landmarks_kf = None
-        opt_k_s, p_cov, info = levmar.levmar(
-            reprojection_error,
-            initial_parameters,
-            np.ones_like(x1[0, :]),
-            args=(x1.copy(),
-                  x2.copy()))
+        opt_k_s, p_cov, info = levmar.levmar(reprojection_error,
+                                             initial_parameters,
+                                             np.ones_like(x1[0, :]),
+                                             args=(x1.copy(), x2.copy()))
 
         s1, k1 = opt_k_s[0], opt_k_s[1]
 
@@ -229,7 +216,11 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
         return x1_norm, x2_norm, T1, T2
 
-    def recover_pose_from_matches(self, x1, x2, param=None, eval_current_solution=False):
+    def recover_pose_from_matches(self,
+                                  x1,
+                                  x2,
+                                  param=None,
+                                  eval_current_solution=False):
         """
         return the a relative camera pose by using TLS method (Higgins 1981)
         """
@@ -237,7 +228,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         assert x1.shape[0] == 3
 
         if param is None:
-            x1_norm, x2_norm, self.T1, self.T2 = self.optimum_normalizer(x1, x2)
+            x1_norm, x2_norm, self.T1, self.T2 = self.optimum_normalizer(
+                x1, x2)
         else:
             x1_norm, self.T1, = self.normalizer(x1,
                                                 s=param[0][0],
@@ -251,11 +243,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
         if eval_current_solution:
             self.current_count_features = x1.shape[1]
-            self.current_residual = np.sum(self.residual_function_evaluation(
-                e=e,
-                x1=x1,
-                x2=x2
-            ) ** 2)
+            self.current_residual = np.sum(
+                self.residual_function_evaluation(e=e, x1=x1, x2=x2)**2)
 
         return self.recover_pose_from_e(e, x1, x2)
 
@@ -269,10 +258,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
         cam_hat = self.recover_pose_from_e(e, x1, x2)
         self.landmarks_kf = self.triangulate_points_from_cam_pose(
-            cam_pose=cam_hat,
-            x1=x1,
-            x2=x2
-        )
+            cam_pose=cam_hat, x1=x1, x2=x2)
 
         eu = rotationMatrixToEulerAngles(cam_hat[0:3, 0:3])
         trn = np.copy(cam_hat[0:3, 3])
@@ -292,15 +278,13 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             landmarks_frm_hat = np.linalg.inv(cam_pose) @ _landmarks_kf
             error = get_angle_between_vectors_arrays(
                 array_ref=_bearings_frm,
-                array_vector=landmarks_frm_hat[0:3, :]
-            )
+                array_vector=landmarks_frm_hat[0:3, :])
             return error
 
-        opt_R_t, p_cov, info = levmar.levmar(
-            reprojection_error,
-            initial_R_t,
-            np.zeros_like(x2[0, :]),
-            args=(self.landmarks_kf, x2))
+        opt_R_t, p_cov, info = levmar.levmar(reprojection_error,
+                                             initial_R_t,
+                                             np.zeros_like(x2[0, :]),
+                                             args=(self.landmarks_kf, x2))
 
         cam_final = eulerAnglesToRotationMatrix(opt_R_t[0:3])
         cam_final[0:3, 3] = opt_R_t[3:]
@@ -308,11 +292,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
         if eval_current_solution:
             e_hat = self.get_e_from_cam_pose(cam_final)
             self.current_count_features = x1.shape[1]
-            self.current_residual = np.sum(self.residual_function_evaluation(
-                e=e_hat,
-                x1=x1,
-                x2=x2
-            ) ** 2)
+            self.current_residual = np.sum(
+                self.residual_function_evaluation(e=e_hat, x1=x1, x2=x2)**2)
 
         return cam_final
 
