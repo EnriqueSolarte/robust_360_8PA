@@ -31,7 +31,7 @@ def get_file_name(**kwargs):
 
 def plot_bar_errors(**kwargs):
     results = list(kwargs["results"].keys())
-    titles = [dt for dt in results if dt not in ("kf",)]
+    titles = [dt for dt in results if dt not in ("kf", )]
 
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
@@ -39,10 +39,11 @@ def plot_bar_errors(**kwargs):
 
     n = 6
     idxs = np.linspace(0, n - 1, n).reshape(2, -1)
-    fig = make_subplots(subplot_titles=["Q75", "Q50", "Q25", "Q75", "Q50", "Q25"],
-                        rows=idxs.shape[0],
-                        cols=idxs.shape[1],
-                        specs=[[{}, {}, {}], [{}, {}, {}]])
+    fig = make_subplots(
+        subplot_titles=["Q75", "Q50", "Q25", "Q75", "Q50", "Q25"],
+        rows=idxs.shape[0],
+        cols=idxs.shape[1],
+        specs=[[{}, {}, {}], [{}, {}, {}]])
 
     kwargs["quartiles"] = dict()
     for i_row, dt in enumerate(dt_results):
@@ -50,10 +51,9 @@ def plot_bar_errors(**kwargs):
         if len(dt) == 0:
             continue
 
-        quartiles_settings = dict(
-            Q75=(np.quantile, 0.75),
-            Q50=(np.quantile, 0.50),
-            Q25=(np.quantile, 0.25))
+        quartiles_settings = dict(Q75=(np.quantile, 0.75),
+                                  Q50=(np.quantile, 0.50),
+                                  Q25=(np.quantile, 0.25))
 
         for i_quart, quartile in enumerate(list(quartiles_settings.keys())):
             row, col = i_row + 1, i_quart + 1
@@ -66,12 +66,13 @@ def plot_bar_errors(**kwargs):
 
                 color = get_color(dt_r)
 
-                fig.add_trace(go.Bar(
-                    x=(dt_r,),
-                    y=(kwargs["quartiles"][dt_r + "_" + quartile],),
-                    name=dt_r + "_" + quartile,
-                    marker_color=color
-                ), row=row, col=col)
+                fig.add_trace(go.Bar(x=(dt_r, ),
+                                     y=(kwargs["quartiles"][dt_r + "_" +
+                                                            quartile], ),
+                                     name=dt_r + "_" + quartile,
+                                     marker_color=color),
+                              row=row,
+                              col=col)
                 if "rot" in dt_r:
                     y_label = "Rotation Error"
                 elif "tran" in dt_r:
@@ -88,7 +89,7 @@ def plot_bar_errors(**kwargs):
 
 def plot_errors(**kwargs):
     results = list(kwargs["results"].keys())
-    titles = [dt for dt in results if dt not in ("kf",)]
+    titles = [dt for dt in results if dt not in ("kf", )]
 
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
@@ -116,13 +117,12 @@ def plot_errors(**kwargs):
         for dt_r in dt:
             color = get_color(dt_r)
 
-            fig.add_trace(go.Scatter(
-                x=kwargs["results"]["kf"],
-                y=kwargs["results"][dt_r],
-                name=dt_r,
-                line=dict(color=color)
-            ),
-                row=row, col=col)
+            fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
+                                     y=kwargs["results"][dt_r],
+                                     name=dt_r,
+                                     line=dict(color=color)),
+                          row=row,
+                          col=col)
             if "rot" in dt_r:
                 y_label = "Rotation Error"
             elif "tran" in dt_r:
@@ -159,9 +159,8 @@ def save_info(only_results=True, **kwargs):
         save_obj(dir_output, kwargs)
     try:
         dir_output = os.path.join("{}_log.txt".format(filename))
-        shutil.move(
-            src=os.path.join(os.environ['HOME'], "log.txt"),
-            dst=dir_output)
+        shutil.move(src=os.path.join(os.environ['HOME'], "log.txt"),
+                    dst=dir_output)
     except:
         print("Log file was not saved")
 
