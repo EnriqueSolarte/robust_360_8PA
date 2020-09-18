@@ -37,11 +37,11 @@ points = [8, 150, 500, 1000]
 
 # ! Choices: "noise", "fov", "point"
 experiment_group_choices = ["noise", "fov", "point", "frame"]
-experiment_group = experiment_group_choices[0]
+experiment_group = experiment_group_choices[3]
 
 noise = noises[0] if experiment_group != "noise" else None
 res = ress[1] if experiment_group != "fov" else None
 point = points[1] if experiment_group != "point" else None
 
 experiment_choices = ["sample", "feature"]
-experiment = experiment_choices[0]
+experiment = experiment_choices[1]
