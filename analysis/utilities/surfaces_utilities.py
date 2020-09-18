@@ -26,13 +26,22 @@ def add_surfaces_evaluation(label, value, **kwargs):
 def plot_surfaces(**kwargs):
     surfaces_names = sorted(list(kwargs["surfaces"].keys()))
 
-    fig = make_subplots(
-        subplot_titles=surfaces_names,
-        rows=2,
-        cols=3,
-        specs=[[{'is_3d': True}, {'is_3d': True}, {'is_3d': True}],
-               [{'is_3d': True}, {'is_3d': True}, {'is_3d': True}]]
-    )
+    fig = make_subplots(subplot_titles=surfaces_names,
+                        rows=2,
+                        cols=3,
+                        specs=[[{
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }], [{
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }]])
     idxs = np.linspace(0, 5, 6).reshape(2, -1)
     for i, eval in enumerate(surfaces_names):
         loc = np.squeeze(np.where(idxs == i))
@@ -47,9 +56,9 @@ def plot_surfaces(**kwargs):
                       col=loc[1] + 1)
         if "norm" in eval:
             eval = "residuals_error"
-        fig.add_trace(go.Scatter3d(x=(1,),
-                                   y=(1,),
-                                   z=(kwargs["8PA"][eval],),
+        fig.add_trace(go.Scatter3d(x=(1, ),
+                                   y=(1, ),
+                                   z=(kwargs["8PA"][eval], ),
                                    marker=dict(color=COLOR_GENERAL, size=5),
                                    name="8PA"),
                       row=loc[0] + 1,
@@ -66,33 +75,25 @@ def get_eval_of_8PA(**kwargs):
     kwargs["8PA"]["cam_pose"], _ = get_cam_pose_by_8pa(**kwargs)
 
     kwargs["8PA"]["e"] = g8p().compute_essential_matrix(
-        x1=kwargs["bearings"]["kf"],
-        x2=kwargs["bearings"]["frm"]
-    )
+        x1=kwargs["bearings"]["kf"], x2=kwargs["bearings"]["frm"])
 
     kwargs["8PA"]["e_error"] = evaluate_error_in_essential_matrix(
-        e_ref=kwargs["e_gt"],
-        e_hat=kwargs["8PA"]["e"]
-    )
+        e_ref=kwargs["e_gt"], e_hat=kwargs["8PA"]["e"])
 
-    residuals = projected_distance(
-        e=kwargs["8PA"]["e"],
-        x1=kwargs["bearings"]["kf"],
-        x2=kwargs["bearings"]["frm"]
-    )
+    residuals = projected_distance(e=kwargs["8PA"]["e"],
+                                   x1=kwargs["bearings"]["kf"],
+                                   x2=kwargs["bearings"]["frm"])
 
     kwargs["8PA"]["residuals_error"] = np.sum(residuals)
 
-    landmarks_hat = np.linalg.inv(kwargs["8PA"]["cam_pose"]) @ kwargs["landmarks_kf"]
+    landmarks_hat = np.linalg.inv(
+        kwargs["8PA"]["cam_pose"]) @ kwargs["landmarks_kf"]
     reprojection = get_projection_error_between_vectors_arrays(
         array_ref=kwargs["bearings"]["frm"],
-        array_vector=landmarks_hat[0:3, :]
-    )
+        array_vector=landmarks_hat[0:3, :])
     kwargs["8PA"]["reprojection_error"] = np.sum(reprojection)
     cam_error = evaluate_error_in_transformation(
-        transform_gt=kwargs["cam_gt"],
-        transform_est=kwargs["8PA"]["cam_pose"]
-    )
+        transform_gt=kwargs["cam_gt"], transform_est=kwargs["8PA"]["cam_pose"])
     kwargs["8PA"]["rot_error"] = cam_error[0]
     kwargs["8PA"]["tran_error"] = cam_error[1]
     return kwargs
@@ -100,55 +101,43 @@ def get_eval_of_8PA(**kwargs):
 
 def eval_surfaces(**kwargs):
     cam_error = evaluate_error_in_transformation(
-        transform_gt=kwargs["cam_gt"],
-        transform_est=kwargs["cam_hat"]
-    )
+        transform_gt=kwargs["cam_gt"], transform_est=kwargs["cam_hat"])
     rot_error, tran_error = cam_error[0], cam_error[1]
-    kwargs = add_surfaces_evaluation(
-        label=nameof(rot_error),
-        value=rot_error,
-        **kwargs)
-    kwargs = add_surfaces_evaluation(
-        label=nameof(tran_error),
-        value=tran_error,
-        **kwargs)
+    kwargs = add_surfaces_evaluation(label=nameof(rot_error),
+                                     value=rot_error,
+                                     **kwargs)
+    kwargs = add_surfaces_evaluation(label=nameof(tran_error),
+                                     value=tran_error,
+                                     **kwargs)
 
-    e_error = evaluate_error_in_essential_matrix(
-        e_ref=kwargs["e_gt"],
-        e_hat=kwargs["e_hat"]
-    )
-    kwargs = add_surfaces_evaluation(
-        label=nameof(e_error),
-        value=e_error,
-        **kwargs)
+    e_error = evaluate_error_in_essential_matrix(e_ref=kwargs["e_gt"],
+                                                 e_hat=kwargs["e_hat"])
+    kwargs = add_surfaces_evaluation(label=nameof(e_error),
+                                     value=e_error,
+                                     **kwargs)
 
     residuals_norm_error = projected_distance(
         e=kwargs["e_norm"],
         x1=kwargs["bearings"]["kf_norm"],
         x2=kwargs["bearings"]["frm_norm"],
     )
-    kwargs = add_surfaces_evaluation(
-        label=nameof(residuals_norm_error),
-        value=np.sum(residuals_norm_error),
-        **kwargs)
+    kwargs = add_surfaces_evaluation(label=nameof(residuals_norm_error),
+                                     value=np.sum(residuals_norm_error),
+                                     **kwargs)
 
     residuals_error = projected_distance(
         e=kwargs["e_hat"],
         x1=kwargs["bearings"]["kf"],
         x2=kwargs["bearings"]["frm"],
     )
-    kwargs = add_surfaces_evaluation(
-        label=nameof(residuals_error),
-        value=np.sum(residuals_error),
-        **kwargs)
+    kwargs = add_surfaces_evaluation(label=nameof(residuals_error),
+                                     value=np.sum(residuals_error),
+                                     **kwargs)
 
     landmark_hat = np.linalg.inv(kwargs["cam_hat"]) @ kwargs["landmarks_kf"]
     reprojection_error = get_projection_error_between_vectors_arrays(
-        array_ref=kwargs["bearings"]["frm"],
-        array_vector=landmark_hat[0:3, :]
-    )
-    kwargs = add_surfaces_evaluation(
-        label=nameof(reprojection_error),
-        value=np.sum(reprojection_error),
-        **kwargs)
+        array_ref=kwargs["bearings"]["frm"], array_vector=landmark_hat[0:3, :])
+    kwargs = add_surfaces_evaluation(label=nameof(reprojection_error),
+                                     value=np.sum(reprojection_error),
+                                     **kwargs)
     return kwargs

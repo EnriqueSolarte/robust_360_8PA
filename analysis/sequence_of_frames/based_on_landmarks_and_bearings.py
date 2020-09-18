@@ -21,12 +21,17 @@ def run_sequence(**kwargs):
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
 
         # ! Norm 8PA Errors
-        kwargs["cam_norm_8pa_res"], reprojection = get_cam_pose_by_opt_rpj_SK(**kwargs)
-        kwargs["results"]["cam_norm_8pa_res_reprojection"].append(np.sum(reprojection ** 2))
+        kwargs["cam_norm_8pa_res"], reprojection = get_cam_pose_by_opt_rpj_SK(
+            **kwargs)
+        kwargs["results"]["cam_norm_8pa_res_reprojection"].append(
+            np.sum(reprojection**2))
 
         # ! Opt Rt in reprojection 8PA Errors
-        kwargs["cam_PnP_opt_rpj"], reprojection = get_cam_pose_by_opt_rpj_Rt_pnp(**kwargs)
-        kwargs["results"]["cam_PnP_opt_rpj_reprojection"].append(np.sum(reprojection ** 2))
+        kwargs[
+            "cam_PnP_opt_rpj"], reprojection = get_cam_pose_by_opt_rpj_Rt_pnp(
+                **kwargs)
+        kwargs["results"]["cam_PnP_opt_rpj_reprojection"].append(
+            np.sum(reprojection**2))
 
         kwargs = eval_cam_pose_error(**kwargs)
 
@@ -49,28 +54,21 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="test1"
-    )
+        extra="test1")
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False
-    )
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
-    ransac_parm = dict(min_samples=8,
-                       max_trials=RansacEssentialMatrix.get_number_of_iteration(
-                           p_success=0.99, outliers=0.5, min_constraint=8
-                       ),
-                       residual_threshold=1e-5,
-                       verbose=True,
-                       use_ransac=False
-                       )
+    ransac_parm = dict(
+        min_samples=8,
+        max_trials=RansacEssentialMatrix.get_number_of_iteration(
+            p_success=0.99, outliers=0.5, min_constraint=8),
+        residual_threshold=1e-5,
+        verbose=True,
+        use_ransac=False)
 
-    kwargs = run_sequence(**scene_settings,
-                          **features_setting,
-                          **ransac_parm
-                          )
+    kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm)
 
     plot_errors(**kwargs)
     save_info(**kwargs)

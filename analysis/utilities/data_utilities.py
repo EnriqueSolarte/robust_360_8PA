@@ -27,10 +27,7 @@ def get_bearings(**kwargs):
     if kwargs.get("use_ransac", False):
         # ! Solving by using RANSAC
         ransac = RansacEssentialMatrix(**kwargs)
-        _ = ransac.solve(data=(
-            bearings_kf.copy().T,
-            bearings_frm.copy().T)
-        )
+        _ = ransac.solve(data=(bearings_kf.copy().T, bearings_frm.copy().T))
         num_inliers = sum(ransac.current_inliers)
         num_of_samples = len(ransac.current_inliers)
         kwargs["bearings"]["rejections"] = 1 - (num_inliers / num_of_samples)
@@ -57,10 +54,8 @@ def eval_cam_pose_error(_print=True, **kwargs):
     for cam in cams:
         cam_pose = kwargs[cam]
         error_name = "error_" + cam
-        error = evaluate_error_in_transformation(
-            transform_est=cam_pose,
-            transform_gt=cam_gt
-        )
+        error = evaluate_error_in_transformation(transform_est=cam_pose,
+                                                 transform_gt=cam_gt)
         if error_name + "_rot" not in kwargs["results"].keys():
             kwargs["results"][error_name + "_rot"] = [error[0]]
             kwargs["results"][error_name + "_tran"] = [error[1]]
@@ -71,11 +66,13 @@ def eval_cam_pose_error(_print=True, **kwargs):
             print("--------------------------------------------------------")
             print("solver:{}".format(cam))
             # print("75% Error-rot: {}".format(np.quantile(kwargs["results"][error_name + "_rot"], 0.75)))
-            print("50% Error-rot: {}".format(np.quantile(kwargs["results"][error_name + "_rot"], 0.5)))
+            print("50% Error-rot: {}".format(
+                np.quantile(kwargs["results"][error_name + "_rot"], 0.5)))
             # print("25% Error-rot: {}".format(np.quantile(kwargs["results"][error_name + "_rot"], 0.25)))
             # print("--------------------------------------------------------")
             # print("75% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.75)))
-            print("50% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.50)))
+            print("50% Error-tran: {}".format(
+                np.quantile(kwargs["results"][error_name + "_tran"], 0.50)))
             # print("25% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.25)))
             # print("--------------------------------------------------------")
 
@@ -105,22 +102,23 @@ def track_features(**kwargs):
         return None, None, None, kwargs, False
 
     if 'mask' not in kwargs.keys():
-        kwargs["mask"] = get_mask_map_by_res_loc(
-            kwargs["data_scene"].shape,
-            res=kwargs["res"],
-            loc=kwargs["loc"])
+        kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
+                                                 res=kwargs["res"],
+                                                 loc=kwargs["loc"])
 
     initial_frame = kwargs["idx_frame"]
     idx = initial_frame
     ret = True
 
     while True:
-        frame_curr = Frame(**kwargs["data_scene"].get_frame(idx, return_dict=True),
-                           **dict(idx=idx))
+        frame_curr = Frame(
+            **kwargs["data_scene"].get_frame(idx, return_dict=True),
+            **dict(idx=idx))
         if idx == initial_frame:
-            kwargs["tracker"].set_initial_frame(initial_frame=frame_curr,
-                                                extractor=kwargs["feat_extractor"],
-                                                mask=kwargs["mask"])
+            kwargs["tracker"].set_initial_frame(
+                initial_frame=frame_curr,
+                extractor=kwargs["feat_extractor"],
+                mask=kwargs["mask"])
             idx += 1
             continue
 
@@ -131,8 +129,10 @@ def track_features(**kwargs):
         tracked_img = kwargs["tracker"].track(frame=frame_curr)
         if kwargs["show_tracked_features"]:
             print("Camera Distance       {}".format(camera_distance))
-            print("Tracked features      {}".format(len(kwargs["tracker"].tracks)))
-            print("KeyFrame/CurrFrame:   {}-{}".format(kwargs["tracker"].initial_frame.idx, frame_curr.idx))
+            print("Tracked features      {}".format(
+                len(kwargs["tracker"].tracks)))
+            print("KeyFrame/CurrFrame:   {}-{}".format(
+                kwargs["tracker"].initial_frame.idx, frame_curr.idx))
             cv2.imshow("preview", tracked_img[:, :, ::-1])
             cv2.waitKey(10)
 

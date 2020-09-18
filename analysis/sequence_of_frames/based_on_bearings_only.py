@@ -22,16 +22,21 @@ def run_sequence(**kwargs):
 
         # ! 8PA Errors
         kwargs["cam_8pa"], residuals = get_cam_pose_by_8pa(**kwargs)
-        kwargs["results"]["cam_8pa_residuals"].append(np.sum(residuals ** 2))
+        kwargs["results"]["cam_8pa_residuals"].append(np.sum(residuals**2))
 
         # ! Norm 8PA Errors
         # cam_hat, residuals = get_cam_pose_by_opt_res_norm_8pa(**kwargs)
-        kwargs["cam_norm_8pa_res"], residuals = get_cam_pose_by_opt_rpj_SK(**kwargs)
-        kwargs["results"]["cam_norm_8pa_res_residuals"].append(np.sum(residuals ** 2))
+        kwargs["cam_norm_8pa_res"], residuals = get_cam_pose_by_opt_rpj_SK(
+            **kwargs)
+        kwargs["results"]["cam_norm_8pa_res_residuals"].append(
+            np.sum(residuals**2))
 
         # ! Opt Rt residuals 8PA Errors
-        kwargs["cam_8pa_opt_res"], residuals = get_cam_pose_by_opt_res_error_Rt(**kwargs)
-        kwargs["results"]["cam_8pa_opt_res_residuals"].append(np.sum(residuals ** 2))
+        kwargs[
+            "cam_8pa_opt_res"], residuals = get_cam_pose_by_opt_res_error_Rt(
+                **kwargs)
+        kwargs["results"]["cam_8pa_opt_res_residuals"].append(
+            np.sum(residuals**2))
 
         kwargs = eval_cam_pose_error(**kwargs)
 
@@ -57,25 +62,19 @@ if __name__ == '__main__':
         extra="residuals_sigma_num_condition",
     )
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False
-    )
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
-    ransac_parm = dict(min_samples=8,
-                       max_trials=RansacEssentialMatrix.get_number_of_iteration(
-                           p_success=0.99, outliers=0.5, min_constraint=8
-                       ),
-                       residual_threshold=1e-5,
-                       verbose=True,
-                       use_ransac=True
-                       )
+    ransac_parm = dict(
+        min_samples=8,
+        max_trials=RansacEssentialMatrix.get_number_of_iteration(
+            p_success=0.99, outliers=0.5, min_constraint=8),
+        residual_threshold=1e-5,
+        verbose=True,
+        use_ransac=True)
 
-    kwargs = run_sequence(**scene_settings,
-                          **features_setting,
-                          **ransac_parm
-                          )
+    kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm)
 
     plot_errors(**kwargs)
     save_info(**kwargs)
