@@ -1,4 +1,5 @@
 from read_datasets.MP3D_VO import MP3D_VO
+from read_datasets.KITTI import KITTI_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 from analysis.utilities.camera_recovering import *
@@ -40,20 +41,26 @@ def run_sequence(**kwargs):
 
 if __name__ == '__main__':
     # path = "/home/kike/Documents/datasets/MP3D_VO"
-    scene = "2azQ1b91cZZ/0"
+    # scene = "2azQ1b91cZZ/0"
     # scene = "i5noydFURQK/0"
     # scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
-    basedir = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+    # basedir = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
 
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=scene, basedir=basedir)
+    # data = MP3D_VO(scene=scene, basedir=basedir)
+    # from config import *
+
+    data = KITTI_VO(basedir="/home/justin/slam/datasets/KITTI/odometry",
+                    scene="00")
+
     print("RES KS: norm_residuals * sigma[-1]/ max(*)")
     scene_settings = dict(
         data_scene=data,
         idx_frame=0,
-        distance_threshold=0.5,
+        distance_threshold=5,
         res=(360, 180),
+        pinhole_model=True,
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
@@ -76,7 +83,7 @@ if __name__ == '__main__':
             p_success=0.99, outliers=0.5, min_constraint=8),
         residual_threshold=1e-5,
         verbose=True,
-        use_ransac=True)
+        use_ransac=False)
 
     log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
                                    "/utilities/camera_recovering.py", ))
