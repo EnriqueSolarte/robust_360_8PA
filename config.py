@@ -1,7 +1,7 @@
 # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
 
 # ! Choices: "minos", "tum_rgbd", "tum_vi", "kitti", "carla"
-dataset = "minos"
+dataset = "kitti"
 
 # ! Output directory
 output_dir = "/home/justin/slam/optimal8PA/report"
@@ -12,13 +12,16 @@ if dataset == "minos":
     path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
     scene = "2azQ1b91cZZ" + "/0"
     idx_frame = 0
+elif dataset == "kitti":
+    basedir = "/home/justin/slam/datasets/KITTI/odometry"
+    scene = "00"
 elif dataset == "tum_rgbd":
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/undistort_depth/Testing_and_debugging/unzip"
     scene = "rgbd_dataset_freiburg1_xyz"
 
 # ! Choices: "v0", "v1", "v2", "v2.1"
 opt_version_choices = ["v0", "v1", "v2", "v2.1"]
-opt_version = opt_version_choices[1]
+opt_version = opt_version_choices[0]
 motion_constraint = True if opt_version == "v0" else False
 
 # ! FoV

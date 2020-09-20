@@ -101,10 +101,16 @@ def track_features(**kwargs):
     if not kwargs["idx_frame"] + 1 < kwargs["data_scene"].number_frames:
         return None, None, None, kwargs, False
 
-    if 'mask' not in kwargs.keys():
-        kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
-                                                 res=kwargs["res"],
-                                                 loc=kwargs["loc"])
+    if kwargs["pinhole_model"]:
+        # pass
+        # TODO: Here we need to create a mask based on 'res' in pixels for pinhole cameras
+        kwargs["mask"] = np.ones(kwargs["data_scene"].shape).astype(np.uint8)
+    else:
+        if 'mask' not in kwargs.keys():
+            kwargs["mask"] = get_mask_map_by_res_loc(
+                kwargs["data_scene"].shape,
+                res=kwargs["res"],
+                loc=kwargs["loc"])
 
     initial_frame = kwargs["idx_frame"]
     idx = initial_frame

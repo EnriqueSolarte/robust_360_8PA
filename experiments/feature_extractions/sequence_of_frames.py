@@ -4,7 +4,6 @@ from config import *
 from geometry_utilities import *
 from image_utilities import get_mask_map_by_res_loc
 from pcl_utilities import *
-from read_datasets.MP3D_VO import MP3D_VO
 from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
 
 # ! Feature extractor
@@ -38,7 +37,7 @@ def eval_camera_pose(tracker, cam_gt, output_dir, file):
 
     ransac_parm = dict(min_samples=8,
                        p_succes=0.99,
-                       outliers=0.5,
+                       outliers=0.05,
                        residual_threshold=0.01,
                        verbose=True)
 
@@ -108,14 +107,18 @@ if __name__ == '__main__':
     assert experiment == experiment_choices[1]
 
     if dataset == "minos":
+        from read_datasets.MP3D_VO import MP3D_VO
         data = MP3D_VO(basedir=basedir, scene=scene)
+    elif dataset == "kitti":
+        from read_datasets.KITTI import KITTI_VO
+        data = KITTI_VO(basedir=basedir, scene=scene)
 
     tracker = LKTracker()
     threshold_camera_distance = 0.5
     camera_distance = 0
     i = 0
 
-    save = True
+    save = False
     '''
     output_dir = os.path.join(OUTPUT_MP3D_SAMPLES, "camera_pose", scene, path)
     create_dir(output_dir)
@@ -129,7 +132,7 @@ if __name__ == '__main__':
     terms = ["Q1", "Q2", "Q3", "Mean", "STD"]
 
     fieldnames = []
-    for ori in oris:
+    for ori in oris:   
         for author in authors:
             fieldnames.append(author + "-" + ori)
 
@@ -179,7 +182,10 @@ if __name__ == '__main__':
         # print("Tracked features      {}".format(len(tracker.tracks)))
         # prinerror_8p[-1][0],t("KeyFrame/CurrFrame:   {}-{}".format(tracker.initial_frame.idx, frame_curr.idx))
         cv2.namedWindow("preview")
-        cv2.imshow("preview", tracked_img[:, :, ::-1])
+        if dataset == "minos":
+            cv2.imshow("preview", tracked_img[:, :, ::-1])
+        elif dataset == "kitti":
+            cv2.imshow("preview", tracked_img)
         cv2.waitKey(1)
 
     # # ! Print fieldnames
