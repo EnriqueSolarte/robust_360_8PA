@@ -72,7 +72,7 @@ def eval_cam_pose_error(_print=True, **kwargs):
             # print("--------------------------------------------------------")
             # print("75% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.75)))
             print("50% Error-tran: {}".format(
-                np.quantile(kwargs["results"][error_name + "_tran"], 0.50)))
+                np.quantile(kwargs["results"][error_name + "_tran"], 0.5)))
             # print("25% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.25)))
             # print("--------------------------------------------------------")
 

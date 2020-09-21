@@ -67,7 +67,7 @@ if __name__ == "__main__":
     threshold_camera_distance = 5
     i = 0
 
-    for idx in range(i, data.number_frames):
+    for idx in range(i, 200):
         frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
         if idx == i:
             tracker.set_initial_frame(
