@@ -8,7 +8,8 @@ from analysis.utilities.experimentals_cam_recovering import *
 
 
 def run_sequence(**kwargs):
-    kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
+    if "filename" not in kwargs.keys():
+        kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
     print_log_files(kwargs["log_files"])
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
@@ -41,8 +42,9 @@ def run_sequence(**kwargs):
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    scene = "2azQ1b91cZZ/0"
+    # scene = "2azQ1b91cZZ/0"
     # scene = "i5noydFURQK/0"
+    scene = "sT4fr6TAbpF/0"
     # scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
     # basedir = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
@@ -60,12 +62,11 @@ if __name__ == '__main__':
         idx_frame=0,
         distance_threshold=0.5,
         res=(360, 180),
-        pinhole_model=True,
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
         extra="Initial eval",
-        special_eval=False)
+        special_eval=True)
     initial_values = dict(
         iVal_Res_SK=(1, 1),
         iVal_Rpj_SK=(1, 1),
@@ -73,9 +74,9 @@ if __name__ == '__main__':
         iVal_Res_RtSK=(1, 1),
     )
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=500),
         tracker=LKTracker(),
-        show_tracked_features=True)
+        show_tracked_features=False)
 
     ransac_parm = dict(
         min_samples=8,

@@ -21,7 +21,7 @@ if __name__ == '__main__':
             iVal_Res_RtSK=(1, 1),
         )
         features_setting = dict(
-            feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
+            feat_extractor=Shi_Tomasi_Extractor(maxCorners=500),
             tracker=LKTracker(),
             show_tracked_features=False)
 
@@ -34,8 +34,11 @@ if __name__ == '__main__':
             use_ransac=False)
 
         log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
-                                       "/utilities/camera_recovering.py",))
-
+                                       "/utilities/camera_recovering.py",),
+                            filename=get_file_name(file_src=__file__,
+                                                   **scene_settings, **features_setting, **ransac_parm,
+                                                   **initial_values,
+                                                   ))
         kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm,
                               **initial_values, **log_settings)
 
