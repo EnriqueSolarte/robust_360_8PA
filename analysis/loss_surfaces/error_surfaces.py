@@ -47,19 +47,20 @@ if __name__ == '__main__':
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=79,
+        idx_frame=0,
         # idx_frame=85,
         distance_threshold=0.5,
         res=(360, 180),
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        grid=(-2, 2, 100),
-        extra="",
+        grid=(-1, 1, 50),
+        extra="samplings",
     )
 
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
+        sampling=8,
         tracker=LKTracker(),
         show_tracked_features=False)
 
