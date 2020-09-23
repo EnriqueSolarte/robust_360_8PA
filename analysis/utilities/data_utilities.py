@@ -1,5 +1,6 @@
 import cv2
 from structures.frame import Frame
+import pandas as pd
 import numpy as np
 from sphere import Sphere
 from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
@@ -17,6 +18,14 @@ COLOR_NORM_8PA_OURS = 'rgb(255,127,80)'
 COLOR_OPT_RPJ_RT_PNP = 'rgb(0,255,100)'
 COLOR_OPT_RES_RT = 'rgb(0,100,80)'
 COLOR_GENERAL = 'red'
+
+
+def sampling_bearings(**kwargs):
+    number_of_samples = kwargs["bearings"]["kf"].shape[1]
+    samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
+    kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
+    kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
+    return kwargs
 
 
 def get_bearings(**kwargs):
@@ -39,6 +48,7 @@ def get_bearings(**kwargs):
         kwargs["bearings"]["kf"] = bearings_kf
         kwargs["bearings"]["frm"] = bearings_frm
 
+    kwargs = sampling_bearings(**kwargs)
     kwargs["cam_gt"] = cam_gt
     kwargs["e_gt"] = g8p.get_e_from_cam_pose(cam_gt)
     kwargs["landmarks_kf"] = g8p.triangulate_points_from_cam_pose(
@@ -46,6 +56,9 @@ def get_bearings(**kwargs):
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy(),
     )
+    if kwargs.get("save_bearings", False):
+        save_bearings(**kwargs)
+    print("Number of pts: {}".format(kwargs["bearings"]["kf"].shape[1]))
     return kwargs, ret
 
 
@@ -163,3 +176,12 @@ def track_features(**kwargs):
         kwargs["idx_frame"] = kwargs["tracker"].frame_idx
 
     return bearings_kf, bearings_frm, relative_pose, kwargs, ret
+
+
+def save_bearings(**kwargs):
+    dt = pd.DataFrame(np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
+    dirname = os.path.join(os.path.dirname(kwargs["filename"]), "frames")
+    file_bearings = str(kwargs["tracker"].initial_frame.idx) + str(kwargs["tracker"].tracked_frame.idx) + ".txt"
+    file_bearings = os.path.join(dirname, file_bearings)
+    create_dir(dirname, delete_previous=False)
+    dt.to_csv(file_bearings, header=None, index=None)
