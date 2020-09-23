@@ -1,6 +1,8 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from analysis.utilities.data_utilities import *
+import os
+import numpy as np
 from file_utilities import create_dir
 from varname import nameof
 import shutil
@@ -9,7 +11,7 @@ import shutil
 def get_file_name(**kwargs):
     dirname, name_src = os.path.split(kwargs["file_src"])
     dirname = os.path.join(dirname, "plots")
-    create_dir(dirname, delete_previous=False)
+    dirname = os.path.join(dirname, kwargs["data_scene"].scene)
     name = os.path.splitext(name_src)[0]
     scene_ = os.path.dirname(kwargs["data_scene"].scene)
     filename = name + "_" + scene_
@@ -26,12 +28,15 @@ def get_file_name(**kwargs):
         for val in initial_val:
             filename += "_" + val + "." + str(kwargs[val])
 
+    dirname = os.path.join(dirname, filename)
+    create_dir(dirname, delete_previous=False)
+
     return os.path.join(dirname, filename)
 
 
 def plot_bar_errors(**kwargs):
     results = list(kwargs["results"].keys())
-    titles = [dt for dt in results if dt not in ("kf", )]
+    titles = [dt for dt in results if dt not in ("kf",)]
 
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
@@ -66,9 +71,9 @@ def plot_bar_errors(**kwargs):
 
                 color = get_color(dt_r)
 
-                fig.add_trace(go.Bar(x=(dt_r, ),
+                fig.add_trace(go.Bar(x=(dt_r,),
                                      y=(kwargs["quartiles"][dt_r + "_" +
-                                                            quartile], ),
+                                                            quartile],),
                                      name=dt_r + "_" + quartile,
                                      marker_color=color),
                               row=row,
@@ -89,7 +94,7 @@ def plot_bar_errors(**kwargs):
 
 def plot_errors(**kwargs):
     results = list(kwargs["results"].keys())
-    titles = [dt for dt in results if dt not in ("kf", )]
+    titles = [dt for dt in results if dt not in ("kf",)]
 
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
@@ -188,3 +193,4 @@ def print_log_files(list_files):
                 print(f.read())
         except:
             print("Could register log file{}".format(file))
+
