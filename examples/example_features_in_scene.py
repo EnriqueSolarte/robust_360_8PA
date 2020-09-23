@@ -18,8 +18,8 @@ def eval_methods(res, noise, loc, data_scene, idx_frame, opt_version,
     g8p = EightPointAlgorithmGeneralGeometry()
 
     # ! Getting a PCL from the dataset
-    pcl = data_scene.get_pcl_from_key_features(idx=idx_frame,
-                                               extractor=feat_extractor)
+    pcl = data_scene.get_pcl_from_key_features(
+        idx=idx_frame, extractor=feat_extractor)
     # pcl_dense, pcl_dense_color, _ = data_scene.get_dense_pcl(idx=idx_frame)
     pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl, loc=loc, res=res)
     np.random.seed(100)
@@ -34,19 +34,19 @@ def eval_methods(res, noise, loc, data_scene, idx_frame, opt_version,
 
         pcl_a = extend_array_to_homogeneous(pcl)
         # ! pcl at "b" location + noise
-        pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
-                                 param=noise)
+        pcl_b = add_noise_to_pcl(
+            np.linalg.inv(cam_a2b).dot(pcl_a), param=noise)
         # ! We expect that there are 1% outliers besides of the noise
-        pcl_b = add_outliers_to_pcl(pcl_b.copy(),
-                                    outliers=int(0.05 * pcl_a.shape[1]))
+        pcl_b = add_outliers_to_pcl(
+            pcl_b.copy(), outliers=int(0.05 * pcl_a.shape[1]))
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_a2b_8p = g8p.recover_pose_from_matches(x1=bearings_a.copy(),
-                                                   x2=bearings_b.copy())
+        cam_a2b_8p = g8p.recover_pose_from_matches(
+            x1=bearings_a.copy(), x2=bearings_b.copy())
 
-        cam_a2b_n8p = g8p_norm.recover_pose_from_matches(x1=bearings_a.copy(),
-                                                         x2=bearings_b.copy())
+        cam_a2b_n8p = g8p_norm.recover_pose_from_matches(
+            x1=bearings_a.copy(), x2=bearings_b.copy())
 
         if cam_a2b_8p is None:
             print("8p failed")
@@ -56,33 +56,33 @@ def eval_methods(res, noise, loc, data_scene, idx_frame, opt_version,
             continue
 
         error_n8p.append(
-            evaluate_error_in_transformation(transform_gt=cam_a2b,
-                                             transform_est=cam_a2b_n8p))
+            evaluate_error_in_transformation(
+                transform_gt=cam_a2b, transform_est=cam_a2b_n8p))
         error_8p.append(
-            evaluate_error_in_transformation(transform_gt=cam_a2b,
-                                             transform_est=cam_a2b_8p))
+            evaluate_error_in_transformation(
+                transform_gt=cam_a2b, transform_est=cam_a2b_8p))
 
         print(
             "====================================================================="
         )
         # ! Ours' method
-        print("Q1-ours:{}- {}".format(np.quantile(error_n8p, 0.25, axis=0),
-                                      len(error_n8p)))
-        print("Q2-ours:{}- {}".format(np.median(error_n8p, axis=0),
-                                      len(error_n8p)))
-        print("Q3-ours:{}- {}".format(np.quantile(error_n8p, 0.75, axis=0),
-                                      len(error_n8p)))
+        print("Q1-ours:{}- {}".format(
+            np.quantile(error_n8p, 0.25, axis=0), len(error_n8p)))
+        print("Q2-ours:{}- {}".format(
+            np.median(error_n8p, axis=0), len(error_n8p)))
+        print("Q3-ours:{}- {}".format(
+            np.quantile(error_n8p, 0.75, axis=0), len(error_n8p)))
 
         print(
             "====================================================================="
         )
         # ! 8PA
-        print("Q1-8PA:{}-  {}".format(np.quantile(error_8p, 0.25, axis=0),
-                                      len(error_8p)))
-        print("Q2-8PA:{}-  {}".format(np.median(error_8p, axis=0),
-                                      len(error_8p)))
-        print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
-                                      len(error_8p)))
+        print("Q1-8PA:{}-  {}".format(
+            np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
+        print("Q2-8PA:{}-  {}".format(
+            np.median(error_8p, axis=0), len(error_8p)))
+        print("Q3-8PA:{}-  {}".format(
+            np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
         print(
             "====================================================================="
         )

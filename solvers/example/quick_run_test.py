@@ -29,8 +29,9 @@ if __name__ == '__main__':
         extra="projected_distance",
     )
 
-    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
-                            tracker=LKTracker(),
-                            show_tracked_features=True)
+    features_setting = dict(
+        feat_extractor=Shi_Tomasi_Extractor(),
+        tracker=LKTracker(),
+        show_tracked_features=True)
 
     eval_run(**scene_settings, **features_setting, **ransac_parm)

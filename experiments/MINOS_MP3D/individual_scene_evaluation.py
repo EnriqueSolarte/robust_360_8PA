@@ -33,11 +33,12 @@ if __name__ == '__main__':
             verbose=True,
             use_ransac=False)
 
-        log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
-                                       "/utilities/camera_recovering.py",))
+        log_settings = dict(
+            log_files=(os.path.dirname(os.path.dirname(__file__)) +
+                       "/utilities/camera_recovering.py", ))
 
-        kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm,
-                              **initial_values, **log_settings)
+        kwargs = run_sequence(**scene_settings, **features_setting,
+                              **ransac_parm, **initial_values, **log_settings)
 
         plot_errors(**kwargs)
         plot_bar_errors(**kwargs)

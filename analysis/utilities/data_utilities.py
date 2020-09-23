@@ -54,8 +54,8 @@ def eval_cam_pose_error(_print=True, **kwargs):
     for cam in cams:
         cam_pose = kwargs[cam]
         error_name = "error_" + cam
-        error = evaluate_error_in_transformation(transform_est=cam_pose,
-                                                 transform_gt=cam_gt)
+        error = evaluate_error_in_transformation(
+            transform_est=cam_pose, transform_gt=cam_gt)
         if error_name + "_rot" not in kwargs["results"].keys():
             kwargs["results"][error_name + "_rot"] = [error[0]]
             kwargs["results"][error_name + "_tran"] = [error[1]]

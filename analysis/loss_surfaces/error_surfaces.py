@@ -16,21 +16,18 @@ def eval_frame(**kwargs):
     for idx in kwargs["grid_range"]:
         s = kwargs["ss_grid"][idx]
         k = kwargs["kk_grid"][idx]
-        kwargs["bearings"]["kf_norm"], t1 = normalizer_s_k(x=bearings_kf,
-                                                           s=s,
-                                                           k=k)
-        kwargs["bearings"]["frm_norm"], t2 = normalizer_s_k(x=bearings_frm,
-                                                            s=s,
-                                                            k=k)
+        kwargs["bearings"]["kf_norm"], t1 = normalizer_s_k(
+            x=bearings_kf, s=s, k=k)
+        kwargs["bearings"]["frm_norm"], t2 = normalizer_s_k(
+            x=bearings_frm, s=s, k=k)
 
         kwargs['e_norm'] = g8p.compute_essential_matrix(
             x1=kwargs["bearings"]["kf_norm"],
             x2=kwargs["bearings"]["frm_norm"],
         )
         kwargs['e_hat'] = t1.T @ kwargs['e_norm'].copy() @ t2
-        kwargs['cam_hat'] = g8p.recover_pose_from_e(E=kwargs['e_hat'],
-                                                    x1=bearings_kf,
-                                                    x2=bearings_frm)
+        kwargs['cam_hat'] = g8p.recover_pose_from_e(
+            E=kwargs['e_hat'], x1=bearings_kf, x2=bearings_frm)
         kwargs = eval_surfaces(**kwargs)
         print("{} : {}".format(kwargs["filename"],
                                idx / kwargs["ss_grid"].size))

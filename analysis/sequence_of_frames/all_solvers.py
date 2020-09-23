@@ -30,7 +30,7 @@ def run_sequence(**kwargs):
         # kwargs["cam_OURS_opt_res_Rtks"], kwargs["loss_OURS_RES_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
         kwargs["cam_OURS_opt_res_ks_Rt"], kwargs[
             "loss_OURS_RES_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(
-            **kwargs)
+                **kwargs)
         # ! Based on REPROJECTION
         # kwargs["cam_PnP_opt_rpj_Rt"], kwargs["loss_PnP"] = get_cam_pose_by_opt_rpj_Rt_pnp(**kwargs)
         # kwargs["cam_OURS_opt_prj_sk"], kwargs["loss_OURS_RPJ_ks"] = get_cam_pose_by_opt_rpj_SK(**kwargs)
@@ -45,10 +45,10 @@ if __name__ == '__main__':
     # scene = "i5noydFURQK/0"
     # scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
-    # basedir = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+    basedir = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
 
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=scene, basedir=path)
+    data = MP3D_VO(scene=scene, basedir=basedir)
     # from config import *
 
     # data = KITTI_VO(basedir="/home/justin/slam/datasets/KITTI/odometry",
@@ -85,8 +85,9 @@ if __name__ == '__main__':
         verbose=True,
         use_ransac=False)
 
-    log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
-                                   "/utilities/camera_recovering.py",))
+    log_settings = dict(
+        log_files=(os.path.dirname(os.path.dirname(__file__)) +
+                   "/utilities/camera_recovering.py", ))
 
     kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm,
                           **initial_values, **log_settings)

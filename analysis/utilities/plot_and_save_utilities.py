@@ -51,9 +51,10 @@ def plot_bar_errors(**kwargs):
         if len(dt) == 0:
             continue
 
-        quartiles_settings = dict(Q75=(np.quantile, 0.75),
-                                  Q50=(np.quantile, 0.50),
-                                  Q25=(np.quantile, 0.25))
+        quartiles_settings = dict(
+            Q75=(np.quantile, 0.75),
+            Q50=(np.quantile, 0.50),
+            Q25=(np.quantile, 0.25))
 
         for i_quart, quartile in enumerate(list(quartiles_settings.keys())):
             row, col = i_row + 1, i_quart + 1
@@ -66,13 +67,14 @@ def plot_bar_errors(**kwargs):
 
                 color = get_color(dt_r)
 
-                fig.add_trace(go.Bar(x=(dt_r, ),
-                                     y=(kwargs["quartiles"][dt_r + "_" +
-                                                            quartile], ),
-                                     name=dt_r + "_" + quartile,
-                                     marker_color=color),
-                              row=row,
-                              col=col)
+                fig.add_trace(
+                    go.Bar(
+                        x=(dt_r, ),
+                        y=(kwargs["quartiles"][dt_r + "_" + quartile], ),
+                        name=dt_r + "_" + quartile,
+                        marker_color=color),
+                    row=row,
+                    col=col)
                 if "rot" in dt_r:
                     y_label = "Rotation Error"
                 elif "tran" in dt_r:
@@ -103,10 +105,11 @@ def plot_errors(**kwargs):
     specs = []
     for _ in dt_results:
         specs.append([{}])
-    fig = make_subplots(subplot_titles=["Rotation Error", "Trans Error"],
-                        rows=n,
-                        cols=1,
-                        specs=specs)
+    fig = make_subplots(
+        subplot_titles=["Rotation Error", "Trans Error"],
+        rows=n,
+        cols=1,
+        specs=specs)
 
     for i, dt in enumerate(dt_results):
         if len(dt) == 0:
@@ -117,12 +120,14 @@ def plot_errors(**kwargs):
         for dt_r in dt:
             color = get_color(dt_r)
 
-            fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
-                                     y=kwargs["results"][dt_r],
-                                     name=dt_r,
-                                     line=dict(color=color)),
-                          row=row,
-                          col=col)
+            fig.add_trace(
+                go.Scatter(
+                    x=kwargs["results"]["kf"],
+                    y=kwargs["results"][dt_r],
+                    name=dt_r,
+                    line=dict(color=color)),
+                row=row,
+                col=col)
             if "rot" in dt_r:
                 y_label = "Rotation Error"
             elif "tran" in dt_r:
@@ -159,8 +164,8 @@ def save_info(only_results=True, **kwargs):
         save_obj(dir_output, kwargs)
     try:
         dir_output = os.path.join("{}_log.txt".format(filename))
-        shutil.move(src=os.path.join(os.environ['HOME'], "log.txt"),
-                    dst=dir_output)
+        shutil.move(
+            src=os.path.join(os.environ['HOME'], "log.txt"), dst=dir_output)
     except:
         print("Log file was not saved")
 
@@ -169,9 +174,10 @@ def save_surface_results(**kwargs):
     filename = kwargs["filename"]
     dir_output = os.path.join("plots/{}.data".format(filename))
 
-    dt = dict(results=kwargs["results"],
-              v_grid=kwargs["v_grid"],
-              vv_grid=kwargs["vv_grid"])
+    dt = dict(
+        results=kwargs["results"],
+        v_grid=kwargs["v_grid"],
+        vv_grid=kwargs["vv_grid"])
     save_obj(dir_output, dt)
 
 
