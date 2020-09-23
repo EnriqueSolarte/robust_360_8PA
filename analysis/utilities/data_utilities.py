@@ -10,6 +10,7 @@ import os
 from file_utilities import save_obj, load_obj
 from image_utilities import get_mask_map_by_res_loc
 from analysis.utilities.camera_recovering import *
+from file_utilities import create_dir
 
 COLOR_8PA = 'rgb(30,144,255)'
 COLOR_NORM_8PA_OURS = 'rgb(255,127,80)'
