@@ -8,6 +8,7 @@ from analysis.utilities.experimentals_cam_recovering import *
 
 
 def run_sequence(**kwargs):
+    # ! In case of filename has nor been defined yet
     if "filename" not in kwargs.keys():
         kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
     print_log_files(kwargs["log_files"])
@@ -65,18 +66,20 @@ if __name__ == '__main__':
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
-        extra="Initial eval",
         special_eval=True)
     initial_values = dict(
         iVal_Res_SK=(1, 1),
         iVal_Rpj_SK=(1, 1),
-        # iVal_Rpj_SK=(0.5, 0.5),
         iVal_Res_RtSK=(1, 1),
     )
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(maxCorners=500),
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
         tracker=LKTracker(),
-        show_tracked_features=False)
+        show_tracked_features=False,
+        sampling=10,
+        extra="sampling10",
+
+    )
 
     ransac_parm = dict(
         min_samples=8,
