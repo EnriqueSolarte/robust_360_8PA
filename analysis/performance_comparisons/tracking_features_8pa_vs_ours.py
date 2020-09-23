@@ -30,12 +30,13 @@ def plot(**kwargs):
     else:
         titles = [dt for dt in results if dt not in ("kf", "rejections")]
 
-    fig = make_subplots(subplot_titles=[
-        "Rotation Error", "Trans Error", "Residuals", "Features/Rejections"
-    ],
-                        rows=2,
-                        cols=2,
-                        specs=[[{}, {}], [{}, {}]])
+    fig = make_subplots(
+        subplot_titles=[
+            "Rotation Error", "Trans Error", "Residuals", "Features/Rejections"
+        ],
+        rows=2,
+        cols=2,
+        specs=[[{}, {}], [{}, {}]])
 
     idxs = np.linspace(0, 3, 4).reshape(2, -1)
 
@@ -61,12 +62,14 @@ def plot(**kwargs):
                 color = 'rgb(255,80,127)'
                 dash = "solid"
 
-            fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
-                                     y=kwargs["results"][dt_r],
-                                     name=dt_r,
-                                     line=dict(color=color, dash=dash)),
-                          row=row,
-                          col=col)
+            fig.add_trace(
+                go.Scatter(
+                    x=kwargs["results"]["kf"],
+                    y=kwargs["results"][dt_r],
+                    name=dt_r,
+                    line=dict(color=color, dash=dash)),
+                row=row,
+                col=col)
             if "rot" in dt_r:
                 y_label = "Rotation Error"
             elif "tran" in dt_r:
@@ -109,20 +112,21 @@ def run_sequence(**kwargs):
         # ! 8PA Evaluation
         if kwargs.get("use_ransac", False):
             # ! Solving by using RANSAC
-            cam_8pa = ransac.solve(data=(bearings_kf.copy().T,
-                                         bearings_frm.copy().T))
+            cam_8pa = ransac.solve(
+                data=(bearings_kf.copy().T, bearings_frm.copy().T))
             num_inliers = sum(ransac.current_inliers)
             num_of_samples = len(ransac.current_inliers)
-            kwargs["results"]["rejections"].append(1 - (num_inliers /
-                                                        num_of_samples))
+            kwargs["results"]["rejections"].append(
+                1 - (num_inliers / num_of_samples))
             kwargs["results"]["8pa_residuals"].append(ransac.current_residual)
             bearings_kf = bearings_kf[:, ransac.current_inliers]
             bearings_frm = bearings_frm[:, ransac.current_inliers]
         else:
             # ! SOLVING USING ALL MATCHES
-            cam_8pa = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
-                                                    x2=bearings_frm.copy(),
-                                                    eval_current_solution=True)
+            cam_8pa = g8p.recover_pose_from_matches(
+                x1=bearings_kf.copy(),
+                x2=bearings_frm.copy(),
+                eval_current_solution=True)
             kwargs["results"]["features"].append(g8p.current_count_features)
             kwargs["results"]["8pa_residuals"].append(g8p.current_residual)
 
@@ -137,14 +141,14 @@ def run_sequence(**kwargs):
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
 
         # ! 8PA Errors
-        error = evaluate_error_in_transformation(transform_gt=cam_gt,
-                                                 transform_est=cam_8pa)
+        error = evaluate_error_in_transformation(
+            transform_gt=cam_gt, transform_est=cam_8pa)
         kwargs["results"]["8pa_error_rot"].append(error[0])
         kwargs["results"]["8pa_error_tran"].append(error[1])
 
         # ! Norm 8PA
-        error = evaluate_error_in_transformation(transform_gt=cam_gt,
-                                                 transform_est=cam_norm_8pa)
+        error = evaluate_error_in_transformation(
+            transform_gt=cam_gt, transform_est=cam_norm_8pa)
         kwargs["results"]["norm_8pa_error_rot"].append(error[0])
         kwargs["results"]["norm_8pa_error_tran"].append(error[1])
 
@@ -200,9 +204,10 @@ if __name__ == '__main__':
         verbose=True,
         use_ransac=False)
 
-    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
-                            tracker=LKTracker(),
-                            show_tracked_features=False)
+    features_setting = dict(
+        feat_extractor=Shi_Tomasi_Extractor(),
+        tracker=LKTracker(),
+        show_tracked_features=False)
 
     run_sequence(**scene_settings, **features_setting, **ransac_parm,
                  **model_settings)

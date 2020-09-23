@@ -20,13 +20,12 @@ def eval_normalizer(parameters, bearings_kf, bearings_frm):
     bearings_kf_norm, t1 = normalizer_s(x=bearings_kf, s=s1)
     bearings_frm_norm, t2 = normalizer_s(x=bearings_frm, s=s2)
 
-    e_norm = solver.compute_essential_matrix(x1=bearings_kf_norm,
-                                             x2=bearings_frm_norm)
+    e_norm = solver.compute_essential_matrix(
+        x1=bearings_kf_norm, x2=bearings_frm_norm)
     e_hat = t1.T @ e_norm @ t2
 
-    cam_hat = solver.recover_pose_from_e(E=e_hat,
-                                         x1=bearings_kf,
-                                         x2=bearings_frm)
+    cam_hat = solver.recover_pose_from_e(
+        E=e_hat, x1=bearings_kf, x2=bearings_frm)
     return cam_hat
 
 
@@ -42,16 +41,15 @@ def reprojection_error_R_T(parameters, bearings, points):
     cam_pose[0:3, 3] = np.array((t0, t1, t2))
 
     points_hat = np.linalg.inv(cam_pose) @ points
-    error = get_angle_between_vectors_arrays(array_ref=bearings,
-                                             array_vector=points_hat[0:3, :])
+    error = get_angle_between_vectors_arrays(
+        array_ref=bearings, array_vector=points_hat[0:3, :])
     return error
 
 
 def reprojection_error_S_K(parameters, bearings_kf, bearings_frm):
     cam_hat = eval_normalizer(parameters, bearings_kf, bearings_frm)
-    landmarks_kf_hat = g8p.triangulate_points_from_cam_pose(cam_pose=cam_hat,
-                                                            x1=bearings_kf,
-                                                            x2=bearings_frm)
+    landmarks_kf_hat = g8p.triangulate_points_from_cam_pose(
+        cam_pose=cam_hat, x1=bearings_kf, x2=bearings_frm)
     landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf_hat
     error = get_angle_between_vectors_arrays(
         array_ref=bearings_frm, array_vector=landmarks_frm_hat[0:3, :])
@@ -72,8 +70,8 @@ def run_estimation(**kwargs):
 
     # ! Getting initial data
     tic = time.time()
-    cam_8p = g8p().recover_pose_from_matches(x1=kwargs["bearings"]["kf"],
-                                             x2=kwargs["bearings"]["frm"])
+    cam_8p = g8p().recover_pose_from_matches(
+        x1=kwargs["bearings"]["kf"], x2=kwargs["bearings"]["frm"])
     landmarks_8p_kf = g8p.triangulate_points_from_cam_pose(
         cam_pose=cam_8p,
         x1=kwargs["bearings"]["kf"],
@@ -129,13 +127,14 @@ def run_estimation(**kwargs):
 
     print("Final projection error by Opt(R,t): {}".format(
         np.sum(
-            reprojection_error_R_T(opt_R_t,
-                                   bearings=kwargs["bearings"]["frm"],
-                                   points=landmarks_8p_kf))))
+            reprojection_error_R_T(
+                opt_R_t,
+                bearings=kwargs["bearings"]["frm"],
+                points=landmarks_8p_kf))))
 
     print("Initial camera error (8p): {}".format(
-        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
-                                         transform_est=cam_8p)))
+        evaluate_error_in_transformation(
+            transform_gt=kwargs["cam_gt"], transform_est=cam_8p)))
 
     # print("Final camera error by Opt(s,k): {}".format(
     #     evaluate_error_in_transformation(
@@ -151,8 +150,8 @@ def run_estimation(**kwargs):
     cam_final = eulerAnglesToRotationMatrix(opt_R_t[0:3])
     cam_final[0:3, 3] = opt_R_t[3:]
     print("Final camera error by Opt(R,t): {}".format(
-        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
-                                         transform_est=cam_final)))
+        evaluate_error_in_transformation(
+            transform_gt=kwargs["cam_gt"], transform_est=cam_final)))
 
 
 if __name__ == '__main__':
@@ -189,9 +188,10 @@ if __name__ == '__main__':
         verbose=True,
         use_ransac=True)
 
-    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
-                            tracker=LKTracker(),
-                            show_tracked_features=False)
+    features_setting = dict(
+        feat_extractor=Shi_Tomasi_Extractor(),
+        tracker=LKTracker(),
+        show_tracked_features=False)
 
     run_estimation(**scene_settings, **features_setting, **ransac_parm,
                    **model_settings)

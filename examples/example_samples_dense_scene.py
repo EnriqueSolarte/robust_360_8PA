@@ -34,15 +34,15 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
         samples = np.random.randint(0, pcl_dense.shape[1], pts)
         pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
         # ! pcl at "b" location + noise
-        pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
-                                 param=noise)
+        pcl_b = add_noise_to_pcl(
+            np.linalg.inv(cam_a2b).dot(pcl_a), param=noise)
         # ! We expect that there are 1% outliers besides of the noise
         pcl_b = add_outliers_to_pcl(pcl_b.copy(), outliers=int(0.05 * pts))
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
-        cam_a2b_8p = g8p.recover_pose_from_matches(x1=bearings_a.copy(),
-                                                   x2=bearings_b.copy())
+        cam_a2b_8p = g8p.recover_pose_from_matches(
+            x1=bearings_a.copy(), x2=bearings_b.copy())
         # # ! prior motion
         prior_motion = cam_a2b_8p[0:3, 3]
         rot = get_rot_from_directional_vectors(prior_motion, (0, 0, 1))
@@ -64,33 +64,33 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
             continue
 
         error_n8p.append(
-            evaluate_error_in_transformation(transform_gt=cam_a2b,
-                                             transform_est=cam_a2b_n8p))
+            evaluate_error_in_transformation(
+                transform_gt=cam_a2b, transform_est=cam_a2b_n8p))
         error_8p.append(
-            evaluate_error_in_transformation(transform_gt=cam_a2b,
-                                             transform_est=cam_a2b_8p))
+            evaluate_error_in_transformation(
+                transform_gt=cam_a2b, transform_est=cam_a2b_8p))
 
         print(
             "====================================================================="
         )
         # ! Ours' method
-        print("Q1-ours:{}- {}".format(np.quantile(error_n8p, 0.25, axis=0),
-                                      len(error_n8p)))
-        print("Q2-ours:{}- {}".format(np.median(error_n8p, axis=0),
-                                      len(error_n8p)))
-        print("Q3-ours:{}- {}".format(np.quantile(error_n8p, 0.75, axis=0),
-                                      len(error_n8p)))
+        print("Q1-ours:{}- {}".format(
+            np.quantile(error_n8p, 0.25, axis=0), len(error_n8p)))
+        print("Q2-ours:{}- {}".format(
+            np.median(error_n8p, axis=0), len(error_n8p)))
+        print("Q3-ours:{}- {}".format(
+            np.quantile(error_n8p, 0.75, axis=0), len(error_n8p)))
 
         print(
             "====================================================================="
         )
         # ! 8PA
-        print("Q1-8PA:{}-  {}".format(np.quantile(error_8p, 0.25, axis=0),
-                                      len(error_8p)))
-        print("Q2-8PA:{}-  {}".format(np.median(error_8p, axis=0),
-                                      len(error_8p)))
-        print("Q3-8PA:{}-  {}".format(np.quantile(error_8p, 0.75, axis=0),
-                                      len(error_8p)))
+        print("Q1-8PA:{}-  {}".format(
+            np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
+        print("Q2-8PA:{}-  {}".format(
+            np.median(error_8p, axis=0), len(error_8p)))
+        print("Q3-8PA:{}-  {}".format(
+            np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
         print(
             "====================================================================="
         )
@@ -107,10 +107,11 @@ if __name__ == '__main__':
     path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", basedir=path)
 
-    eval_methods(res=(54, 54),
-                 noise=500,
-                 loc=(0, 0),
-                 pts=150,
-                 data_scene=data,
-                 idx_frame=50,
-                 opt_version="v2")
+    eval_methods(
+        res=(54, 54),
+        noise=500,
+        loc=(0, 0),
+        pts=150,
+        data_scene=data,
+        idx_frame=50,
+        opt_version="v2")

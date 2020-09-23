@@ -47,19 +47,18 @@ def eval_camera_pose(initial_frame, key_frame, cam_gt):
     kf = cam.pixel2normalized_vector(matches[0])
     frm = cam.pixel2normalized_vector(matches[1])
 
-    ransac_parm = dict(min_samples=8,
-                       p_succes=0.99,
-                       outliers=0.5,
-                       residual_threshold=0.01,
-                       verbose=True)
+    ransac_parm = dict(
+        min_samples=8,
+        p_succes=0.99,
+        outliers=0.5,
+        residual_threshold=0.01,
+        verbose=True)
 
     print("Number of matches: {}".format(kf.shape[1]))
-    cam_8p = RansacEssentialMatrix(**ransac_parm).solve(data=(np.copy(kf.T),
-                                                              np.copy(frm.T)),
-                                                        solver="g8p")
-    cam_n8p = RansacEssentialMatrix(**ransac_parm).solve(data=(np.copy(kf.T),
-                                                               np.copy(frm.T)),
-                                                         solver="norm_8pa")
+    cam_8p = RansacEssentialMatrix(**ransac_parm).solve(
+        data=(np.copy(kf.T), np.copy(frm.T)), solver="g8p")
+    cam_n8p = RansacEssentialMatrix(**ransac_parm).solve(
+        data=(np.copy(kf.T), np.copy(frm.T)), solver="norm_8pa")
 
 
 if __name__ == "__main__":
@@ -83,9 +82,10 @@ if __name__ == "__main__":
         print("Distance: " + str(camera_distance))
 
         if camera_distance > threshold_camera_distance:
-            eval_camera_pose(initial_frame=initial_frame,
-                             key_frame=frame_curr,
-                             cam_gt=relative_pose)
+            eval_camera_pose(
+                initial_frame=initial_frame,
+                key_frame=frame_curr,
+                cam_gt=relative_pose)
             frame_prev = frame_curr
             initial_frame = frame_prev
             relative_pose = frame_curr.get_relative_pose(

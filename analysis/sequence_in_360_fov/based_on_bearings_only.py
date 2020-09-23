@@ -62,9 +62,10 @@ if __name__ == '__main__':
         extra="residuals_sigma_num_condition",
     )
 
-    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
-                            tracker=LKTracker(),
-                            show_tracked_features=False)
+    features_setting = dict(
+        feat_extractor=Shi_Tomasi_Extractor(),
+        tracker=LKTracker(),
+        show_tracked_features=False)
 
     ransac_parm = dict(
         min_samples=8,

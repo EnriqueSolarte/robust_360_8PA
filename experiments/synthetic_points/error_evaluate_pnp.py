@@ -48,19 +48,19 @@ def eval_error(res, noise, loc, point, data_scene, idx_frame, opt_version,
         cam_pnp = pnp_dlt.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
 
         error_8p.append(
-            evaluate_error_in_transformation(transform_gt=cam_gt,
-                                             transform_est=cam_pnp))
+            evaluate_error_in_transformation(
+                transform_gt=cam_gt, transform_est=cam_pnp))
 
         print(
             "====================================================================="
         )
         # ! PnP
-        print("Q1-PnP: {} - {}".format(np.quantile(error_8p, 0.25, axis=0),
-                                       len(error_8p)))
-        print("Q2-PnP: {} - {}".format(np.median(error_8p, axis=0),
-                                       len(error_8p)))
-        print("Q3-PnP: {} - {}".format(np.quantile(error_8p, 0.75, axis=0),
-                                       len(error_8p)))
+        print("Q1-PnP: {} - {}".format(
+            np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
+        print("Q2-PnP: {} - {}".format(
+            np.median(error_8p, axis=0), len(error_8p)))
+        print("Q3-PnP: {} - {}".format(
+            np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
         print(
             "====================================================================="
         )
@@ -74,34 +74,37 @@ if __name__ == '__main__':
 
     if experiment_group == "noise":
         for noise in noises:
-            eval_error(res=res,
-                       noise=noise,
-                       loc=(0, 0),
-                       point=point,
-                       data_scene=data,
-                       idx_frame=idx_frame,
-                       opt_version=opt_version,
-                       scene=scene,
-                       motion_constraint=motion_constraint)
+            eval_error(
+                res=res,
+                noise=noise,
+                loc=(0, 0),
+                point=point,
+                data_scene=data,
+                idx_frame=idx_frame,
+                opt_version=opt_version,
+                scene=scene,
+                motion_constraint=motion_constraint)
     elif experiment_group == "fov":
         for res in ress:
-            eval_error(res=res,
-                       noise=noise,
-                       loc=(0, 0),
-                       point=point,
-                       data_scene=data,
-                       idx_frame=idx_frame,
-                       opt_version=opt_version,
-                       scene=scene,
-                       motion_constraint=motion_constraint)
+            eval_error(
+                res=res,
+                noise=noise,
+                loc=(0, 0),
+                point=point,
+                data_scene=data,
+                idx_frame=idx_frame,
+                opt_version=opt_version,
+                scene=scene,
+                motion_constraint=motion_constraint)
     elif experiment_group == "point":
         for point in points:
-            eval_error(res=res,
-                       noise=noise,
-                       loc=(0, 0),
-                       point=point,
-                       data_scene=data,
-                       idx_frame=idx_frame,
-                       opt_version=opt_version,
-                       scene=scene,
-                       motion_constraint=motion_constraint)
+            eval_error(
+                res=res,
+                noise=noise,
+                loc=(0, 0),
+                point=point,
+                data_scene=data,
+                idx_frame=idx_frame,
+                opt_version=opt_version,
+                scene=scene,
+                motion_constraint=motion_constraint)

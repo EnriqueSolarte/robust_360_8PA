@@ -9,6 +9,7 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
     This Class is the VSLAB implementation of the norm 8PA with optimal K,S
     for spherical projection models
     """
+
     def __init__(self, version='v1'):
         super().__init__()
         self.T1 = np.eye(3)
@@ -140,8 +141,8 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
             delta_, C = get_delta_bound_by_bearings(x1_norm_, x2_norm_)
             pm = np.degrees(
-                np.nanmean(get_angle_between_vectors_arrays(
-                    x1_norm_, x2_norm_)))
+                np.nanmean(
+                    get_angle_between_vectors_arrays(x1_norm_, x2_norm_)))
             if delta_ == np.nan:
                 return np.inf
             return C / delta_
@@ -194,10 +195,11 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
 
         initial_parameters = np.array((1, 1, 1, 1))
         self.landmarks_kf = None
-        opt_k_s, p_cov, info = levmar.levmar(reprojection_error,
-                                             initial_parameters,
-                                             np.ones_like(x1[0, :]),
-                                             args=(x1.copy(), x2.copy()))
+        opt_k_s, p_cov, info = levmar.levmar(
+            reprojection_error,
+            initial_parameters,
+            np.ones_like(x1[0, :]),
+            args=(x1.copy(), x2.copy()))
 
         s1, k1 = opt_k_s[0], opt_k_s[1]
 
@@ -231,12 +233,10 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
             x1_norm, x2_norm, self.T1, self.T2 = self.optimum_normalizer(
                 x1, x2)
         else:
-            x1_norm, self.T1, = self.normalizer(x1,
-                                                s=param[0][0],
-                                                k=param[0][1])
-            x2_norm, self.T2, = self.normalizer(x2,
-                                                s=param[1][0],
-                                                k=param[1][1])
+            x1_norm, self.T1, = self.normalizer(
+                x1, s=param[0][0], k=param[0][1])
+            x2_norm, self.T2, = self.normalizer(
+                x2, s=param[1][0], k=param[1][1])
 
         e = self.compute_essential_matrix(x1_norm, x2_norm)
         e = np.dot(self.T1.T, np.dot(e, self.T2))
@@ -281,10 +281,11 @@ class Optimal8PA(EightPointAlgorithmGeneralGeometry):
                 array_vector=landmarks_frm_hat[0:3, :])
             return error
 
-        opt_R_t, p_cov, info = levmar.levmar(reprojection_error,
-                                             initial_R_t,
-                                             np.zeros_like(x2[0, :]),
-                                             args=(self.landmarks_kf, x2))
+        opt_R_t, p_cov, info = levmar.levmar(
+            reprojection_error,
+            initial_R_t,
+            np.zeros_like(x2[0, :]),
+            args=(self.landmarks_kf, x2))
 
         cam_final = eulerAnglesToRotationMatrix(opt_R_t[0:3])
         cam_final[0:3, 3] = opt_R_t[3:]
