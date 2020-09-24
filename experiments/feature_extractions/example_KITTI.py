@@ -4,7 +4,7 @@ from read_datasets.KITTI import KITTI_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 
-error_n8p, error_8p = [], []
+error_8p, error_res_sk, error_res_rt, error_res_sk_rt = [], [], [], []
 
 
 def eval_camera_pose(cam, tracker, cam_gt):
@@ -35,6 +35,11 @@ def eval_camera_pose(cam, tracker, cam_gt):
     cam_opt_res_SK, _ = get_cam_pose_by_opt_res_error_SK(**kwargs)
     cam_opt_res_Rt, _ = get_cam_pose_by_opt_res_error_Rt(**kwargs)
     cam_opt_res_SK_Rt, _ = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
+
+    # error_8p.append(cam_8p)
+    # error_res_sk.append(cam_opt_res_SK)
+    # error_res_rt.append(cam_opt_res_Rt)
+    # error_res_sk_rt.append(cam_opt_res_SK_Rt)
 
     print("8PA:             {}".format(
         evaluate_error_in_transformation(

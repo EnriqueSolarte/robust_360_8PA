@@ -14,7 +14,9 @@ def run_sequence(**kwargs):
     print_log_files(kwargs["log_files"])
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []
-    while True:
+
+    # while True:
+    for _ in range(100):
         kwargs, ret = get_bearings(**kwargs)
         if not ret:
             break
@@ -36,13 +38,13 @@ def run_sequence(**kwargs):
         # ! Based on REPROJECTION
         # kwargs["cam_PnP_opt_rpj_Rt"], kwargs["loss_PnP"] = get_cam_pose_by_opt_rpj_Rt_pnp(**kwargs)
         # kwargs["cam_OURS_opt_prj_sk"], kwargs["loss_OURS_RPJ_ks"] = get_cam_pose_by_opt_rpj_SK(**kwargs)
-        kwargs = eval_cam_pose_error(**kwargs)
+        kwargs = eval_cam_pose_error(**kwargs, _print=False)
 
     return kwargs
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
     # scene = "2azQ1b91cZZ/0"
     # scene = "i5noydFURQK/0"
     scene = "sT4fr6TAbpF/0"
@@ -73,9 +75,9 @@ if __name__ == '__main__':
         iVal_Res_RtSK=(1, 1),
     )
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
         tracker=LKTracker(),
-        show_tracked_features=False,
+        show_tracked_features=True,
         sampling=10,
         extra="sampling10",
 
@@ -86,8 +88,8 @@ if __name__ == '__main__':
         max_trials=RansacEssentialMatrix.get_number_of_iteration(
             p_success=0.99, outliers=0.5, min_constraint=8),
         residual_threshold=1e-5,
-        verbose=True,
-        use_ransac=False)
+        verbose=False,
+        use_ransac=True)
 
     log_settings = dict(
         log_files=(os.path.dirname(os.path.dirname(__file__)) +

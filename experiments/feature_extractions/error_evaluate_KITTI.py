@@ -4,8 +4,6 @@ from read_datasets.KITTI import KITTI_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 
-error_n8p, error_8p = [], []
-
 
 def eval_camera_pose(cam, **kwargs):
     from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8p
@@ -44,20 +42,20 @@ def eval_camera_pose(cam, **kwargs):
     kwargs["cam_OURS_opt_res_ks_Rt"], kwargs[
         "loss_OURS_RES_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
 
-    kwargs = eval_cam_pose_error(**kwargs)
+    kwargs = eval_cam_pose_error(**kwargs, _print=False)
 
-    # print("8PA:             {}".format(
-    #     evaluate_error_in_transformation(transform_gt=cam_gt,
-    #                                      transform_est=cam_8p)))
-    # print("Opt_Res_SK:      {}".format(
-    #     evaluate_error_in_transformation(transform_gt=cam_gt,
-    #                                      transform_est=cam_opt_res_SK)))
-    # print("Opt_Res_Rt:      {}".format(
-    #     evaluate_error_in_transformation(transform_gt=cam_gt,
-    #                                      transform_est=cam_opt_res_Rt)))
-    # print("Opt_Res_SK_Rt:   {}".format(
-    #     evaluate_error_in_transformation(transform_gt=cam_gt,
-    #                                      transform_est=cam_opt_res_SK_Rt)))
+    print("8PA:             {}".format(
+        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
+                                         transform_est=kwargs["cam_8pa"])))
+    print("Opt_Res_SK:      {}".format(
+        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
+                                         transform_est=kwargs["cam_OURS_opt_res_ks"])))
+    print("Opt_Res_Rt:      {}".format(
+        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
+                                         transform_est=kwargs["cam_8pa_opt_res_Rt"])))
+    print("Opt_Res_SK_Rt:   {}".format(
+        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
+                                         transform_est=kwargs["cam_OURS_opt_res_ks_Rt"])))
 
     print("kf:{} - frm:{} - matches:{}".format(
         kwargs["tracker"].initial_frame.idx,
@@ -107,7 +105,7 @@ if __name__ == "__main__":
             p_success=0.99, outliers=0.5, min_constraint=8),
         residual_threshold=1e-5,
         verbose=True,
-        use_ransac=True)
+        use_ransac=False)
 
     log_settings = dict(
         log_files=(os.path.dirname(os.path.dirname(__file__)) +
@@ -124,7 +122,7 @@ if __name__ == "__main__":
     kwargs["results"]["kf"] = []
 
     # data.number_frames
-    for idx in range(i, 500):
+    for idx in range(i, 200):
         frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
         if idx == i:
             kwargs["tracker"].set_initial_frame(
