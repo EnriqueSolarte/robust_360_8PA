@@ -37,8 +37,7 @@ def eval_camera_pose(cam, **kwargs):
     kwargs["cam_8pa_opt_res_Rt"], kwargs[
         "loss_RES_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
     kwargs["cam_OURS_opt_res_ks_Rt"], kwargs[
-        "loss_OURS_RES_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(
-        **kwargs)
+        "loss_OURS_RES_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
 
     kwargs = eval_cam_pose_error(**kwargs)
 
@@ -55,9 +54,9 @@ def eval_camera_pose(cam, **kwargs):
     #     evaluate_error_in_transformation(transform_gt=cam_gt,
     #                                      transform_est=cam_opt_res_SK_Rt)))
 
-    print("kf:{} - frm:{} - matches:{}".format(kwargs["tracker"].initial_frame.idx,
-                                               kwargs["tracker"].tracked_frame.idx,
-                                               len(kwargs["tracker"].tracks)))
+    print("kf:{} - frm:{} - matches:{}".format(
+        kwargs["tracker"].initial_frame.idx,
+        kwargs["tracker"].tracked_frame.idx, len(kwargs["tracker"].tracks)))
     print(
         "====================================================================="
     )
@@ -104,7 +103,7 @@ if __name__ == "__main__":
         use_ransac=False)
 
     log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
-                                   "/utilities/camera_recovering.py",))
+                                   "/utilities/camera_recovering.py", ))
 
     kwargs = scene_settings
     kwargs.update(initial_values)
@@ -119,12 +118,12 @@ if __name__ == "__main__":
     for idx in range(i, 200):
         frame_curr = Frame(**data.get_frame(idx, return_dict=True), idx=idx)
         if idx == i:
-            kwargs["tracker"].set_initial_frame(
-                initial_frame=frame_curr,
-                extractor=Shi_Tomasi_Extractor(maxCorners=500,
-                                               qualityLevel=0.01,
-                                               minDistance=7,
-                                               blockSize=5))
+            kwargs["tracker"].set_initial_frame(initial_frame=frame_curr,
+                                                extractor=Shi_Tomasi_Extractor(
+                                                    maxCorners=500,
+                                                    qualityLevel=0.01,
+                                                    minDistance=7,
+                                                    blockSize=5))
             continue
 
         relative_pose = frame_curr.get_relative_pose(
@@ -133,8 +132,7 @@ if __name__ == "__main__":
 
         if camera_distance > threshold_camera_distance:
             kwargs["cam_gt"] = relative_pose
-            kwargs = eval_camera_pose(cam=data.camera_projection,
-                                      **kwargs)
+            kwargs = eval_camera_pose(cam=data.camera_projection, **kwargs)
             frame_prev = kwargs["tracker"].tracked_frame
             kwargs["tracker"].set_initial_frame(
                 initial_frame=frame_prev,

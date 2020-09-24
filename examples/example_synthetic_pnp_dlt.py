@@ -12,12 +12,11 @@ def evaluate_synthetic_points(theta_roi, phi_roi, n_pts, min_d, max_d,
     pnp_dlt = PnP_DLT()
 
     for _ in range(10):
-        pcl_a = generate_pcl_by_roi_theta_phi(
-            theta=theta_roi,
-            phi=phi_roi,
-            n_pts=n_pts,
-            min_d=min_d,
-            max_d=max_d)
+        pcl_a = generate_pcl_by_roi_theta_phi(theta=theta_roi,
+                                              phi=phi_roi,
+                                              n_pts=n_pts,
+                                              min_d=min_d,
+                                              max_d=max_d)
 
         pcl_b = np.linalg.inv(cam_gt).dot(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
@@ -25,16 +24,16 @@ def evaluate_synthetic_points(theta_roi, phi_roi, n_pts, min_d, max_d,
         cam_pnp = pnp_dlt.recoverPose(w=pcl_a.copy(), x=bearings_b.copy())
 
         error_8p.append(
-            evaluate_error_in_transformation(
-                transform_gt=cam_gt, transform_est=cam_pnp))
+            evaluate_error_in_transformation(transform_gt=cam_gt,
+                                             transform_est=cam_pnp))
 
         # ! 8PA
-        print("Q1-PnP: {} - {}".format(
-            np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
-        print("Q2-PnP: {} - {}".format(
-            np.median(error_8p, axis=0), len(error_8p)))
-        print("Q3-PnP: {} - {}".format(
-            np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
+        print("Q1-PnP: {} - {}".format(np.quantile(error_8p, 0.25, axis=0),
+                                       len(error_8p)))
+        print("Q2-PnP: {} - {}".format(np.median(error_8p, axis=0),
+                                       len(error_8p)))
+        print("Q3-PnP: {} - {}".format(np.quantile(error_8p, 0.75, axis=0),
+                                       len(error_8p)))
         print(
             "====================================================================="
         )

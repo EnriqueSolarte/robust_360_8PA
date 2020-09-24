@@ -31,27 +31,27 @@ def get_file_name(**kwargs):
 
 def plot_surfaces(**kwargs):
     titles = sorted(list(kwargs["results"].keys()))
-    fig = make_subplots(
-        subplot_titles=titles,
-        rows=2,
-        cols=4,
-        specs=[[{
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }], [{
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }]])
+    fig = make_subplots(subplot_titles=titles,
+                        rows=2,
+                        cols=4,
+                        specs=[[{
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }],
+                               [{
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }]])
 
     idxs = np.linspace(0, 7, 8).reshape(2, -1)
     for i, eval in enumerate(titles):
@@ -60,20 +60,19 @@ def plot_surfaces(**kwargs):
             results = msk(results, kwargs["mask_quantile"])
 
         loc = np.squeeze(np.where(idxs == i))
-        fig.add_trace(
-            go.Surface(
-                x=kwargs["v_grid"],
-                y=kwargs["v_grid"],
-                z=results.reshape((len(kwargs["v_grid"]), len(
-                    kwargs["v_grid"]))),
-                colorscale='Viridis',
-                showscale=False),
-            row=loc[0] + 1,
-            col=loc[1] + 1)
+        fig.add_trace(go.Surface(x=kwargs["v_grid"],
+                                 y=kwargs["v_grid"],
+                                 z=results.reshape((len(kwargs["v_grid"]),
+                                                    len(kwargs["v_grid"]))),
+                                 colorscale='Viridis',
+                                 showscale=False),
+                      row=loc[0] + 1,
+                      col=loc[1] + 1)
 
     def labels(key):
-        return dict(
-            xaxis_title='S', yaxis_title='K', zaxis_title='{}'.format(key))
+        return dict(xaxis_title='S',
+                    yaxis_title='K',
+                    zaxis_title='{}'.format(key))
 
     fig.update_layout(
         title_text=kwargs["filename"],
@@ -97,15 +96,17 @@ def eval_function(**kwargs):
     g8p_norm = norm_8pa(version=kwargs.get("opt_version", "v1"))
     g8p = EightPointAlgorithmGeneralGeometry()
     ransac = RansacEssentialMatrix(**kwargs)
-    kwargs["mask"] = get_mask_map_by_res_loc(
-        kwargs["data_scene"].shape, res=kwargs["res"], loc=kwargs["loc"])
+    kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
+                                             res=kwargs["res"],
+                                             loc=kwargs["loc"])
     # ! Getting initial data
     bearings_kf_all, bearings_frm_all, cam_gt, kwargs = track_features(
         **kwargs)
     e_gt = g8p_norm.get_e_from_cam_pose(cam_gt)
 
-    v = np.linspace(
-        start=kwargs["grid"][0], stop=kwargs["grid"][1], num=kwargs["grid"][2])
+    v = np.linspace(start=kwargs["grid"][0],
+                    stop=kwargs["grid"][1],
+                    num=kwargs["grid"][2])
     ss, kk = np.meshgrid(v, v)
 
     kwargs["v_grid"] = v
@@ -123,17 +124,16 @@ def eval_function(**kwargs):
     kwargs["results"]["inliers_pts_error_residual"] = np.zeros_like(
         kk.flatten())
 
-    cam_no_ransac = g8p.recover_pose_from_matches(
-        x1=bearings_kf_all.copy(),
-        x2=bearings_frm_all.copy(),
-        eval_current_solution=True)
-    cam_ransac = ransac.solve(
-        data=(bearings_kf_all.copy().T, bearings_frm_all.copy().T))
+    cam_no_ransac = g8p.recover_pose_from_matches(x1=bearings_kf_all.copy(),
+                                                  x2=bearings_frm_all.copy(),
+                                                  eval_current_solution=True)
+    cam_ransac = ransac.solve(data=(bearings_kf_all.copy().T,
+                                    bearings_frm_all.copy().T))
     bearings_kf_inliers = bearings_kf_all[:, ransac.current_inliers]
     bearings_frm_inliers = bearings_frm_all[:, ransac.current_inliers]
 
-    error_ransac = evaluate_error_in_transformation(
-        transform_est=cam_ransac, transform_gt=cam_gt)
+    error_ransac = evaluate_error_in_transformation(transform_est=cam_ransac,
+                                                    transform_gt=cam_gt)
     error_no_ransac = evaluate_error_in_transformation(
         transform_est=cam_no_ransac, transform_gt=cam_gt)
     print("Using RANSAC")
@@ -165,8 +165,9 @@ def eval_function(**kwargs):
         kwargs["results"]["all_pts_error_e"][
             i] = evaluate_error_in_essential_matrix(e_gt, e_hat)
         kwargs["results"]["all_pts_error_residual"][i] = np.sum(
-            g8p.residual_function_evaluation(
-                e=e_hat, x1=bearings_kf_norm_all, x2=bearings_frm_norm_all))
+            g8p.residual_function_evaluation(e=e_hat,
+                                             x1=bearings_kf_norm_all,
+                                             x2=bearings_frm_norm_all))
 
         bearings_kf_norm_inliers, T1 = g8p_norm.normalizer(
             bearings_kf_inliers, S, K)
@@ -183,8 +184,9 @@ def eval_function(**kwargs):
         kwargs["results"]["inliers_pts_error_e"][
             i] = evaluate_error_in_essential_matrix(e_gt, e_hat)
         kwargs["results"]["inliers_pts_error_residual"][i] = np.sum(
-            g8p.residual_function_evaluation(
-                e=e_hat, x1=bearings_kf_inliers, x2=bearings_frm_inliers))
+            g8p.residual_function_evaluation(e=e_hat,
+                                             x1=bearings_kf_inliers,
+                                             x2=bearings_frm_inliers))
 
         kwargs["num_features"] = g8p.current_count_features
         kwargs["ratio_out"] = ransac.current_rejection_ratio
@@ -234,10 +236,9 @@ if __name__ == '__main__':
         # extra="tangential_distance"
     )
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False)
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
     eval_function(**scene_settings, **features_setting, **ransac_parm,
                   **model_settings)

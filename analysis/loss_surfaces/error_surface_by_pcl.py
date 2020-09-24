@@ -24,11 +24,13 @@ def pcl_creation(**kwargs):
     if kwargs["pcl"] == "by_sampling":
         pcl_dense, pcl_dense_color, _ = data_scene.get_pcl(
             idx=kwargs["idx_frame"])
-        pcl, mask = mask_pcl_by_res_and_loc(
-            pcl=pcl_dense, loc=kwargs["loc"], res=kwargs["res"])
+        pcl, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
+                                            loc=kwargs["loc"],
+                                            res=kwargs["res"])
     else:
-        mask = get_mask_map_by_res_loc(
-            data_scene.shape, res=kwargs["res"], loc=kwargs["loc"])
+        mask = get_mask_map_by_res_loc(data_scene.shape,
+                                       res=kwargs["res"],
+                                       loc=kwargs["loc"])
         pcl = data_scene.get_pcl_from_key_features(
             idx=kwargs["idx_frame"],
             extractor=kwargs["feat_extractor"],
@@ -84,8 +86,9 @@ def eval_error_surface(**kwargs):
     plot_pcl_and_cameras(pcl[0:3, :].T, cam2=cam_a2b)
 
     e = g8p_norm.get_e_from_cam_pose(cam_a2b)
-    v = np.linspace(
-        start=kwargs["grid"][0], stop=kwargs["grid"][1], num=kwargs["grid"][2])
+    v = np.linspace(start=kwargs["grid"][0],
+                    stop=kwargs["grid"][1],
+                    num=kwargs["grid"][2])
     ss, kk = np.meshgrid(v, v)
 
     kwargs["v_grid"] = v
@@ -98,8 +101,8 @@ def eval_error_surface(**kwargs):
     kwargs["losses"]["loss_delta"] = np.zeros_like(kk.flatten())
     kwargs["losses"]["loss_pm"] = np.zeros_like(kk.flatten())
 
-    cam_hat_8pa = g8pa().recover_pose_from_matches(
-        x1=bearings_a.copy(), x2=bearings_b.copy())
+    cam_hat_8pa = g8pa().recover_pose_from_matches(x1=bearings_a.copy(),
+                                                   x2=bearings_b.copy())
     error_cam_8pa = evaluate_error_in_transformation(cam_hat_8pa, cam_a2b)
 
     for i in range(len(v) * len(v)):
@@ -122,8 +125,9 @@ def eval_error_surface(**kwargs):
         x2 = spherical_normalization(bearings_b_norm)
         C_2 = get_frobenius_norm(x1, x2)
 
-        C, A = get_frobenius_norm(
-            bearings_a_norm, bearings_b_norm, return_A=True)
+        C, A = get_frobenius_norm(bearings_a_norm,
+                                  bearings_b_norm,
+                                  return_A=True)
         kwargs["losses"]["loss_c"][i] = C
         kwargs["losses"]["loss_pm"][i] = np.nanmean(
             get_angle_between_vectors_arrays(bearings_a_norm, bearings_b_norm))
@@ -171,64 +175,55 @@ def eval_cam_error(rot_error, tra_error):
 
 def plot_contours(**kwargs):
     titles = sorted(list(kwargs["losses"].keys()))
-    fig = make_subplots(
-        subplot_titles=titles,
-        rows=2,
-        cols=4,
-        specs=[[{}, {}, {}, {}], [{}, {}, {}, {}]])
+    fig = make_subplots(subplot_titles=titles,
+                        rows=2,
+                        cols=4,
+                        specs=[[{}, {}, {}, {}], [{}, {}, {}, {}]])
 
     idxs = np.linspace(0, 7, 8).reshape(2, -1)
     kwargs["minimum"] = dict()
     for i, eval in enumerate(titles):
         # ! get min values
-        results = kwargs["losses"][eval].reshape((len(kwargs["v_grid"]),
-                                                  len(kwargs["v_grid"])))
-        min_val = np.unravel_index(
-            np.argmin(results, axis=None), results.shape)
-        kwargs["minimum"][eval] = kwargs["v_grid"][min_val[1]], kwargs[
-            "v_grid"][min_val[0]], results.min()
+        results = kwargs["losses"][eval].reshape(
+            (len(kwargs["v_grid"]), len(kwargs["v_grid"])))
+        min_val = np.unravel_index(np.argmin(results, axis=None),
+                                   results.shape)
+        kwargs["minimum"][eval] = kwargs["v_grid"][
+            min_val[1]], kwargs["v_grid"][min_val[0]], results.min()
         if eval in kwargs["mask_results"]:
             results = msk(results, kwargs["mask_quantile"])
         loc = np.squeeze(np.where(idxs == i))
-        fig.add_trace(
-            go.Contour(
-                x=kwargs["v_grid"],
-                y=kwargs["v_grid"],
-                z=results,
-                colorscale='Viridis',
-                showscale=False),
-            row=loc[0] + 1,
-            col=loc[1] + 1)
+        fig.add_trace(go.Contour(x=kwargs["v_grid"],
+                                 y=kwargs["v_grid"],
+                                 z=results,
+                                 colorscale='Viridis',
+                                 showscale=False),
+                      row=loc[0] + 1,
+                      col=loc[1] + 1)
 
         fig.update_xaxes(title_text="S", row=loc[0] + 1, col=loc[1] + 1)
         fig.update_yaxes(title_text="K", row=loc[0] + 1, col=loc[1] + 1)
-        fig.add_trace(
-            go.Scatter(
-                x=(1, ),
-                y=(1, ),
-                mode='markers',
-                marker=dict(size=8, color=_8PA_COLOR),
-                name="8PA"),
-            row=loc[0] + 1,
-            col=loc[1] + 1)
-        fig.add_trace(
-            go.Scatter(
-                x=(kwargs["minimum"][eval][0], ),
-                y=(kwargs["minimum"][eval][1], ),
-                name="min",
-                mode='markers',
-                marker=dict(size=10, color=MIN_COLOR)),
-            row=loc[0] + 1,
-            col=loc[1] + 1)
-        fig.add_trace(
-            go.Scatter(
-                x=(kwargs["Ours"]["S"], ),
-                y=(kwargs["Ours"]["K"], ),
-                name="Ours",
-                mode='markers',
-                marker=dict(size=8, color=OURS_COLOR)),
-            row=loc[0] + 1,
-            col=loc[1] + 1)
+        fig.add_trace(go.Scatter(x=(1, ),
+                                 y=(1, ),
+                                 mode='markers',
+                                 marker=dict(size=8, color=_8PA_COLOR),
+                                 name="8PA"),
+                      row=loc[0] + 1,
+                      col=loc[1] + 1)
+        fig.add_trace(go.Scatter(x=(kwargs["minimum"][eval][0], ),
+                                 y=(kwargs["minimum"][eval][1], ),
+                                 name="min",
+                                 mode='markers',
+                                 marker=dict(size=10, color=MIN_COLOR)),
+                      row=loc[0] + 1,
+                      col=loc[1] + 1)
+        fig.add_trace(go.Scatter(x=(kwargs["Ours"]["S"], ),
+                                 y=(kwargs["Ours"]["K"], ),
+                                 name="Ours",
+                                 mode='markers',
+                                 marker=dict(size=8, color=OURS_COLOR)),
+                      row=loc[0] + 1,
+                      col=loc[1] + 1)
 
     fig_file = "contour_{}.html".format(get_file_name(**kwargs))
 
@@ -240,27 +235,27 @@ def plot_contours(**kwargs):
 
 def plot_surfaces(**kwargs):
     titles = sorted(list(kwargs["losses"].keys()))
-    fig = make_subplots(
-        subplot_titles=titles,
-        rows=2,
-        cols=4,
-        specs=[[{
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }], [{
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }, {
-            'is_3d': True
-        }]])
+    fig = make_subplots(subplot_titles=titles,
+                        rows=2,
+                        cols=4,
+                        specs=[[{
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }, {
+                            'is_3d': True
+                        }],
+                               [{
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }, {
+                                   'is_3d': True
+                               }]])
 
     idxs = np.linspace(0, 7, 8).reshape(2, -1)
     for i, eval in enumerate(titles):
@@ -268,49 +263,42 @@ def plot_surfaces(**kwargs):
         if eval in kwargs["mask_results"]:
             results = msk(results, kwargs["mask_quantile"])
         loc = np.squeeze(np.where(idxs == i))
-        fig.add_trace(
-            go.Surface(
-                x=kwargs["v_grid"],
-                y=kwargs["v_grid"],
-                z=results.reshape((len(kwargs["v_grid"]), len(
-                    kwargs["v_grid"]))),
-                colorscale='Viridis',
-                showscale=False),
-            row=loc[0] + 1,
-            col=loc[1] + 1)
+        fig.add_trace(go.Surface(x=kwargs["v_grid"],
+                                 y=kwargs["v_grid"],
+                                 z=results.reshape((len(kwargs["v_grid"]),
+                                                    len(kwargs["v_grid"]))),
+                                 colorscale='Viridis',
+                                 showscale=False),
+                      row=loc[0] + 1,
+                      col=loc[1] + 1)
 
         if eval in ("error_rot", "error_tran"):
-            fig.add_trace(
-                go.Scatter3d(
-                    x=(kwargs["Ours"]["S"], ),
-                    y=(kwargs["Ours"]["K"], ),
-                    z=(kwargs["Ours"][eval], ),
-                    marker=dict(color=OURS_COLOR, size=5),
-                    name="Ours"),
-                row=loc[0] + 1,
-                col=loc[1] + 1)
-            fig.add_trace(
-                go.Scatter3d(
-                    x=(1, ),
-                    y=(1, ),
-                    z=(kwargs["8PA"][eval], ),
-                    marker=dict(color=_8PA_COLOR, size=5),
-                    name="8PA"),
-                row=loc[0] + 1,
-                col=loc[1] + 1)
-            fig.add_trace(
-                go.Scatter3d(
-                    x=(kwargs["minimum"][eval][0], ),
-                    y=(kwargs["minimum"][eval][1], ),
-                    z=(kwargs["minimum"][eval][2], ),
-                    marker=dict(color=MIN_COLOR, size=5),
-                    name="min"),
-                row=loc[0] + 1,
-                col=loc[1] + 1)
+            fig.add_trace(go.Scatter3d(x=(kwargs["Ours"]["S"], ),
+                                       y=(kwargs["Ours"]["K"], ),
+                                       z=(kwargs["Ours"][eval], ),
+                                       marker=dict(color=OURS_COLOR, size=5),
+                                       name="Ours"),
+                          row=loc[0] + 1,
+                          col=loc[1] + 1)
+            fig.add_trace(go.Scatter3d(x=(1, ),
+                                       y=(1, ),
+                                       z=(kwargs["8PA"][eval], ),
+                                       marker=dict(color=_8PA_COLOR, size=5),
+                                       name="8PA"),
+                          row=loc[0] + 1,
+                          col=loc[1] + 1)
+            fig.add_trace(go.Scatter3d(x=(kwargs["minimum"][eval][0], ),
+                                       y=(kwargs["minimum"][eval][1], ),
+                                       z=(kwargs["minimum"][eval][2], ),
+                                       marker=dict(color=MIN_COLOR, size=5),
+                                       name="min"),
+                          row=loc[0] + 1,
+                          col=loc[1] + 1)
 
     def labels(key):
-        return dict(
-            xaxis_title='S', yaxis_title='K', zaxis_title='{}'.format(key))
+        return dict(xaxis_title='S',
+                    yaxis_title='K',
+                    zaxis_title='{}'.format(key))
 
     fig_file = "surface_{}.html".format(get_file_name(**kwargs))
 

@@ -11,8 +11,9 @@ def main(**arg):
     data = MP3D_VO(scene=arg["scene"], basedir=path)
 
     pcl_dense, pcl_dense_color, _ = data.get_pcl(idx=arg["frame"])
-    pcl_dense, mask = mask_pcl_by_res_and_loc(
-        pcl=pcl_dense, res=arg["res"], loc=arg["loc"])
+    pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense,
+                                              res=arg["res"],
+                                              loc=arg["loc"])
     samples = np.random.randint(0, pcl_dense.shape[1], arg["samples"])
 
     bearings_a, bearings_b, cam_a2b = get_bearings_from_pcl(
@@ -31,17 +32,18 @@ def main(**arg):
 
 
 if __name__ == '__main__':
-    parameters = dict(
-        scene="1LXtFkjw3qL/1",
-        frame=100,
-        res=(55, 65),
-        loc=(0, 0),
-        samples=200,
-        noise=500,
-        outliers=0.05,
-        t_vector=(np.random.uniform(-0.5, 0.5), np.random.uniform(-0.5, 0.5),
-                  np.random.uniform(-0.5, 0.5)),
-        r_vector=(np.random.uniform(-10, 10), np.random.uniform(-10, 10),
-                  np.random.uniform(-10, 10)))
+    parameters = dict(scene="1LXtFkjw3qL/1",
+                      frame=100,
+                      res=(55, 65),
+                      loc=(0, 0),
+                      samples=200,
+                      noise=500,
+                      outliers=0.05,
+                      t_vector=(np.random.uniform(-0.5, 0.5),
+                                np.random.uniform(-0.5, 0.5),
+                                np.random.uniform(-0.5, 0.5)),
+                      r_vector=(np.random.uniform(-10, 10),
+                                np.random.uniform(-10, 10),
+                                np.random.uniform(-10, 10)))
 
     main(**parameters)

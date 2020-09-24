@@ -36,7 +36,7 @@ def get_file_name(**kwargs):
 
 def plot_bar_errors(**kwargs):
     results = list(kwargs["results"].keys())
-    titles = [dt for dt in results if dt not in ("kf",)]
+    titles = [dt for dt in results if dt not in ("kf", )]
 
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
@@ -71,9 +71,9 @@ def plot_bar_errors(**kwargs):
 
                 color = get_color(dt_r)
 
-                fig.add_trace(go.Bar(x=(dt_r,),
+                fig.add_trace(go.Bar(x=(dt_r, ),
                                      y=(kwargs["quartiles"][dt_r + "_" +
-                                                            quartile],),
+                                                            quartile], ),
                                      name=dt_r + "_" + quartile,
                                      marker_color=color),
                               row=row,
@@ -94,7 +94,7 @@ def plot_bar_errors(**kwargs):
 
 def plot_errors(**kwargs):
     results = list(kwargs["results"].keys())
-    titles = [dt for dt in results if dt not in ("kf",)]
+    titles = [dt for dt in results if dt not in ("kf", )]
 
     dt_results = list()
     dt_results.append([dt for dt in titles if "rot" in dt])
@@ -193,4 +193,3 @@ def print_log_files(list_files):
                 print(f.read())
         except:
             print("Could register log file{}".format(file))
-

@@ -22,7 +22,8 @@ COLOR_GENERAL = 'red'
 
 def sampling_bearings(**kwargs):
     number_of_samples = kwargs["bearings"]["kf"].shape[1]
-    samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
+    samples = np.random.randint(0, number_of_samples,
+                                kwargs.get("sampling", number_of_samples))
     kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
     kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
     return kwargs
@@ -68,8 +69,8 @@ def eval_cam_pose_error(_print=True, **kwargs):
     for cam in cams:
         cam_pose = kwargs[cam]
         error_name = "error_" + cam
-        error = evaluate_error_in_transformation(
-            transform_est=cam_pose, transform_gt=cam_gt)
+        error = evaluate_error_in_transformation(transform_est=cam_pose,
+                                                 transform_gt=cam_gt)
         if error_name + "_rot" not in kwargs["results"].keys():
             kwargs["results"][error_name + "_rot"] = [error[0]]
             kwargs["results"][error_name + "_tran"] = [error[1]]
@@ -179,9 +180,11 @@ def track_features(**kwargs):
 
 
 def save_bearings(**kwargs):
-    dt = pd.DataFrame(np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
+    dt = pd.DataFrame(
+        np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
     dirname = os.path.join(os.path.dirname(kwargs["filename"]), "frames")
-    file_bearings = str(kwargs["tracker"].initial_frame.idx) + str(kwargs["tracker"].tracked_frame.idx) + ".txt"
+    file_bearings = str(kwargs["tracker"].initial_frame.idx) + str(
+        kwargs["tracker"].tracked_frame.idx) + ".txt"
     file_bearings = os.path.join(dirname, file_bearings)
     create_dir(dirname, delete_previous=False)
     dt.to_csv(file_bearings, header=None, index=None)

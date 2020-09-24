@@ -80,7 +80,6 @@ if __name__ == '__main__':
         show_tracked_features=True,
         sampling=10,
         extra="sampling10",
-
     )
 
     ransac_parm = dict(
@@ -91,9 +90,8 @@ if __name__ == '__main__':
         verbose=False,
         use_ransac=True)
 
-    log_settings = dict(
-        log_files=(os.path.dirname(os.path.dirname(__file__)) +
-                   "/utilities/camera_recovering.py", ))
+    log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
+                                   "/utilities/camera_recovering.py", ))
 
     kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm,
                           **initial_values, **log_settings)

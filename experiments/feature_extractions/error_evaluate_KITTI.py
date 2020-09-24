@@ -48,14 +48,17 @@ def eval_camera_pose(cam, **kwargs):
         evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
                                          transform_est=kwargs["cam_8pa"])))
     print("Opt_Res_SK:      {}".format(
-        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
-                                         transform_est=kwargs["cam_OURS_opt_res_ks"])))
+        evaluate_error_in_transformation(
+            transform_gt=kwargs["cam_gt"],
+            transform_est=kwargs["cam_OURS_opt_res_ks"])))
     print("Opt_Res_Rt:      {}".format(
-        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
-                                         transform_est=kwargs["cam_8pa_opt_res_Rt"])))
+        evaluate_error_in_transformation(
+            transform_gt=kwargs["cam_gt"],
+            transform_est=kwargs["cam_8pa_opt_res_Rt"])))
     print("Opt_Res_SK_Rt:   {}".format(
-        evaluate_error_in_transformation(transform_gt=kwargs["cam_gt"],
-                                         transform_est=kwargs["cam_OURS_opt_res_ks_Rt"])))
+        evaluate_error_in_transformation(
+            transform_gt=kwargs["cam_gt"],
+            transform_est=kwargs["cam_OURS_opt_res_ks_Rt"])))
 
     print("kf:{} - frm:{} - matches:{}".format(
         kwargs["tracker"].initial_frame.idx,
@@ -107,9 +110,8 @@ if __name__ == "__main__":
         verbose=True,
         use_ransac=False)
 
-    log_settings = dict(
-        log_files=(os.path.dirname(os.path.dirname(__file__)) +
-                   "/utilities/camera_recovering.py", ))
+    log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
+                                   "/utilities/camera_recovering.py", ))
 
     # kwargs = dict()
     kwargs = scene_settings

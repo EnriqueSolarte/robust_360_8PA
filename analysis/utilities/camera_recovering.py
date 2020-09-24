@@ -27,10 +27,9 @@ def residuals_error_R_T(parameters, bearings_kf, bearings_frm):
 
     cam_pose = eulerAnglesToRotationMatrix((r0, r1, r2))
     cam_pose[0:3, 3] = np.array((t0, t1, t2)).copy()
-    residual = projected_distance(
-        e=solver.get_e_from_cam_pose(cam_pose),
-        x1=bearings_kf,
-        x2=bearings_frm)
+    residual = projected_distance(e=solver.get_e_from_cam_pose(cam_pose),
+                                  x1=bearings_kf,
+                                  x2=bearings_frm)
     return residual
 
 
@@ -127,16 +126,19 @@ def res_error_S_K(parameters, bearings_kf, bearings_frm):
     bearings_kf_norm, t1 = normalizer_s_k(x=bearings_kf, s=s, k=k)
     bearings_frm_norm, t2 = normalizer_s_k(x=bearings_frm, s=s, k=k)
 
-    e_norm, sigma, A = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm, return_all=True)
+    e_norm, sigma, A = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                                       x2=bearings_frm_norm,
+                                                       return_all=True)
     C = np.linalg.norm(A.T.dot(A), ord="fro")
     # # # ! De-normalization
     e_hat = t1.T @ e_norm @ t2
-    residuals_error = projected_distance(
-        e=e_hat, x1=bearings_kf, x2=bearings_frm)
+    residuals_error = projected_distance(e=e_hat,
+                                         x1=bearings_kf,
+                                         x2=bearings_frm)
 
-    norm_residuals_error = epipolar_constraint(
-        e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
+    norm_residuals_error = epipolar_constraint(e=e_norm,
+                                               x1=bearings_kf_norm,
+                                               x2=bearings_frm_norm)
     # TODO KS loss function
     # residuals_b = np.sum(norm_residuals_error)
     # residuals_b = residuals_b * sigma[-1]
@@ -164,16 +166,18 @@ def get_cam_pose_by_opt_res_error_SK(**kwargs):
     print("S:{} K:{}".format(s, k))
     print("Iterations: {}".format(info[2]))
     print("termination: {}".format(info[3]))
-    bearings_kf_norm, t1 = normalizer_s_k(
-        x=kwargs["bearings"]["kf"].copy(), s=s, k=k)
+    bearings_kf_norm, t1 = normalizer_s_k(x=kwargs["bearings"]["kf"].copy(),
+                                          s=s,
+                                          k=k)
     # s = opt_k_s[2]
     # k = opt_k_s[3]
     # print("S:{} K:{}".format(s, k))
-    bearings_frm_norm, t2 = normalizer_s_k(
-        x=kwargs["bearings"]["frm"].copy(), s=s, k=k)
+    bearings_frm_norm, t2 = normalizer_s_k(x=kwargs["bearings"]["frm"].copy(),
+                                           s=s,
+                                           k=k)
 
-    e_norm = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm)
+    e_norm = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                             x2=bearings_frm_norm)
     e_hat = t1.T @ e_norm @ t2
 
     cam_hat = solver.recover_pose_from_e(
@@ -181,10 +185,9 @@ def get_cam_pose_by_opt_res_error_SK(**kwargs):
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy(),
     )
-    residual = projected_distance(
-        e=e_hat,
-        x1=kwargs["bearings"]['kf'].copy(),
-        x2=kwargs["bearings"]['frm'].copy())
+    residual = projected_distance(e=e_hat,
+                                  x1=kwargs["bearings"]['kf'].copy(),
+                                  x2=kwargs["bearings"]['frm'].copy())
     return cam_hat, np.sum(residual**2)
 
 
@@ -197,12 +200,14 @@ def rpj_S_K_const_lm(parameters, bearings_kf, bearings_frm, landmarks_kf):
     bearings_kf_norm, t1 = normalizer_s_k(x=bearings_kf, s=s, k=k)
     bearings_frm_norm, t2 = normalizer_s_k(x=bearings_frm, s=s, k=k)
 
-    e_norm, sigma, A = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm, return_all=True)
+    e_norm, sigma, A = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                                       x2=bearings_frm_norm,
+                                                       return_all=True)
     C = np.linalg.norm(A.T.dot(A), ord="fro")
     e_hat = t1.T @ e_norm @ t2
-    cam_hat = solver.recover_pose_from_e(
-        E=e_hat, x1=bearings_kf, x2=bearings_frm)
+    cam_hat = solver.recover_pose_from_e(E=e_hat,
+                                         x1=bearings_kf,
+                                         x2=bearings_frm)
     # landmarks_kf_ = solver.triangulate_points_from_cam_pose(
     #     cam_pose=cam_hat,
     #     x1=bearings_kf.copy(),
@@ -211,13 +216,15 @@ def rpj_S_K_const_lm(parameters, bearings_kf, bearings_frm, landmarks_kf):
     landmarks_frm_hat = np.linalg.inv(cam_hat) @ landmarks_kf
     reprojection_error = get_projection_error_between_vectors_arrays(
         array_ref=bearings_frm, array_vector=landmarks_frm_hat[0:3, :])
-    residuals_error = projected_distance(
-        e=e_hat, x1=bearings_kf, x2=bearings_frm)
-    norm_residuals_error = epipolar_constraint(
-        e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
+    residuals_error = projected_distance(e=e_hat,
+                                         x1=bearings_kf,
+                                         x2=bearings_frm)
+    norm_residuals_error = epipolar_constraint(e=e_norm,
+                                               x1=bearings_kf_norm,
+                                               x2=bearings_frm_norm)
     # TODO KS_RT loss function
-    residuals_b = sigma[-1] * np.sum(abs(residuals_error)) / (
-        abs(reprojection_error))
+    residuals_b = sigma[-1] * np.sum(
+        abs(residuals_error)) / (abs(reprojection_error))
     return np.ones_like(bearings_kf[0, :]) * residuals_b
     # return np.array((
     #     np.sum(abs(residuals_error)),
@@ -255,16 +262,18 @@ def get_cam_pose_by_opt_rpj_SK(**kwargs):
     print("S:{} K:{}".format(s, k))
     print("Iterations: {}".format(info[2]))
     print("termination: {}".format(info[3]))
-    bearings_kf_norm, t1 = normalizer_s_k(
-        x=kwargs["bearings"]["kf"].copy(), s=s, k=k)
+    bearings_kf_norm, t1 = normalizer_s_k(x=kwargs["bearings"]["kf"].copy(),
+                                          s=s,
+                                          k=k)
     # s = opt_k_s[2]
     # k = opt_k_s[3]
     # print("S:{} K:{}".format(s, k))
-    bearings_frm_norm, t2 = normalizer_s_k(
-        x=kwargs["bearings"]["frm"].copy(), s=s, k=k)
+    bearings_frm_norm, t2 = normalizer_s_k(x=kwargs["bearings"]["frm"].copy(),
+                                           s=s,
+                                           k=k)
 
-    e_norm = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm)
+    e_norm = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                             x2=bearings_frm_norm)
     e_hat = t2.T @ e_norm @ t1
 
     cam_hat = solver.recover_pose_from_e(
@@ -316,11 +325,13 @@ def residuals_error_RTKS(parameters, bearings_kf, bearings_frm):
     #     e_hat=e_hat
     # )
 
-    residuals_error = projected_distance(
-        e=e_rt, x1=bearings_kf, x2=bearings_frm)
+    residuals_error = projected_distance(e=e_rt,
+                                         x1=bearings_kf,
+                                         x2=bearings_frm)
 
-    norm_residuals_error = epipolar_constraint(
-        e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
+    norm_residuals_error = epipolar_constraint(e=e_norm,
+                                               x1=bearings_kf_norm,
+                                               x2=bearings_frm_norm)
     # TODO EnriqueSolarte
     residuals_b = norm_residuals_error / np.max(abs(norm_residuals_error))
     residuals_a = residuals_error / np.max(abs(residuals_error))
@@ -391,8 +402,9 @@ def residuals_error_KS_RT(parameters, bearings_kf, bearings_frm, s, k):
     e_rt = solver.get_e_from_cam_pose(cam_pose)
     e_norm = np.linalg.inv(n1).T @ e_rt @ np.linalg.inv(n2)
 
-    norm_residuals_error = epipolar_constraint(
-        e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
+    norm_residuals_error = epipolar_constraint(e=e_norm,
+                                               x1=bearings_kf_norm,
+                                               x2=bearings_frm_norm)
     # TODO KS_RT loss function
     residuals_b = np.sum(norm_residuals_error)
     return np.ones_like(bearings_kf[0, :]) * residuals_b

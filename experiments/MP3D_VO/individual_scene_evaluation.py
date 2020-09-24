@@ -7,14 +7,13 @@ if __name__ == '__main__':
     for sc in scene_list:
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
-        scene_settings = dict(
-            data_scene=data,
-            idx_frame=0,
-            distance_threshold=0.5,
-            res=(360, 180),
-            loc=(0, 0),
-            extra="ALL_POINTS",
-            special_eval=True)
+        scene_settings = dict(data_scene=data,
+                              idx_frame=0,
+                              distance_threshold=0.5,
+                              res=(360, 180),
+                              loc=(0, 0),
+                              extra="ALL_POINTS",
+                              special_eval=True)
         initial_values = dict(
             iVal_Res_SK=(1, 1),
             iVal_Rpj_SK=(1, 1),
@@ -33,15 +32,19 @@ if __name__ == '__main__':
             verbose=True,
             use_ransac=False)
 
-        log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
-                                       "/utilities/camera_recovering.py",),
-                            filename=get_file_name(file_src=__file__,
-                                                   **scene_settings, **features_setting, **ransac_parm,
-                                                   **initial_values,
-                                                   ),
-                            save_bearings=True)
-        kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm,
-                              **initial_values, **log_settings)
+        log_settings = dict(
+            log_files=(os.path.dirname(os.path.dirname(__file__)) +
+                       "/utilities/camera_recovering.py", ),
+            filename=get_file_name(
+                file_src=__file__,
+                **scene_settings,
+                **features_setting,
+                **ransac_parm,
+                **initial_values,
+            ),
+            save_bearings=True)
+        kwargs = run_sequence(**scene_settings, **features_setting,
+                              **ransac_parm, **initial_values, **log_settings)
 
         plot_errors(**kwargs)
         plot_bar_errors(**kwargs)

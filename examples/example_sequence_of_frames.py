@@ -15,8 +15,8 @@ def eval_camera_pose(tracker, cam_gt):
     bearings_kf = cam.pixel2normalized_vector(matches[0])
     bearings_frm = cam.pixel2normalized_vector(matches[1])
 
-    cam_8p = g8p.recover_pose_from_matches(
-        x1=bearings_kf.copy(), x2=bearings_frm.copy())
+    cam_8p = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
+                                           x2=bearings_frm.copy())
 
     # # ! prior motion
     # prior_motion = cam_8p[0:3, 3]
@@ -30,36 +30,36 @@ def eval_camera_pose(tracker, cam_gt):
     # cam_8p_norm = extend_SO3_to_homogenous(rot.T).dot(cam_a2b_n8p_rot).dot(
     #     extend_SO3_to_homogenous(rot))
 
-    cam_8p_norm = g8p_norm.recover_pose_from_matches(
-        x1=bearings_kf.copy(), x2=bearings_frm.copy())
+    cam_8p_norm = g8p_norm.recover_pose_from_matches(x1=bearings_kf.copy(),
+                                                     x2=bearings_frm.copy())
 
     error_8p.append(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_8p))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_8p))
     error_n8p.append(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_8p_norm))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_8p_norm))
 
     print(
         "====================================================================="
     )
     # ! Ours' method
-    print("Q1-ours:{} -{}".format(
-        np.quantile(error_n8p, 0.25, axis=0), len(error_n8p)))
-    print("Q2-ours:{} -{}".format(
-        np.median(error_n8p, axis=0), len(error_n8p)))
-    print("Q3-ours:{} -{}".format(
-        np.quantile(error_n8p, 0.75, axis=0), len(error_n8p)))
+    print("Q1-ours:{} -{}".format(np.quantile(error_n8p, 0.25, axis=0),
+                                  len(error_n8p)))
+    print("Q2-ours:{} -{}".format(np.median(error_n8p, axis=0),
+                                  len(error_n8p)))
+    print("Q3-ours:{} -{}".format(np.quantile(error_n8p, 0.75, axis=0),
+                                  len(error_n8p)))
 
     print(
         "====================================================================="
     )
     # ! 8PA
-    print("Q1-8PA:{} - {}".format(
-        np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
+    print("Q1-8PA:{} - {}".format(np.quantile(error_8p, 0.25, axis=0),
+                                  len(error_8p)))
     print("Q2-8PA:{} - {}".format(np.median(error_8p, axis=0), len(error_8p)))
-    print("Q3-8PA:{} - {}".format(
-        np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
+    print("Q3-8PA:{} - {}".format(np.quantile(error_8p, 0.75, axis=0),
+                                  len(error_8p)))
     print(
         "====================================================================="
     )
@@ -83,12 +83,12 @@ if __name__ == '__main__':
     i = 0
 
     for idx in range(dt.number_frames):
-        frame_curr = Frame(
-            **dt.get_frame(idx, return_dict=True), **dict(idx=idx))
+        frame_curr = Frame(**dt.get_frame(idx, return_dict=True),
+                           **dict(idx=idx))
 
         if idx == i:
-            tracker.set_initial_frame(
-                initial_frame=frame_curr, extractor=feat_extractor)
+            tracker.set_initial_frame(initial_frame=frame_curr,
+                                      extractor=feat_extractor)
             continue
 
         relative_pose = frame_curr.get_relative_pose(
@@ -98,8 +98,8 @@ if __name__ == '__main__':
         if camera_distance > threshold_camera_distance:
             eval_camera_pose(tracker=tracker, cam_gt=relative_pose)
             frame_prev = tracker.tracked_frame
-            tracker.set_initial_frame(
-                initial_frame=frame_prev, extractor=feat_extractor)
+            tracker.set_initial_frame(initial_frame=frame_prev,
+                                      extractor=feat_extractor)
             relative_pose = frame_curr.get_relative_pose(
                 key_frame=tracker.initial_frame)
             camera_distance = np.linalg.norm(relative_pose[0:3, 3])
