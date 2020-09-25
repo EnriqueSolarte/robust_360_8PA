@@ -12,18 +12,16 @@ if __name__ == '__main__':
 
     data = MP3D_VO(scene=scene, basedir=basedir)
 
-    scene_settings = dict(
-        data_scene=data,
-        idx_frame=idx_frame,
-        distance_threshold=0.5,
-        res=ress[3],
-        loc=(0, 0),
-        extra="test1")
+    scene_settings = dict(data_scene=data,
+                          idx_frame=idx_frame,
+                          distance_threshold=0.5,
+                          res=ress[3],
+                          loc=(0, 0),
+                          extra="test1")
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False)
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
     ransac_parm = dict(
         min_samples=8,
@@ -56,8 +54,8 @@ if __name__ == '__main__':
 
     for i in range(len(tmps[0]["results"]["8pa_error_rot"])):
         mean_error["results"]["8pa_error_rot"].append(
-            np.mean(
-                [tmps[j]["results"]["8pa_error_rot"][i] for j in range(n)]))
+            np.mean([tmps[j]["results"]["8pa_error_rot"][i]
+                     for j in range(n)]))
         mean_error["results"]["norm_8pa_error_rot"].append(
             np.mean([
                 tmps[j]["results"]["norm_8pa_error_rot"][i] for j in range(n)

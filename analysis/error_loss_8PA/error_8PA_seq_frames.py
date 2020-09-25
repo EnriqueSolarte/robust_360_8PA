@@ -31,17 +31,19 @@ def plot(**kwargs):
         titles = [dt for dt in results if dt not in ("kf", "features")]
     else:
         titles = [dt for dt in results if dt not in ("kf", "rejections")]
-    fig = make_subplots(
-        subplot_titles=titles, rows=2, cols=2, specs=[[{}, {}], [{}, {}]])
+    fig = make_subplots(subplot_titles=titles,
+                        rows=2,
+                        cols=2,
+                        specs=[[{}, {}], [{}, {}]])
 
     idxs = np.linspace(0, 3, 4).reshape(2, -1)
     for i, dt in enumerate(titles):
         loc = np.squeeze(np.where(idxs == i))
         row, col = loc[0] + 1, loc[1] + 1
-        fig.add_trace(
-            go.Scatter(x=kwargs["results"]["kf"], y=kwargs["results"][dt]),
-            row=row,
-            col=col)
+        fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
+                                 y=kwargs["results"][dt]),
+                      row=row,
+                      col=col)
 
         fig.update_xaxes(title_text="Kfrm idx", row=row, col=col)
         fig.update_yaxes(title_text=dt, row=row, col=col)
@@ -70,12 +72,12 @@ def eval_function(**kwargs):
             break
         if kwargs.get("use_ransac", False):
             # ! Solving by using RANSAC
-            cam_8pa = ransac.solve(
-                data=(bearings_kf.copy().T, bearings_frm.copy().T))
+            cam_8pa = ransac.solve(data=(bearings_kf.copy().T,
+                                         bearings_frm.copy().T))
             num_inliers = sum(ransac.current_inliers)
             num_of_samples = len(ransac.current_inliers)
-            kwargs["results"]["rejections"].append(
-                1 - (num_inliers / num_of_samples))
+            kwargs["results"]["rejections"].append(1 - (num_inliers /
+                                                        num_of_samples))
             kwargs["results"]["residuals"].append(ransac.current_residual)
         else:
             # ! SOLVING USING ALL MATCHES
@@ -86,8 +88,8 @@ def eval_function(**kwargs):
             kwargs["results"]["features"].append(solver.current_count_features)
             kwargs["results"]["residuals"].append(solver.current_residual)
 
-        error = evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_8pa)
+        error = evaluate_error_in_transformation(transform_gt=cam_gt,
+                                                 transform_est=cam_8pa)
         kwargs["results"]["error_rot"].append(error[0])
         kwargs["results"]["error_tran"].append(error[1])
         kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
@@ -133,9 +135,8 @@ if __name__ == '__main__':
         # extra="tangential_distance"
     )
 
-    features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(),
-        tracker=LKTracker(),
-        show_tracked_features=False)
+    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
+                            tracker=LKTracker(),
+                            show_tracked_features=False)
 
     eval_function(**scene_settings, **features_setting, **ransac_parm)

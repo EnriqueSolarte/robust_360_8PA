@@ -4,7 +4,7 @@ from read_datasets.KITTI import KITTI_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 
-error_n8p, error_8p = [], []
+error_8p, error_res_sk, error_res_rt, error_res_sk_rt = [], [], [], []
 
 
 def eval_camera_pose(cam, tracker, cam_gt):
@@ -36,18 +36,23 @@ def eval_camera_pose(cam, tracker, cam_gt):
     cam_opt_res_Rt, _ = get_cam_pose_by_opt_res_error_Rt(**kwargs)
     cam_opt_res_SK_Rt, _ = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
 
+    # error_8p.append(cam_8p)
+    # error_res_sk.append(cam_opt_res_SK)
+    # error_res_rt.append(cam_opt_res_Rt)
+    # error_res_sk_rt.append(cam_opt_res_SK_Rt)
+
     print("8PA:             {}".format(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_8p)))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_8p)))
     print("Opt_Res_SK:      {}".format(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_opt_res_SK)))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_opt_res_SK)))
     print("Opt_Res_Rt:      {}".format(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_opt_res_Rt)))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_opt_res_Rt)))
     print("Opt_Res_SK_Rt:   {}".format(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_opt_res_SK_Rt)))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_opt_res_SK_Rt)))
 
     print("kf:{} - frm:{} - matches:{}".format(tracker.initial_frame.idx,
                                                tracker.tracked_frame.idx,
@@ -80,10 +85,9 @@ if __name__ == "__main__":
         camera_distance = np.linalg.norm(relative_pose[0:3, 3])
 
         if camera_distance > threshold_camera_distance:
-            eval_camera_pose(
-                cam=data.camera_projection,
-                tracker=tracker,
-                cam_gt=relative_pose)
+            eval_camera_pose(cam=data.camera_projection,
+                             tracker=tracker,
+                             cam_gt=relative_pose)
             frame_prev = tracker.tracked_frame
             tracker.set_initial_frame(
                 initial_frame=frame_prev,

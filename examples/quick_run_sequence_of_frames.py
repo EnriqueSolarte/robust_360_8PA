@@ -22,39 +22,39 @@ def eval_camera_pose(**kwargs):
     bearings_kf = cam.pixel2normalized_vector(matches[0])
     bearings_frm = cam.pixel2normalized_vector(matches[1])
 
-    cam_8p = g8p_.recover_pose_from_matches(
-        x1=bearings_kf.copy(), x2=bearings_frm.copy())
+    cam_8p = g8p_.recover_pose_from_matches(x1=bearings_kf.copy(),
+                                            x2=bearings_frm.copy())
 
-    cam_8p_norm = g8p_n.recover_pose_from_matches(
-        x1=bearings_kf.copy(), x2=bearings_frm.copy())
+    cam_8p_norm = g8p_n.recover_pose_from_matches(x1=bearings_kf.copy(),
+                                                  x2=bearings_frm.copy())
 
     error_8p.append(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_8p))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_8p))
     error_n8p.append(
-        evaluate_error_in_transformation(
-            transform_gt=cam_gt, transform_est=cam_8p_norm))
+        evaluate_error_in_transformation(transform_gt=cam_gt,
+                                         transform_est=cam_8p_norm))
 
     print(
         "====================================================================="
     )
     # ! Ours' method
-    print("Q1-ours:{} -{}".format(
-        np.quantile(error_n8p, 0.25, axis=0), len(error_n8p)))
-    print("Q2-ours:{} -{}".format(
-        np.median(error_n8p, axis=0), len(error_n8p)))
-    print("Q3-ours:{} -{}".format(
-        np.quantile(error_n8p, 0.75, axis=0), len(error_n8p)))
+    print("Q1-ours:{} -{}".format(np.quantile(error_n8p, 0.25, axis=0),
+                                  len(error_n8p)))
+    print("Q2-ours:{} -{}".format(np.median(error_n8p, axis=0),
+                                  len(error_n8p)))
+    print("Q3-ours:{} -{}".format(np.quantile(error_n8p, 0.75, axis=0),
+                                  len(error_n8p)))
 
     print(
         "====================================================================="
     )
     # ! 8PA
-    print("Q1-8PA:{} - {}".format(
-        np.quantile(error_8p, 0.25, axis=0), len(error_8p)))
+    print("Q1-8PA:{} - {}".format(np.quantile(error_8p, 0.25, axis=0),
+                                  len(error_8p)))
     print("Q2-8PA:{} - {}".format(np.median(error_8p, axis=0), len(error_8p)))
-    print("Q3-8PA:{} - {}".format(
-        np.quantile(error_8p, 0.75, axis=0), len(error_8p)))
+    print("Q3-8PA:{} - {}".format(np.quantile(error_8p, 0.75, axis=0),
+                                  len(error_8p)))
     print(
         "====================================================================="
     )
@@ -66,8 +66,9 @@ def run_sequence_of_frames(**kwargs):
         path = kwargs["basedir"]
         kwargs["data_scene"] = MP3D_VO(scene=scene, basedir=path)
 
-    kwargs["mask"] = get_mask_map_by_res_loc(
-        kwargs["data_scene"].shape, res=kwargs["res"], loc=kwargs["loc"])
+    kwargs["mask"] = get_mask_map_by_res_loc(kwargs["data_scene"].shape,
+                                             res=kwargs["res"],
+                                             loc=kwargs["loc"])
     initial_frame = kwargs["idx_frame"]
     idx = initial_frame
     while True:

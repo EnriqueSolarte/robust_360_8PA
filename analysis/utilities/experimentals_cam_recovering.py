@@ -18,11 +18,13 @@ def residuals_error_RKS(parameters, bearings_kf, bearings_frm):
     bearings_kf_norm, n1 = normalizer_rsk(x=bearings_kf, s=s, k=k, r=r)
     bearings_frm_norm, n2 = normalizer_rsk(x=bearings_frm, s=s, k=k, r=r)
 
-    e_norm, sigma, A = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm, return_all=True)
+    e_norm, sigma, A = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                                       x2=bearings_frm_norm,
+                                                       return_all=True)
 
-    norm_residuals_error = projected_distance(
-        e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
+    norm_residuals_error = projected_distance(e=e_norm,
+                                              x1=bearings_kf_norm,
+                                              x2=bearings_frm_norm)
     # e_hat = n1.T @ e_norm @ n1
     # residuals_error = projected_distance(
     #     e=e_hat,
@@ -62,14 +64,18 @@ def get_cam_pose_by_opt_res_error_RSK(**kwargs):
         bearings_frm=kwargs["bearings"]["frm"].copy(),
     )
 
-    bearings_kf_norm, t1 = normalizer_rsk(
-        x=kwargs["bearings"]["kf"].copy(), s=s, k=k, r=r)
+    bearings_kf_norm, t1 = normalizer_rsk(x=kwargs["bearings"]["kf"].copy(),
+                                          s=s,
+                                          k=k,
+                                          r=r)
 
-    bearings_frm_norm, t2 = normalizer_rsk(
-        x=kwargs["bearings"]["frm"].copy(), s=s, k=k, r=r)
+    bearings_frm_norm, t2 = normalizer_rsk(x=kwargs["bearings"]["frm"].copy(),
+                                           s=s,
+                                           k=k,
+                                           r=r)
 
-    e_norm = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm)
+    e_norm = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                             x2=bearings_frm_norm)
     e_hat = t2.T @ e_norm @ t1
 
     cam_final = solver.recover_pose_from_e(
@@ -86,16 +92,19 @@ def residuals_error_Cxyz(parameters, bearings_kf, bearings_frm):
     bearings_kf_norm, n1 = normalizer_Cxyz(x=bearings_kf, Cxyz=parameters)
     bearings_frm_norm, n2 = normalizer_Cxyz(x=bearings_frm, Cxyz=parameters)
 
-    e_norm, sigma, A = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm, return_all=True)
+    e_norm, sigma, A = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                                       x2=bearings_frm_norm,
+                                                       return_all=True)
     c_fro_norm = np.linalg.norm(A.T.dot(A), ord="fro")
 
     e_hat = n1.T @ e_norm @ n2
-    residuals_error = projected_distance(
-        e=e_hat, x1=bearings_kf, x2=bearings_frm)
+    residuals_error = projected_distance(e=e_hat,
+                                         x1=bearings_kf,
+                                         x2=bearings_frm)
 
-    norm_residuals_error = sampson_distance(
-        e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
+    norm_residuals_error = sampson_distance(e=e_norm,
+                                            x1=bearings_kf_norm,
+                                            x2=bearings_frm_norm)
 
     return c_fro_norm * residuals_error
 
@@ -126,14 +135,14 @@ def get_cam_pose_by_opt_res_error_Cxyz(**kwargs):
         bearings_frm=kwargs["bearings"]["frm"].copy(),
     )
 
-    bearings_kf_norm, t1 = normalizer_Cxyz(
-        x=kwargs["bearings"]["kf"].copy(), Cxyz=opt_Cxyz)
+    bearings_kf_norm, t1 = normalizer_Cxyz(x=kwargs["bearings"]["kf"].copy(),
+                                           Cxyz=opt_Cxyz)
 
-    bearings_frm_norm, t2 = normalizer_Cxyz(
-        x=kwargs["bearings"]["frm"].copy(), Cxyz=opt_Cxyz)
+    bearings_frm_norm, t2 = normalizer_Cxyz(x=kwargs["bearings"]["frm"].copy(),
+                                            Cxyz=opt_Cxyz)
 
-    e_norm = solver.compute_essential_matrix(
-        x1=bearings_kf_norm, x2=bearings_frm_norm)
+    e_norm = solver.compute_essential_matrix(x1=bearings_kf_norm,
+                                             x2=bearings_frm_norm)
     e_hat = t2.T @ e_norm @ t1
 
     cam_final = solver.recover_pose_from_e(
