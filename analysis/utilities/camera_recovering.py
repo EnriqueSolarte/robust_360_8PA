@@ -2,6 +2,7 @@ from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8
 import levmar
 from analysis.utilities.optmization_utilities import *
 from solvers.epipolar_constraint import *
+import time
 
 solver = g8p()
 
@@ -10,10 +11,16 @@ def get_cam_pose_by_8pa(**kwargs):
     """
     Returns a camera pose using bearing vectors and the 8PA
     """
+    timing = kwargs.get("timing_evaluation", False)
+    solver.timing = 0
     cam_pose = solver.recover_pose_from_matches(
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy(),
-        eval_current_solution=True)
+        eval_current_solution=True,
+        timing=timing
+    )
+    if timing:
+        return cam_pose, solver.current_residual, solver.timing
     return cam_pose, solver.current_residual
 
 
@@ -83,21 +90,22 @@ def get_cam_pose_by_opt_rpj_Rt_pnp(**kwargs):
         array_ref=kwargs["bearings"]["frm"].copy(),
         array_vector=landmarks_frm_hat[0:3, :])
 
-    return cam_final, np.sum(reprojection**2)
+    return cam_final, np.sum(reprojection ** 2)
 
 
 def get_cam_pose_by_opt_res_error_Rt(**kwargs):
-    initial_pose, _ = get_cam_pose_by_8pa(**kwargs)
+    initial_time = time.time()
+    initial_pose = get_cam_pose_by_8pa(**kwargs)[0]
     eu = rotationMatrixToEulerAngles(initial_pose[0:3, 0:3])
     trn = np.copy(initial_pose[0:3, 3])
     initial_r_t = np.hstack((eu, trn))
-
     opt_r_t, p_cov, info = levmar.levmar(
         residuals_error_R_T,
         initial_r_t,
         np.zeros_like(kwargs["bearings"]["frm"][0, :]),
         args=(kwargs["bearings"]["kf"], kwargs["bearings"]["frm"]))
 
+    final_time = time.time() - initial_time
     print("***********************************")
     print("Opt RESIDUALS over Rt ")
     print("Iterations: {}".format(info[2]))
@@ -109,7 +117,9 @@ def get_cam_pose_by_opt_res_error_Rt(**kwargs):
         parameters=opt_r_t,
         bearings_kf=kwargs["bearings"]['kf'].copy(),
         bearings_frm=kwargs["bearings"]['frm'].copy())
-    return cam_final, np.sum(residual**2)
+    if kwargs.get("timing_evaluation", False):
+        return cam_final, np.sum(residual ** 2), final_time
+    return cam_final, np.sum(residual ** 2)
 
 
 # * ====================================================================
@@ -142,12 +152,14 @@ def res_error_S_K(parameters, bearings_kf, bearings_frm):
     # residuals_b = residuals_b * sigma[-1]
     # return np.ones_like(bearings_kf[0, :]) * residuals_b
     return np.array((np.sum(abs(residuals_error)),
-                     np.sum(abs(norm_residuals_error)), sigma[-1], C**2))
+                     np.sum(abs(norm_residuals_error)), sigma[-1], C ** 2))
 
 
 def get_cam_pose_by_opt_res_error_SK(**kwargs):
     initial_s_k = kwargs[
-        "iVal_Res_SK"]  # initial_k_s = (0.001, 0.001, 0.001, 0.001)
+        "iVal_Res_SK"]
+
+    initial_time = time.time()
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_s_k,
@@ -156,6 +168,7 @@ def get_cam_pose_by_opt_res_error_SK(**kwargs):
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()))
 
+    delta_time = time.time() - initial_time
     s = opt_k_s[0]
     k = opt_k_s[1]
     print("***********************************")
@@ -185,7 +198,9 @@ def get_cam_pose_by_opt_res_error_SK(**kwargs):
         e=e_hat,
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy())
-    return cam_hat, np.sum(residual**2)
+    if kwargs.get("timing_evaluation", False):
+        return cam_hat, np.sum(residual ** 2), delta_time
+    return cam_hat, np.sum(residual ** 2)
 
 
 # * ********************************************************************
@@ -277,7 +292,7 @@ def get_cam_pose_by_opt_rpj_SK(**kwargs):
         array_ref=kwargs["bearings"]["frm"].copy(),
         array_vector=landmarks_frm_hat[0:3, :])
 
-    return cam_hat, np.sum(reprojection**2)
+    return cam_hat, np.sum(reprojection ** 2)
 
 
 # * ********************************************************************
@@ -368,7 +383,7 @@ def get_cam_pose_by_opt_res_error_RtSK(**kwargs):
         bearings_frm=kwargs["bearings"]["frm"].copy(),
     )
 
-    return cam_final, np.sum(residuals**2)
+    return cam_final, np.sum(residuals ** 2)
 
 
 # * ********************************************************************
@@ -401,6 +416,8 @@ def residuals_error_KS_RT(parameters, bearings_kf, bearings_frm, s, k):
 def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
     initial_s_k = kwargs[
         "iVal_Res_SK"]  # initial_k_s = (0.001, 0.001, 0.001, 0.001)
+
+    initial_time = time.time()
     opt_k_s, p_cov, info = levmar.levmar(
         res_error_S_K,
         initial_s_k,
@@ -408,7 +425,7 @@ def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
         np.array((0, 0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()))
-
+    delta_time = time.time() - initial_time
     s = opt_k_s[0]
     k = opt_k_s[1]
     print("***********************************")
@@ -418,7 +435,8 @@ def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
     print("Iterations: {}".format(info[2]))
     print("termination: {}".format(info[3]))
 
-    initial_pose, _ = get_cam_pose_by_8pa(**kwargs)
+    initial_time = time.time()
+    initial_pose = get_cam_pose_by_8pa(**kwargs)[0]
     eu = rotationMatrixToEulerAngles(initial_pose[0:3, 0:3])
     trn = np.copy(initial_pose[0:3, 3])
 
@@ -431,6 +449,7 @@ def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
         # np.array((0, 0, 0, 0, 0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy(), s, k))
+    delta_time = time.time() - initial_time + delta_time
 
     print("Iterations: {}".format(info[2]))
     print("termination: {}".format(info[3]))
@@ -445,7 +464,8 @@ def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
         s=s,
         k=k)
 
-    return cam_final, np.sum(residuals**2)
-
+    if kwargs.get("timing_evaluation", False):
+        return cam_final, np.sum(residuals ** 2), delta_time
+    return cam_final, np.sum(residuals ** 2)
 
 # * ********************************************************************
