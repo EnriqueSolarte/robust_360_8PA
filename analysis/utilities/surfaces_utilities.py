@@ -56,14 +56,12 @@ def plot_surfaces(**kwargs):
                 showscale=False),
             row=loc[0] + 1,
             col=loc[1] + 1)
-        if "norm" in eval:
-            eval = "residuals_error"
         fig.add_trace(
             go.Scatter3d(
                 x=(1, ),
                 y=(1, ),
                 z=(kwargs["8PA"][eval], ),
-                marker=dict(color=COLOR_GENERAL, size=5),
+                marker=dict(color=colors["COLOR_GENERAL"], size=5),
                 name="8PA"),
             row=loc[0] + 1,
             col=loc[1] + 1)
@@ -89,6 +87,12 @@ def get_eval_of_8PA(**kwargs):
         x1=kwargs["bearings"]["kf"],
         x2=kwargs["bearings"]["frm"])
 
+    residuals_norm = epipolar_constraint(
+        e=kwargs["8PA"]["e"],
+        x1=kwargs["bearings"]["kf"],
+        x2=kwargs["bearings"]["frm"])
+
+    kwargs["8PA"]["residuals_norm_error"] = np.sum(residuals_norm)
     kwargs["8PA"]["residuals_error"] = np.sum(residuals)
 
     landmarks_hat = np.linalg.inv(
@@ -96,7 +100,7 @@ def get_eval_of_8PA(**kwargs):
     reprojection = get_projection_error_between_vectors_arrays(
         array_ref=kwargs["bearings"]["frm"],
         array_vector=landmarks_hat[0:3, :])
-    kwargs["8PA"]["reprojection_error"] = np.sum(reprojection)
+    kwargs["8PA"]["reprojection_error"] = np.sum(1/reprojection)
     cam_error = evaluate_error_in_transformation(
         transform_gt=kwargs["cam_gt"], transform_est=kwargs["8PA"]["cam_pose"])
     kwargs["8PA"]["rot_error"] = cam_error[0]
@@ -118,11 +122,16 @@ def eval_surfaces(**kwargs):
     kwargs = add_surfaces_evaluation(
         label=nameof(e_error), value=e_error, **kwargs)
 
-    residuals_norm_error = projected_distance(
-        e=kwargs["e_norm"],
-        x1=kwargs["bearings"]["kf_norm"],
-        x2=kwargs["bearings"]["frm_norm"],
-    )
+    # residuals_norm_error = projected_distance(
+    #     e=kwargs["e_norm"],
+    #     x1=kwargs["bearings"]["kf_norm"],
+    #     x2=kwargs["bearings"]["frm_norm"],
+    # )
+    residuals_norm_error = epipolar_constraint(
+            e=kwargs["e_norm"],
+            x1=kwargs["bearings"]["kf_norm"],
+            x2=kwargs["bearings"]["frm_norm"],
+        )
     kwargs = add_surfaces_evaluation(
         label=nameof(residuals_norm_error),
         value=np.sum(residuals_norm_error),
@@ -141,6 +150,6 @@ def eval_surfaces(**kwargs):
         array_ref=kwargs["bearings"]["frm"], array_vector=landmark_hat[0:3, :])
     kwargs = add_surfaces_evaluation(
         label=nameof(reprojection_error),
-        value=np.sum(reprojection_error),
+        value=np.sum(1/reprojection_error),
         **kwargs)
     return kwargs
