@@ -44,22 +44,22 @@ if __name__ == '__main__':
 
     scene_settings = dict(
         data_scene=data,
-        idx_frame=0,
-        # idx_frame=85,
+        # idx_frame=0,
+        idx_frame=80,
         distance_threshold=0.5,
         res=(360, 180),
         # res=(180, 180),
         # res=(65.5, 46.4),
         loc=(0, 0),
         grid=(-1, 1, 50),
-        extra="samplings",
+        extra="meting09.25",
     )
 
     features_setting = dict(
         feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
         sampling=8,
         tracker=LKTracker(),
-        show_tracked_features=False)
+        show_tracked_features=True)
 
     ransac_parm = dict(
         min_samples=8,
