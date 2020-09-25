@@ -18,11 +18,13 @@ def get_file_name(**kwargs):
     filename += "_ifrm_{}".format(kwargs["idx_frame"])
     filename += "_res_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
     filename += "_dist" + str(kwargs["distance_threshold"])
-    if kwargs["use_ransac"]:
+    if kwargs.get("use_ransac", False):
         filename += "_RANSAC_thr" + str(kwargs["residual_threshold"])
         filename += "_trials" + str(kwargs["max_trials"])
     filename += "_" + kwargs["extra"]
 
+    if 'sampling' in kwargs.keys():
+        filename += "_samples_" + str(kwargs["sampling"])
     initial_val = [dt for dt in kwargs.keys() if "iVal" in dt]
     if len(initial_val) > 0:
         for val in initial_val:
@@ -85,7 +87,7 @@ def plot_bar_errors(**kwargs):
 
             fig.update_yaxes(title_text=y_label, row=row, col=col)
 
-    fig_file = "{}.html".format(kwargs["filename"])
+    fig_file = "{}_plot_bar_errors.html".format(kwargs["filename"])
     fig.update_layout(title_text=fig_file, height=800, width=1800)
     fig.show()
     fig.write_html("{}".format(fig_file))
@@ -136,7 +138,68 @@ def plot_errors(**kwargs):
         fig.update_xaxes(title_text="Kfrm idx", row=row, col=col)
         fig.update_yaxes(title_text=y_label, row=row, col=col)
 
-    fig_file = "{}.html".format(kwargs["filename"])
+    fig_file = "{}_plot_errors.html".format(kwargs["filename"])
+    fig.update_layout(title_text=fig_file, height=800, width=1800)
+    fig.show()
+    fig.write_html("{}".format(fig_file))
+
+
+def plot_time_results(**kwargs):
+    results = list(kwargs["results"].keys())
+    titles = [dt for dt in results if dt not in ("kf",)]
+
+    dt_results = list()
+    dt_results.append([dt for dt in titles if "time" in dt])
+    n = 2  # !  two rows. (1) time per Kf and (2) bars 75% 50% 25%
+    kwargs["quartiles"] = dict()
+
+    fig = make_subplots(subplot_titles=["Timing per frame", "Q75", "Q52", "Q25"],
+                        rows=n,
+                        cols=3,
+                        specs=[[{"colspan": 3}, None, None],
+                               [{}, {}, {}]]
+                        )
+
+    for i, dt in enumerate(dt_results):
+        if len(dt) == 0:
+            continue
+        row, col = 1, 1
+        y_label = "Time (s)"
+        for dt_r in dt:
+            color = get_color(dt_r)
+            fig.add_trace(go.Scatter(x=kwargs["results"]["kf"],
+                                     y=kwargs["results"][dt_r],
+                                     name=dt_r,
+                                     line=dict(color=color)),
+                          row=row,
+                          col=col)
+
+        quartiles_settings = dict(Q75=(np.quantile, 0.75),
+                                  Q50=(np.quantile, 0.50),
+                                  Q25=(np.quantile, 0.25))
+
+        for i_quart, quartile in enumerate(list(quartiles_settings.keys())):
+            row, col = 2, i_quart + 1
+            for dt_r in dt:
+                func = quartiles_settings[quartile][0]
+                arg = quartiles_settings[quartile][1]
+                kwargs["quartiles"][dt_r + "_" + quartile] = func(
+                    kwargs["results"][dt_r], arg)
+
+                color = get_color(dt_r)
+                fig.add_trace(go.Bar(x=(dt_r,),
+                                     y=(kwargs["quartiles"][dt_r + "_" +
+                                                            quartile],),
+                                     name=dt_r + "_" + quartile,
+                                     marker_color=color),
+                              row=row,
+                              col=col)
+            fig.update_yaxes(title_text=y_label, row=row, col=col)
+
+        fig.update_xaxes(title_text="Kfrm idx", row=row, col=col)
+        fig.update_yaxes(title_text=y_label, row=row, col=col)
+
+    fig_file = "{}_time_results.html".format(kwargs["filename"])
     fig.update_layout(title_text=fig_file, height=800, width=1800)
     fig.show()
     fig.write_html("{}".format(fig_file))
@@ -144,14 +207,17 @@ def plot_errors(**kwargs):
 
 def get_color(label):
     if "OURS" in label:
-        return COLOR_NORM_8PA_OURS
+        if "opt" in label:
+            return colors["COLOR_OURS_OPT_RES_RT"]
+        return colors["COLOR_OURS_NORM_8PA"]
     elif "8pa" in label:
-        if "8pa_opt_res" in label:
-            return COLOR_OPT_RPJ_RT_PNP
-        else:
-            return COLOR_8PA
-    elif "PnP" in label:
-        return COLOR_OPT_RES_RT
+        if "hartley" in label:
+            return colors["COLOR_HARTLEY_8PA"]
+        if "norm" in label:
+            return colors["COLOR_NORM"]
+        return colors["COLOR_8PA"]
+    else:
+        return colors["COLOR_GENERAL"]
 
 
 def save_info(only_results=True, **kwargs):
@@ -192,5 +258,4 @@ def print_log_files(list_files):
             with open(file, 'r') as f:
                 print(f.read())
         except:
-            print("Could register log file{}".format(file))
-
+            print("Could not register log file{}".format(file))
