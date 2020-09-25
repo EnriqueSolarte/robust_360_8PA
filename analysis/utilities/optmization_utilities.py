@@ -23,9 +23,28 @@ def normalizer_s(x, s):
     return n_matrix @ x, n_matrix
 
 
+def normalizer_Hartley_isotropic(x):
+    x_mean = np.mean(x, axis=1)
+    x_std = np.linalg.norm(x - x_mean.reshape((3, -1)), axis=0)
+    x_std = 0.5 * np.sum(x_std ** 2) / x_std.size
+    x_std = 1 / np.sqrt(x_std)
+    n_matrix = np.eye(3) * x_std
+    n_matrix[0, 2] = -x_std * x_mean[0]
+    n_matrix[1, 2] = -x_std * x_mean[1]
+    n_matrix[2, 2] = 1
+    return n_matrix @ x, n_matrix
+
+
+def normalizer_Hartley_non_isotropic(x):
+    x_2 = x @ x.T
+    k = np.linalg.cholesky(x_2)
+    n_matrix = np.linalg.inv(k)
+    return n_matrix @ x, n_matrix
+
+
 def normalizer_3dv2020(x, s, k):
     x_mean = np.mean(x, axis=1)
-    t = np.array([[s, 0, 1], [0, s, 1], [0, 0, k**abs(1 - x_mean[2])]])
+    t = np.array([[s, 0, -s * x_mean[0]], [0, s, -s * x_mean[1]], [0, 0, k ** abs(1 - x_mean[2])]])
     x_norm = np.dot(t, x)
     return x_norm, t
 
