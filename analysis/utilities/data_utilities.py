@@ -13,11 +13,15 @@ from image_utilities import get_mask_map_by_res_loc
 from analysis.utilities.camera_recovering import *
 from file_utilities import create_dir
 
-COLOR_8PA = 'rgb(30,144,255)'
-COLOR_NORM_8PA_OURS = 'rgb(255,127,80)'
-COLOR_OPT_RPJ_RT_PNP = 'rgb(0,255,100)'
-COLOR_OPT_RES_RT = 'rgb(0,100,80)'
-COLOR_GENERAL = 'red'
+colors = dict(
+    COLOR_NORM='rgb(0,200,200)',
+    COLOR_HARTLEY_8PA='rgb(0,50,255)',
+    COLOR_8PA='rgb(30,144,255)',
+    COLOR_OURS_NORM_8PA='rgb(255,127,80)',
+    COLOR_OPT_RT='rgb(0,255,100)',
+    COLOR_OURS_OPT_RES_RT='rgb(0,100,80)',
+    COLOR_GENERAL='red',
+)
 
 
 def sampling_bearings(**kwargs):
@@ -51,8 +55,13 @@ def get_bearings(**kwargs):
     kwargs = sampling_bearings(**kwargs)
     kwargs["cam_gt"] = cam_gt
     kwargs["e_gt"] = g8p.get_e_from_cam_pose(cam_gt)
+    if kwargs.get("timing_evaluation", False):
+        cam_pose, _, _ = get_cam_pose_by_8pa(**kwargs)
+    else:
+        cam_pose, _ = get_cam_pose_by_8pa(**kwargs)
+
     kwargs["landmarks_kf"] = g8p.triangulate_points_from_cam_pose(
-        cam_pose=get_cam_pose_by_8pa(**kwargs)[0],
+        cam_pose=cam_pose,
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy(),
     )
@@ -99,6 +108,19 @@ def eval_cam_pose_error(_print=True, **kwargs):
         else:
             kwargs["results"][loss].append(ls)
 
+    if kwargs.get("timing_evaluation", False):
+        time_evaluation = [time_ for time_ in kwargs.keys() if "time" in time_]
+        print("*****************************************")
+        for eval in time_evaluation:
+            if eval not in kwargs["results"].keys():
+                kwargs["results"][eval] = [kwargs[eval]]
+            else:
+                kwargs["results"][eval].append(kwargs[eval])
+
+            if _print:
+                print("MED time {}: {}".format(eval,
+                                               np.quantile(kwargs["results"][eval], 0.5)))
+    print("done")
     return kwargs
 
 
@@ -114,6 +136,9 @@ def track_features(**kwargs):
     # ! It stops at the end of the sequence
     if not kwargs["idx_frame"] + 1 < kwargs["data_scene"].number_frames:
         return None, None, None, kwargs, False
+    if "results" not in kwargs.keys():
+        kwargs["results"] = dict()
+        kwargs["results"]["kf"] = []
 
     if kwargs.get("pinhole_model", False):
         kwargs["mask"] = np.ones(kwargs["data_scene"].shape).astype(np.uint8)
@@ -168,6 +193,7 @@ def track_features(**kwargs):
 
     cam = Sphere(shape=kwargs["tracker"].initial_frame.shape)
     matches = kwargs["tracker"].get_matches()
+    kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
     bearings_kf = cam.pixel2normalized_vector(matches[0])
     bearings_frm = cam.pixel2normalized_vector(matches[1])
     if kwargs.get("special_eval", False):
@@ -181,7 +207,7 @@ def track_features(**kwargs):
 def save_bearings(**kwargs):
     dt = pd.DataFrame(np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
     dirname = os.path.join(os.path.dirname(kwargs["filename"]), "frames")
-    file_bearings = str(kwargs["tracker"].initial_frame.idx) + str(kwargs["tracker"].tracked_frame.idx) + ".txt"
+    file_bearings = str(kwargs["tracker"].initial_frame.idx) + "_" + str(kwargs["tracker"].tracked_frame.idx) + ".txt"
     file_bearings = os.path.join(dirname, file_bearings)
     create_dir(dirname, delete_previous=False)
     dt.to_csv(file_bearings, header=None, index=None)
