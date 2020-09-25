@@ -25,22 +25,14 @@ if __name__ == '__main__':
             tracker=LKTracker(),
             show_tracked_features=False)
 
-        ransac_parm = dict(
-            min_samples=8,
-            max_trials=RansacEssentialMatrix.get_number_of_iteration(
-                p_success=0.99, outliers=0.5, min_constraint=8),
-            residual_threshold=1e-5,
-            verbose=True,
-            use_ransac=False)
-
         log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
                                        "/utilities/camera_recovering.py",),
                             filename=get_file_name(file_src=__file__,
-                                                   **scene_settings, **features_setting, **ransac_parm,
+                                                   **scene_settings, **features_setting,
                                                    **initial_values,
                                                    ),
                             save_bearings=True)
-        kwargs = run_sequence(**scene_settings, **features_setting, **ransac_parm,
+        kwargs = run_sequence(**scene_settings, **features_setting,
                               **initial_values, **log_settings)
 
         plot_errors(**kwargs)
