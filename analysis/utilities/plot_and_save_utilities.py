@@ -153,7 +153,7 @@ def plot_time_results(**kwargs):
     n = 2  # !  two rows. (1) time per Kf and (2) bars 75% 50% 25%
     kwargs["quartiles"] = dict()
 
-    fig = make_subplots(subplot_titles=["Timing per frame", "Q75", "Q52", "Q25"],
+    fig = make_subplots(subplot_titles=["Timing per frame", "Q75", "Q50", "Q25"],
                         rows=n,
                         cols=3,
                         specs=[[{"colspan": 3}, None, None],

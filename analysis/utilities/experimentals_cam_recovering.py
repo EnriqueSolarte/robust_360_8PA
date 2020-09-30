@@ -22,9 +22,9 @@ def residuals_error_RKS(parameters, bearings_kf, bearings_frm):
                                                        x2=bearings_frm_norm,
                                                        return_all=True)
 
-    norm_residuals_error = projected_distance(e=e_norm,
-                                              x1=bearings_kf_norm,
-                                              x2=bearings_frm_norm)
+    norm_residuals_error = projected_error(e=e_norm,
+                                           x1=bearings_kf_norm,
+                                           x2=bearings_frm_norm)
     # e_hat = n1.T @ e_norm @ n1
     # residuals_error = projected_distance(
     #     e=e_hat,
@@ -98,9 +98,9 @@ def residuals_error_Cxyz(parameters, bearings_kf, bearings_frm):
     c_fro_norm = np.linalg.norm(A.T.dot(A), ord="fro")
 
     e_hat = n1.T @ e_norm @ n2
-    residuals_error = projected_distance(e=e_hat,
-                                         x1=bearings_kf,
-                                         x2=bearings_frm)
+    residuals_error = projected_error(e=e_hat,
+                                      x1=bearings_kf,
+                                      x2=bearings_frm)
 
     norm_residuals_error = sampson_distance(e=e_norm,
                                             x1=bearings_kf_norm,

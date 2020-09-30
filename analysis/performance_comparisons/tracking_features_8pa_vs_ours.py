@@ -2,7 +2,7 @@ from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry
-from solvers.epipolar_constraint import projected_distance
+from solvers.epipolar_constraint import projected_error
 from solvers.optimal8pa import Optimal8PA
 from analysis.utilities.data_utilities import *
 import plotly.graph_objects as go
@@ -88,7 +88,7 @@ def run_sequence(**kwargs):
     ransac = RansacEssentialMatrix(**kwargs)
     g8p = EightPointAlgorithmGeneralGeometry()
     norm_8pa = Optimal8PA(kwargs["opt_version"],
-                          kwargs.get("residual_function", projected_distance))
+                          kwargs.get("residual_function", projected_error))
 
     kwargs["results"] = dict()
     kwargs["results"]["kf"] = []

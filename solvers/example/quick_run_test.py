@@ -1,16 +1,36 @@
+from read_datasets.MP3D_VO import MP3D_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
-from read_datasets.MP3D_VO import MP3D_VO
-from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
+from analysis.utilities.data_utilities import track_features
+from solvers.ransac.ransac_ours_8pa import RANSAC_OURS_8PA
+from geometry_utilities import evaluate_error_in_transformation
+
+
+def run_example(**kwargs):
+    bearings_kf, bearings_frm, cam_gt, kwargs, ret = track_features(**kwargs)
+    if not ret:
+        exit(1)
+
+    cam_pose = RANSAC_OURS_8PA().get_cam_pose(
+        bearings_1=bearings_kf,
+        bearings_2=bearings_frm,
+    )
+    error = evaluate_error_in_transformation(
+        transform_est=cam_pose,
+        transform_gt=cam_gt
+    )
+    print(error)
+
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene = "2azQ1b91cZZ/0"
+    # scene = "i5noydFURQK/0"
+    # scene = "sT4fr6TAbpF/0"
     # scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
-    # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
-    data = MP3D_VO(scene=scene, basedir=path)
 
+    data = MP3D_VO(scene=scene, basedir=path)
     scene_settings = dict(
         data_scene=data,
         idx_frame=0,
@@ -19,18 +39,10 @@ if __name__ == '__main__':
         loc=(0, 0),
     )
 
-    ransac_parm = dict(
-        min_samples=8,
-        max_trials=RansacEssentialMatrix.get_number_of_iteration(
-            p_success=0.99, outliers=0.5, min_constraint=8),
-        residual_threshold=1e-5,
-        verbose=True,
-        use_ransac=True,
-        extra="projected_distance",
+    features_setting = dict(
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
+        tracker=LKTracker(),
+        show_tracked_features=False,
     )
 
-    features_setting = dict(feat_extractor=Shi_Tomasi_Extractor(),
-                            tracker=LKTracker(),
-                            show_tracked_features=True)
-
-    eval_run(**scene_settings, **features_setting, **ransac_parm)
+    kwargs = run_example(**scene_settings, **features_setting)

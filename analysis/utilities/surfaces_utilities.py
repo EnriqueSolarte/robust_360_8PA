@@ -82,12 +82,12 @@ def get_eval_of_8PA(**kwargs):
     kwargs["8PA"]["e_error"] = evaluate_error_in_essential_matrix(
         e_ref=kwargs["e_gt"], e_hat=kwargs["8PA"]["e"])
 
-    residuals = projected_distance(
+    residuals = projected_error(
         e=kwargs["8PA"]["e"],
         x1=kwargs["bearings"]["kf"],
         x2=kwargs["bearings"]["frm"])
 
-    residuals_norm = epipolar_constraint(
+    residuals_norm = algebraic_error(
         e=kwargs["8PA"]["e"],
         x1=kwargs["bearings"]["kf"],
         x2=kwargs["bearings"]["frm"])
@@ -127,7 +127,7 @@ def eval_surfaces(**kwargs):
     #     x1=kwargs["bearings"]["kf_norm"],
     #     x2=kwargs["bearings"]["frm_norm"],
     # )
-    residuals_norm_error = epipolar_constraint(
+    residuals_norm_error = algebraic_error(
             e=kwargs["e_norm"],
             x1=kwargs["bearings"]["kf_norm"],
             x2=kwargs["bearings"]["frm_norm"],
@@ -137,7 +137,7 @@ def eval_surfaces(**kwargs):
         value=np.sum(residuals_norm_error),
         **kwargs)
 
-    residuals_error = projected_distance(
+    residuals_error = projected_error(
         e=kwargs["e_hat"],
         x1=kwargs["bearings"]["kf"],
         x2=kwargs["bearings"]["frm"],
