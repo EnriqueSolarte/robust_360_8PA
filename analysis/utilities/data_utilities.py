@@ -25,10 +25,11 @@ colors = dict(
 
 
 def sampling_bearings(**kwargs):
-    number_of_samples = kwargs["bearings"]["kf"].shape[1]
-    samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
-    kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
-    kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
+    if "sampling" in kwargs.keys():
+        number_of_samples = kwargs["bearings"]["kf"].shape[1]
+        samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
+        kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
+        kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
     return kwargs
 
 
@@ -211,3 +212,39 @@ def save_bearings(**kwargs):
     file_bearings = os.path.join(dirname, file_bearings)
     create_dir(dirname, delete_previous=False)
     dt.to_csv(file_bearings, header=None, index=None)
+
+
+def get_bearings_by_plc(**kwargs):
+    # ! Getting a PCL from the dataset
+    idx_frame = kwargs["idx_frame"]
+    loc = kwargs["loc"]
+    res = kwargs["res"]
+    pcl_dense, pcl_dense_color, _, _ = kwargs["data_scene"].get_pcl(idx=idx_frame)
+    pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense, loc=loc, res=res)
+
+    linear_motion = kwargs.get("linear_motion", (-1, 1))
+    angular_motion = kwargs.get("angular_motion", (-10, 10))
+
+    cam_a2b = get_homogeneous_transform_from_vectors(
+        t_vector=(np.random.uniform(linear_motion[0], linear_motion[1]),
+                  np.random.uniform(linear_motion[0], linear_motion[1]),
+                  np.random.uniform(linear_motion[0], linear_motion[1])),
+        r_vector=(np.random.uniform(angular_motion[0], angular_motion[1]),
+                  np.random.uniform(angular_motion[0], angular_motion[1]),
+                  np.random.uniform(angular_motion[0], angular_motion[1])))
+
+    pts = kwargs.get("sampling", 200)
+    samples = np.random.randint(0, pcl_dense.shape[1], pts)
+    pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
+
+    pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
+                             param=kwargs.get("noise", 500))
+
+    pcl_b = add_outliers_to_pcl(
+        pcl_b.copy(),
+        inliers=int(kwargs.get("inliers_ratio", 0.5) * pts))
+
+    bearings_a = sph.sphere_normalization(pcl_a)
+    bearings_b = sph.sphere_normalization(pcl_b)
+
+    return bearings_a, bearings_b, cam_a2b, kwargs

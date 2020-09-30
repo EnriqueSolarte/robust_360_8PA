@@ -15,14 +15,14 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
     g8p = EightPointAlgorithmGeneralGeometry()
 
     # ! Getting a PCL from the dataset
-    pcl_dense, pcl_dense_color, _ = data_scene.get_pcl(idx=idx_frame)
+    pcl_dense, pcl_dense_color, _, _ = data_scene.get_pcl(idx=idx_frame)
     pcl_dense, mask = mask_pcl_by_res_and_loc(pcl=pcl_dense, loc=loc, res=res)
     np.random.seed(100)
 
     # ! Output file
-    error_report = FileReport(
-        filename="../report/{}_sample_scene.csv".format(opt_version))
-    error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
+    # error_report = FileReport(
+    #     filename="../report/{}_sample_scene.csv".format(opt_version))
+    # error_report.set_headers(["rot-8PA", "tran-8PA", "rot-n8PA", "tran-n8PA"])
     while True:
         # ! relative camera pose from a to b
         cam_a2b = get_homogeneous_transform_from_vectors(
@@ -37,7 +37,7 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
         pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
                                  param=noise)
         # ! We expect that there are 1% outliers besides of the noise
-        pcl_b = add_outliers_to_pcl(pcl_b.copy(), outliers=int(0.05 * pts))
+        pcl_b = add_outliers_to_pcl(pcl_b.copy(), inliers=int(0.05 * pts))
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
@@ -99,12 +99,12 @@ def eval_methods(res, noise, loc, pts, data_scene, idx_frame, opt_version):
             error_8p[-1][0], error_8p[-1][1], error_n8p[-1][0],
             error_n8p[-1][1]
         ]
-        error_report.write(line)
+        # error_report.write(line)
 
 
 if __name__ == '__main__':
-    # path = "/home/kike/Documents/datasets/Matterport_360_odometry"
-    path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
+    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene="1LXtFkjw3qL/0", basedir=path)
 
     eval_methods(res=(54, 54),

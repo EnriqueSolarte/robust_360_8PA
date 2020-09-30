@@ -38,7 +38,7 @@ def eval_methods(res, noise, loc, data_scene, idx_frame, opt_version,
                                  param=noise)
         # ! We expect that there are 1% outliers besides of the noise
         pcl_b = add_outliers_to_pcl(pcl_b.copy(),
-                                    outliers=int(0.05 * pcl_a.shape[1]))
+                                    inliers=int(0.05 * pcl_a.shape[1]))
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 

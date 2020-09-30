@@ -27,7 +27,7 @@ def evaluate_synthetic_points(theta_roi, phi_roi, n_pts, min_d, max_d,
         # ! pcl at "b" location + noise
         pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
                                  param=noise_parameter)
-        pcl_b = add_outliers_to_pcl(pcl_b.copy(), outliers=5)
+        pcl_b = add_outliers_to_pcl(pcl_b.copy(), inliers=5)
         bearings_a = sph.sphere_normalization(pcl_a)
         bearings_b = sph.sphere_normalization(pcl_b)
 
