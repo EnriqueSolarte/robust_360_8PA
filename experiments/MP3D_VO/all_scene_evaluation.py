@@ -31,9 +31,9 @@ if __name__ == '__main__':
                                                    **scene_settings, **features_setting,
                                                    **initial_values,
                                                    ),
-                            save_bearings=True)
-        kwargs = run_sequence(**scene_settings, **features_setting,
-                              **initial_values, **log_settings)
+                            save_bearings=False)
+        kwargs = run_evaluation(**scene_settings, **features_setting,
+                                **initial_values, **log_settings)
 
         plot_errors(**kwargs)
         plot_bar_errors(**kwargs)
