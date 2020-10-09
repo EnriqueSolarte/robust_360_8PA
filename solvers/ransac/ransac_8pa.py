@@ -1,6 +1,4 @@
-import numpy as np
-from solvers.epipolar_constraint import *
-import time
+from analysis.utilities.essential_e_recovering import *
 
 
 class RANSAC_8PA:
@@ -23,10 +21,20 @@ class RANSAC_8PA:
         self.counter_trials = 0
         self.time_evaluation = np.inf
 
-        # ! LOG
-        self.log_data = dict()
-        self.log_data["best_evaluation"] = []
-        self.log_data["best_inliers_num"] = []
+        self.prior_function_evaluation = None
+        self.post_function_evaluation = get_e_by_8pa
+
+    @staticmethod
+    def estimate_essential_matrix(sample_bearings1, sample_bearings2, function):
+        bearings = dict(
+            kf=sample_bearings1,
+            frm=sample_bearings2
+        )
+        arg = dict(
+            iVal_Res_SK=(1, 1),
+            bearings=bearings
+        )
+        return function(**arg, **bearings)
 
     def run(self, bearings_1, bearings_2):
         assert bearings_1.shape == bearings_2.shape
@@ -37,16 +45,18 @@ class RANSAC_8PA:
         self.time_evaluation = 0
         aux_time = time.time()
         for self.counter_trials in range(self.max_trials):
-            # self.counter_trials += 1
+
             initial_inliers = random_state.choice(self.num_samples, 8, replace=False)
             sample_bearings1 = bearings_1[:, initial_inliers]
             sample_bearings2 = bearings_2[:, initial_inliers]
-            # ! Estimation
+
+            # * Estimation
             e_hat = self.solver.compute_essential_matrix(
                 x1=sample_bearings1,
                 x2=sample_bearings2,
             )
-            # ! Evaluation
+
+            # * Evaluation
             sample_residuals = projected_error(
                 e=e_hat,
                 x1=bearings_1,
@@ -54,16 +64,16 @@ class RANSAC_8PA:
             )
             sample_evaluation = np.sum(sample_residuals ** 2)
 
-            # ! Selection
+            # * Selection
             sample_inliers = sample_residuals < self.residual_threshold
             sample_inliers_num = np.sum(sample_inliers)
 
-            # ! Loop Control
+            # * Loop Control
             lc_1 = sample_inliers_num > self.best_inliers_num
             lc_2 = sample_inliers_num == self.best_inliers_num
             lc_3 = sample_evaluation < self.best_evaluation
             if lc_1 or (lc_2 and lc_3):
-                # ! Update best performance
+                # + Update best performance
                 self.best_model = e_hat.copy()
                 self.best_inliers_num = sample_inliers_num.copy()
                 self.best_evaluation = sample_evaluation.copy()
@@ -71,20 +81,19 @@ class RANSAC_8PA:
 
             if self.counter_trials >= self._dynamic_max_trials():
                 break
-            self.time_evaluation += time.time() - aux_time
-            aux_time = time.time()
-
-            # ! saving log
-            self.log_data["best_evaluation"].append(self.best_evaluation.copy())
-            self.log_data["best_inliers_num"].append(self.best_inliers_num.copy())
 
         best_bearings_1 = bearings_1[:, self.best_inliers]
         best_bearings_2 = bearings_2[:, self.best_inliers]
-        self.best_model = self.solver.compute_essential_matrix(
-            x1=best_bearings_1,
-            x2=best_bearings_2,
+
+        # * Estimating final model using only inliers
+        self.best_model = self.estimate_essential_matrix(
+            sample_bearings1=best_bearings_1,
+            sample_bearings2=best_bearings_2,
+            function=self.post_function_evaluation
+            # ! predefined function used for post-evaluation
         )
 
+        self.time_evaluation += time.time() - aux_time
         return self.best_model, self.best_inliers
 
     def get_cam_pose(self, bearings_1, bearings_2):
