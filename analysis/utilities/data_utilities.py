@@ -125,12 +125,56 @@ def eval_cam_pose_error(_print=True, **kwargs):
     return kwargs
 
 
+def error_eval(**kwargs):
+    cams = [cam for cam in kwargs.keys() if "cam" in cam and "gt" not in cam]
+    for cam in cams:
+        error_name = "error_" + cam
+        error = (np.nan, np.nan)
+        if error_name + "_rot" not in kwargs["results"].keys():
+            kwargs["results"][error_name + "_rot"] = [error[0]]
+            kwargs["results"][error_name + "_tran"] = [error[1]]
+        else:
+            kwargs["results"][error_name + "_rot"].append(error[0])
+            kwargs["results"][error_name + "_tran"].append(error[1])
+
+    losses = [loss for loss in kwargs.keys() if "loss" in loss]
+    for loss in losses:
+        ls = np.nan
+
+        if loss not in kwargs["results"].keys():
+            kwargs["results"][loss] = [ls]
+        else:
+            kwargs["results"][loss].append(ls)
+
+    if kwargs.get("timing_evaluation", False):
+        time_evaluation = [time_ for time_ in kwargs.keys() if "time" in time_]
+        for eval in time_evaluation:
+            if eval not in kwargs["results"].keys():
+                kwargs["results"][eval] = [np.nan]
+            else:
+                kwargs["results"][eval].append(np.nan)
+    return kwargs
+
+
 def msk(eval, quantile):
     pivot = np.quantile(eval, quantile)
     # pivot = np.inf
     mask = eval > pivot
     eval[mask] = pivot
     return eval
+
+
+def save_bearings_vectors(**kwargs):
+    while True:
+        bearings_kf, bearings_frm, cam_gt, kwargs, ret = track_features(**kwargs)
+
+        if not ret:
+            break
+
+        kwargs["bearings"] = dict()
+        kwargs["bearings"]["kf"] = bearings_kf
+        kwargs["bearings"]["frm"] = bearings_frm
+        save_bearings(**kwargs)
 
 
 def track_features(**kwargs):
@@ -141,7 +185,7 @@ def track_features(**kwargs):
         kwargs["results"] = dict()
         kwargs["results"]["kf"] = []
 
-    if kwargs.get("pinhole_model", False):
+    if kwargs.get("mask_in_all_image", False):
         kwargs["mask"] = np.ones(kwargs["data_scene"].shape).astype(np.uint8)
     else:
         if 'mask' not in kwargs.keys():
@@ -180,7 +224,7 @@ def track_features(**kwargs):
             cv2.imshow("preview", tracked_img[:, :, ::-1])
             cv2.waitKey(10)
 
-        if camera_distance > kwargs["distance_threshold"]:
+        if camera_distance > kwargs.get("distance_threshold", 0.5):
             break
         idx += 1
         if not idx < kwargs["data_scene"].number_frames:
@@ -191,12 +235,17 @@ def track_features(**kwargs):
 
     # ! Maybe for different camera projection we want to change this
     # ! However, we can consider every projection as spherical one
-
-    cam = Sphere(shape=kwargs["tracker"].initial_frame.shape)
+    cam = kwargs["data_scene"].cam
+    # cam = Sphere(shape=kwargs["tracker"].initial_frame.shape)
     matches = kwargs["tracker"].get_matches()
     kwargs["results"]["kf"].append(kwargs["tracker"].initial_frame.idx)
-    bearings_kf = cam.pixel2normalized_vector(matches[0])
-    bearings_frm = cam.pixel2normalized_vector(matches[1])
+    try:
+        bearings_kf = cam.pixel2euclidean_space(matches[0])
+        bearings_frm = cam.pixel2euclidean_space(matches[1])
+    except:
+        bearings_kf = None
+        bearings_frm = None
+        print("error")
     if kwargs.get("special_eval", False):
         kwargs["idx_frame"] += 1
     else:
@@ -206,16 +255,22 @@ def track_features(**kwargs):
 
 
 def save_bearings(**kwargs):
-    dt = pd.DataFrame(np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
-    dirname = os.path.join(os.path.dirname(kwargs["filename"]), "frames")
-    file_bearings = str(kwargs["tracker"].initial_frame.idx) + "_" + str(kwargs["tracker"].tracked_frame.idx) + ".txt"
-    file_bearings = os.path.join(dirname, file_bearings)
-    create_dir(dirname, delete_previous=False)
-    dt.to_csv(file_bearings, header=None, index=None)
+    if kwargs["bearings"]["kf"] is not None:
+        dt = pd.DataFrame(np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
+        dirname = os.path.join(os.path.dirname(kwargs["filename"]), "frames")
+        file_bearings = str(kwargs["tracker"].initial_frame.idx) + "_" + str(
+            kwargs["tracker"].tracked_frame.idx) + ".txt"
+        file_bearings = os.path.join(dirname, file_bearings)
+        print("scene:{}".format(kwargs["data_scene"].scene))
+        print("Frames Kf:{}-frm:{}".format(kwargs["tracker"].initial_frame.idx, kwargs["tracker"].tracked_frame.idx))
+        print("tracked features {}".format(kwargs["bearings"]["kf"].shape[1]))
+        create_dir(dirname, delete_previous=False)
+        dt.to_csv(file_bearings, header=None, index=None)
 
 
 def get_bearings_by_plc(**kwargs):
     # ! Getting a PCL from the dataset
+    ret = True
     idx_frame = kwargs["idx_frame"]
     loc = kwargs["loc"]
     res = kwargs["res"]
@@ -247,4 +302,21 @@ def get_bearings_by_plc(**kwargs):
     bearings_a = sph.sphere_normalization(pcl_a)
     bearings_b = sph.sphere_normalization(pcl_b)
 
-    return bearings_a, bearings_b, cam_a2b, kwargs
+    if "results" not in kwargs.keys():
+        kwargs["results"] = dict()
+        kwargs["results"]["kf"] = [idx_frame]
+    else:
+        kwargs["results"]["kf"].append(idx_frame)
+
+    if "skip_frames" in kwargs.keys():
+        kwargs["idx_frame"] += kwargs["skip_frames"]
+    else:
+        kwargs["idx_frame"] += 1
+    if kwargs["idx_frame"] >= kwargs["data_scene"].number_frames:
+        ret = False
+
+    kwargs["bearings"] = dict()
+    kwargs["bearings"]["kf"] = bearings_a
+    kwargs["bearings"]["frm"] = bearings_b
+    kwargs["cam_gt"] = cam_a2b
+    return kwargs, ret
