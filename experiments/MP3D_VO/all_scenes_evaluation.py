@@ -11,19 +11,21 @@ if __name__ == '__main__':
             data_scene=data,
             idx_frame=0,
             distance_threshold=0.5,
-            res=(360, 180),
+            res=(-180, 180),
             loc=(0, 0),
-            extra="ALL_POINTS",
+            extra="ablation_B",
             special_eval=True)
         initial_values = dict(
             iVal_Res_SK=(1, 1),
-            iVal_Rpj_SK=(1, 1),
             iVal_Res_RtSK=(1, 1),
         )
         features_setting = dict(
-            feat_extractor=Shi_Tomasi_Extractor(maxCorners=200),
+            feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
             tracker=LKTracker(),
-            show_tracked_features=False)
+            show_tracked_features=False,
+            sampling=200,
+            timing_evaluation=True,
+        )
 
         log_settings = dict(log_files=(os.path.dirname(os.path.dirname(__file__)) +
                                        "/utilities/camera_recovering.py",),
