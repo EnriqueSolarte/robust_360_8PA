@@ -12,8 +12,8 @@ def eval_camera_pose(cam, **kwargs):
     g8p = g8p()
     matches = np.array(kwargs["tracker"].get_matches())
 
-    kfrm = cam.pixel2normalized_vector(matches[0]).T
-    frm = cam.pixel2normalized_vector(matches[1]).T
+    kfrm = cam.pixel2euclidean_space(matches[0]).T
+    frm = cam.pixel2euclidean_space(matches[1]).T
 
     print("Number of matches: {}".format(kfrm.shape[1]))
     # cam_8p = g8p.recover_pose_from_matches(x1=kfrm.copy(), x2=frm.copy())

@@ -14,7 +14,7 @@ if __name__ == '__main__':
         distance_threshold=0.5,
         res=(360, 180),
         loc=(0, 0),
-        extra="Ablation_",
+        extra="set_max_iter",
         timing_evaluation=True,
         special_eval=True)
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         tracker=LKTracker(),
         show_tracked_features=False)
 
-    for sampling in range(10, 500, 10):
+    for sampling in (30, 100): #range(30, 30, 10):
         initial_values = dict(
             iVal_Res_SK=(1, 1),
             iVal_Rpj_SK=(1, 1),

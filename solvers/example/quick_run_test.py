@@ -2,7 +2,7 @@ from read_datasets.MP3D_VO import MP3D_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 from analysis.utilities.data_utilities import track_features
-from solvers.ransac.ransac_ours_8pa import RANSAC_OURS_8PA
+from solvers.ransac.ransac_opt_8pa import RANSAC_OURS_8PA
 from geometry_utilities import evaluate_error_in_transformation
 
 

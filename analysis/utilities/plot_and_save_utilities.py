@@ -4,31 +4,55 @@ from analysis.utilities.data_utilities import *
 import os
 import numpy as np
 from file_utilities import create_dir
-from varname import nameof
 import shutil
 
 
 def get_file_name(**kwargs):
     dirname, name_src = os.path.split(kwargs["file_src"])
-    dirname = os.path.join(dirname, "plots")
+    dirname = os.path.join(dirname, "results")
     dirname = os.path.join(dirname, kwargs["data_scene"].scene)
     name = os.path.splitext(name_src)[0]
     scene_ = os.path.dirname(kwargs["data_scene"].scene)
     filename = name + "_" + scene_
     filename += "_ifrm_{}".format(kwargs["idx_frame"])
-    filename += "_res_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
-    filename += "_dist" + str(kwargs["distance_threshold"])
-    if kwargs.get("use_ransac", False):
+    try:
+        filename += "_res" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
+    except:
+        print("")
+    if "distance_threshold" in kwargs.keys():
+        filename += "_dist" + str(kwargs["distance_threshold"])
+    if "noise" in kwargs.keys():
+        filename += "_Noise." + str(kwargs["noise"]) + "_In." + str(kwargs["inliers_ratio"])
+    try:
         filename += "_RANSAC_thr" + str(kwargs["residual_threshold"])
-        filename += "_trials" + str(kwargs["max_trials"])
-    filename += "_" + kwargs["extra"]
+        filename += "_exp_in" + str(kwargs["expected_inliers"])
+    except:
+        print("RANSAC parameters not available")
+
+    if "post_function_evaluation" in kwargs.keys():
+        if "8pa" in str(kwargs["post_function_evaluation"]):
+            filename += "_method_8PA"
+            kwargs["method"] = "8PA"
+        if "Rt" in str(kwargs["post_function_evaluation"]):
+            if "SK" in str(kwargs["post_function_evaluation"]):
+                filename += "_method_KS_Rt"
+                kwargs["method"] = "KS_Rt"
+            else:
+                filename += "_method_Rt"
+                kwargs["method"] = "Rt"
+    if 'extra' in kwargs.keys():
+        filename += "_" + kwargs["extra"]
 
     if 'sampling' in kwargs.keys():
-        filename += "_samples_" + str(kwargs["sampling"])
-    initial_val = [dt for dt in kwargs.keys() if "iVal" in dt]
-    if len(initial_val) > 0:
-        for val in initial_val:
-            filename += "_" + val + "." + str(kwargs[val])
+        filename += "_samples" + str(kwargs["sampling"])
+
+    try:
+        initial_val = [dt for dt in kwargs.keys() if "iVal" in dt]
+        if len(initial_val) > 0:
+            for val in initial_val:
+                filename += "_" + val + "." + str(kwargs[val])
+    except:
+        print("initail values not available")
 
     dirname = os.path.join(dirname, filename)
     create_dir(dirname, delete_previous=False)

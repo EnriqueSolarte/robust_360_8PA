@@ -12,8 +12,8 @@ import cv2
 def eval_camera_pose(tracker, cam_gt):
     cam = Sphere(shape=tracker.initial_frame.shape)
     matches = tracker.get_matches()
-    bearings_kf = cam.pixel2normalized_vector(matches[0])
-    bearings_frm = cam.pixel2normalized_vector(matches[1])
+    bearings_kf = cam.pixel2euclidean_space(matches[0])
+    bearings_frm = cam.pixel2euclidean_space(matches[1])
 
     cam_8p = g8p.recover_pose_from_matches(x1=bearings_kf.copy(),
                                            x2=bearings_frm.copy())
