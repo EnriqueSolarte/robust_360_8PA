@@ -6,7 +6,6 @@ import time
 
 solver = g8p()
 
-
 def get_cam_pose_by_8pa(**kwargs):
     """
     Returns a camera pose using bearing vectors and the 8PA
@@ -153,10 +152,10 @@ def res_error_S_K(parameters, bearings_kf, bearings_frm):
     # TODO KS loss function
 
     loss = np.zeros((4,))
-    loss[0] = np.sum(residuals_error)
+    # loss[0] = np.sum(residuals_error)
     loss[1] = np.sum(norm_residuals_error)
-    loss[2] = sigma[-1]
-    loss[3] = C ** 2
+    # loss[2] = sigma[-1]
+    # loss[3] = C ** 2
     # loss[3] = 1/sigma[-2]
     # residuals_b = residuals_b * sigma[-1]
     # return np.ones_like(bearings_kf[0, :]) * residuals_error
@@ -171,10 +170,11 @@ def get_cam_pose_by_opt_res_error_SK(**kwargs):
 
     tic_toc = time.time()
     opt_k_s, p_cov, info = levmar.levmar(
-        res_error_S_K,
-        initial_s_k,
+        func=res_error_S_K,
+        p0=initial_s_k,
+        # maxit=100,
         # np.zeros_like(initial_s_k),
-        np.array((0, 0, 0, 0)),
+        y=np.array((0, 0, 0, 0)),
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()))
 
@@ -422,8 +422,9 @@ def residuals_error_KS_RT(parameters, bearings_kf, bearings_frm, s, k):
     norm_residuals_error = algebraic_error(
         e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
     # TODO KS_RT loss function
-    loss = np.ones_like(parameters)
-    loss[0] = np.sum(residuals_error)
+    loss = np.zeros_like(parameters)
+    # loss = np.ones_like(bearings_frm[0, :])
+    loss[1] = np.sum(residuals_error)
     loss[0] = np.sum(norm_residuals_error)
     # return norm_residuals_error
     return loss
@@ -435,10 +436,11 @@ def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
 
     initial_time = time.time()
     opt_k_s, p_cov, info = levmar.levmar(
-        res_error_S_K,
-        initial_s_k,
+        func=res_error_S_K,
+        p0=initial_s_k,
         # np.zeros_like(initial_s_k),
-        np.array((0, 0, 0, 0)),
+        y=np.array((0, 0, 0, 0)),
+        maxit=500,
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy()))
     delta_time = time.time() - initial_time
@@ -458,10 +460,12 @@ def get_cam_pose_by_opt_res_error_SK_Rt(**kwargs):
 
     initial_rt = np.hstack((eu, trn))
     opt_rt, p_cov, info = levmar.levmar(
-        residuals_error_KS_RT,
-        initial_rt,
-        np.zeros_like(initial_rt),
+        func=residuals_error_KS_RT,
+        p0=initial_rt,
+        y=np.zeros_like(initial_rt),
+        # y=np.zeros_like(kwargs["bearings"]["kf"][0, :]),
         # np.zeros((8,)),
+        maxit=500,
         args=(kwargs["bearings"]["kf"].copy(),
               kwargs["bearings"]["frm"].copy(), s, k))
     delta_time = time.time() - initial_time + delta_time
