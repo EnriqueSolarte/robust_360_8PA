@@ -14,18 +14,22 @@ def get_file_name(**kwargs):
     name = os.path.splitext(name_src)[0]
     scene_ = os.path.dirname(kwargs["data_scene"].scene)
     filename = name + "_" + scene_
-    filename += "_ifrm_{}".format(kwargs["idx_frame"])
     try:
+        filename += "_ifrm_{}".format(kwargs["idx_frame"])
         filename += "_res" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1])
+        filename += "_loc" + str(kwargs["loc"][0]) + "." + str(kwargs["loc"][1])
+        if "distance_threshold" in kwargs.keys():
+            filename += "_dist" + str(kwargs["distance_threshold"])
+        if "noise" in kwargs.keys():
+            filename += "_Noise." + str(kwargs["noise"]) + "_In." + str(kwargs["inliers_ratio"])
     except:
-        print("")
-    if "distance_threshold" in kwargs.keys():
-        filename += "_dist" + str(kwargs["distance_threshold"])
-    if "noise" in kwargs.keys():
-        filename += "_Noise." + str(kwargs["noise"]) + "_In." + str(kwargs["inliers_ratio"])
+        print("Some labels cannot be read")
     try:
-        filename += "_RANSAC_thr" + str(kwargs["residual_threshold"])
-        filename += "_exp_in" + str(kwargs["expected_inliers"])
+        filename += "_RANSAC_in" + str(kwargs["expected_inliers"])
+        filename += "_rthr8pa" + str(kwargs.get("residual_threshold_8PA", ""))
+        filename += "_set" + str(kwargs["min_super_set"])
+        filename += "_thr" + str(kwargs["residual_threshold"])
+        filename += "_rthr" + str(kwargs["relaxed_threshold"])
     except:
         print("RANSAC parameters not available")
 

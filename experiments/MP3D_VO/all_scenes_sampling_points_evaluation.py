@@ -4,8 +4,8 @@ import os
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    for sc in ("759xd9YjKW5", "pRbA3pwrgk9", "Z6MFQCViBuw"):
-        for inliers_ratio in (1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4):
+    for sc in ("pRbA3pwrgk9",):
+        for inliers_ratio in (1, 0.9):
             scene = sc + "/0"
             data = MP3D_VO(scene=scene, basedir=path)
             scene_settings = dict(
@@ -17,9 +17,10 @@ if __name__ == '__main__':
                 loc=(0, 0),
                 extra="inliers_eval",
                 skip_frames=1,
-                noise=500,
-                inliers_ratio=1.0,
+                noise=10,
+                inliers_ratio=inliers_ratio,
                 sampling=200,
+                save_bearings=True
             )
             initial_values = dict(
                 iVal_Res_SK=(1, 1),
@@ -34,8 +35,9 @@ if __name__ == '__main__':
                                                        **initial_values,
                                                        ),
                                 )
+
             kwargs = run_evaluation(**scene_settings, **initial_values, **log_settings)
 
-            plot_errors(**kwargs)
+            # plot_errors(**kwargs)
             plot_bar_errors(**kwargs)
             save_info(**kwargs)

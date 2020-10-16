@@ -1,17 +1,7 @@
-import cv2
 from structures.frame import Frame
-import pandas as pd
-import numpy as np
-from sphere import Sphere
 from solvers.epipolar_constraint_by_ransac import RansacEssentialMatrix
-from pcl_utilities import *
-from geometry_utilities import *
-from solvers.epipolar_constraint import EightPointAlgorithmGeneralGeometry as g8p
-import os
-from file_utilities import save_obj, load_obj
 from image_utilities import get_mask_map_by_res_loc
 from analysis.utilities.camera_recovering import *
-from file_utilities import create_dir
 
 colors = dict(
     COLOR_NORM='rgb(0,200,200)',
@@ -66,8 +56,6 @@ def get_bearings(**kwargs):
         x1=kwargs["bearings"]['kf'].copy(),
         x2=kwargs["bearings"]['frm'].copy(),
     )
-    if kwargs.get("save_bearings", False):
-        save_bearings(**kwargs)
     print("Number of pts: {}".format(kwargs["bearings"]["kf"].shape[1]))
     return kwargs, ret
 
@@ -125,6 +113,17 @@ def eval_cam_pose_error(_print=True, **kwargs):
     return kwargs
 
 
+def add_results(key, data, _print=True, **kwargs):
+    if key not in kwargs["results"].keys():
+        kwargs["results"][key] = [data]
+    else:
+        kwargs["results"][key].append(data)
+
+    if _print:
+        print("{}: {}".format(key, np.quantile(kwargs["results"][key], 0.5)))
+    return kwargs
+
+
 def error_eval(**kwargs):
     cams = [cam for cam in kwargs.keys() if "cam" in cam and "gt" not in cam]
     for cam in cams:
@@ -162,19 +161,6 @@ def msk(eval, quantile):
     mask = eval > pivot
     eval[mask] = pivot
     return eval
-
-
-def save_bearings_vectors(**kwargs):
-    while True:
-        bearings_kf, bearings_frm, cam_gt, kwargs, ret = track_features(**kwargs)
-
-        if not ret:
-            break
-
-        kwargs["bearings"] = dict()
-        kwargs["bearings"]["kf"] = bearings_kf
-        kwargs["bearings"]["frm"] = bearings_frm
-        save_bearings(**kwargs)
 
 
 def track_features(**kwargs):
@@ -252,20 +238,6 @@ def track_features(**kwargs):
         kwargs["idx_frame"] = kwargs["tracker"].frame_idx
 
     return bearings_kf, bearings_frm, relative_pose, kwargs, ret
-
-
-def save_bearings(**kwargs):
-    if kwargs["bearings"]["kf"] is not None:
-        dt = pd.DataFrame(np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
-        dirname = os.path.join(os.path.dirname(kwargs["filename"]), "frames")
-        file_bearings = str(kwargs["tracker"].initial_frame.idx) + "_" + str(
-            kwargs["tracker"].tracked_frame.idx) + ".txt"
-        file_bearings = os.path.join(dirname, file_bearings)
-        print("scene:{}".format(kwargs["data_scene"].scene))
-        print("Frames Kf:{}-frm:{}".format(kwargs["tracker"].initial_frame.idx, kwargs["tracker"].tracked_frame.idx))
-        print("tracked features {}".format(kwargs["bearings"]["kf"].shape[1]))
-        create_dir(dirname, delete_previous=False)
-        dt.to_csv(file_bearings, header=None, index=None)
 
 
 def get_bearings_by_plc(**kwargs):

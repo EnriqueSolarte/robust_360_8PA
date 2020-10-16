@@ -5,9 +5,9 @@ import os
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    for sc in scene_list:
-        if sc in ("i5noydFURQK", "sT4fr6TAbpF"):
-            continue
+    for sc in ["pRbA3pwrgk9"]:
+        # if sc in ("i5noydFURQK", "sT4fr6TAbpF"):
+        #     continue
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(

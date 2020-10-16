@@ -3,7 +3,7 @@ from read_datasets.KITTI import KITTI_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 from analysis.utilities.camera_recovering import *
-from analysis.utilities.plot_and_save_utilities import *
+from analysis.utilities.plot_utilities import *
 from analysis.utilities.experimentals_cam_recovering import *
 from analysis.utilities.surfaces_utilities import get_eval_of_8PA
 

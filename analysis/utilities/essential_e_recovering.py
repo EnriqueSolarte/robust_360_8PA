@@ -88,7 +88,7 @@ def res_error_S_K(parameters, bearings_kf, bearings_frm):
     return loss
 
 
-def get_cam_pose_by_opt_res_error_SK(**kwargs):
+def get_e_by_opt_res_error_SK(**kwargs):
     # ! Initial K,S parameters
     initial_s_k = kwargs[
         "iVal_Res_SK"]
@@ -149,6 +149,47 @@ def residuals_error_KS_RT(parameters, bearings_kf, bearings_frm, s, k):
 
 
 def get_e_by_opt_res_error_SK_Rt(**kwargs):
+    initial_s_k = kwargs[
+        "iVal_Res_SK"]  # initial_k_s = (0.001, 0.001, 0.001, 0.001)
+
+    opt_k_s, p_cov, info = levmar.levmar(
+        func=res_error_S_K,
+        p0=initial_s_k,
+        y=np.array((0, 0, 0, 0)),
+        maxit=500,
+        args=(kwargs["bearings"]["kf"].copy(),
+              kwargs["bearings"]["frm"].copy()))
+
+    s = opt_k_s[0]
+    k = opt_k_s[1]
+
+    # ! To speed up, we are using a previous e matrix saved at the
+    # ! LM loop optimization
+    # initial_pose = get_cam_pose_by_8pa(**kwargs)[0]
+    initial_pose = solver.recover_pose_from_e(
+        E=solver.current_e_matrix,
+        x1=kwargs["bearings"]["kf"].copy(),
+        x2=kwargs["bearings"]["frm"].copy()
+    )
+    eu = rotationMatrixToEulerAngles(initial_pose[0:3, 0:3])
+    trn = np.copy(initial_pose[0:3, 3])
+
+    initial_rt = np.hstack((eu, trn))
+    opt_rt, p_cov, info = levmar.levmar(
+        func=residuals_error_KS_RT,
+        p0=initial_rt,
+        y=np.zeros_like(initial_rt),
+        maxit=500,
+        args=(kwargs["bearings"]["kf"].copy(),
+              kwargs["bearings"]["frm"].copy(), s, k))
+
+    cam_final = eulerAnglesToRotationMatrix(opt_rt[0:3])
+    cam_final[0:3, 3] = opt_rt[3:6].copy()
+    return solver.get_e_from_cam_pose(cam_pose=cam_final)
+# * ********************************************************************
+
+
+def get_e_by_opt_res_error_RtKS(**kwargs):
     initial_s_k = kwargs[
         "iVal_Res_SK"]  # initial_k_s = (0.001, 0.001, 0.001, 0.001)
 

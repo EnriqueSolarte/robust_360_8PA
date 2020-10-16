@@ -1,4 +1,4 @@
-from analysis.utilities.plot_and_save_utilities import *
+from analysis.utilities.plot_utilities import *
 from pinhole import Pinhole
 from read_datasets.KITTI import KITTI_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor

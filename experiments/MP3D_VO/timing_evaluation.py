@@ -2,7 +2,7 @@ from analysis.sequence_in_360_fov.all_solvers import run_evaluation
 from read_datasets.MP3D_VO import MP3D_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
-from analysis.utilities.plot_and_save_utilities import *
+from analysis.utilities.plot_utilities import *
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"

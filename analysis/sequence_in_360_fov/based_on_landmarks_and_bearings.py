@@ -2,7 +2,7 @@ from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from analysis.utilities.camera_recovering import *
-from analysis.utilities.plot_and_save_utilities import *
+from analysis.utilities.plot_utilities import *
 
 
 def run_sequence(**kwargs):

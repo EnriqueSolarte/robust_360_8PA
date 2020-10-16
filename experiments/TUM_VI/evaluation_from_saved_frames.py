@@ -5,19 +5,16 @@ import os
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/TUM_VI/dataset"
     scene_list = os.listdir(path)
-
-    # scene = "dataset-room3_512_16"
-    # scene = "dataset-room1_512_16"
-    for num in [5]:
+    label_info = generate_fingerprint_time() + "_new_methods_"
+    for num in [1, 2, 3, 4, 5, 6]:
         scene = "dataset-room{}_512_16".format(num)
         data = TUM_VI(scene=scene, basedir=path)
         scene_settings = dict(
             data_scene=data,
             idx_frame=0,
             distance_threshold=0.5,
-            extra="test",
+            extra=label_info,
             special_eval=True,
-            sampling=200,
             use_saved_bearings=True
         )
         initial_values = dict(

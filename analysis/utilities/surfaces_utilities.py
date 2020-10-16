@@ -1,4 +1,4 @@
-from analysis.utilities.plot_and_save_utilities import *
+from analysis.utilities.plot_utilities import *
 
 
 def create_grid(**kwargs):

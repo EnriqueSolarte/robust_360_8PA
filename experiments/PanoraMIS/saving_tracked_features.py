@@ -2,7 +2,7 @@ from read_datasets.TUM_VI import TUM_VI
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from file_utilities import generate_fingerprint_time
-from analysis.utilities.plot_and_save_utilities import get_file_name, save_bearings
+from analysis.utilities.plot_utilities import get_file_name, save_bearings
 import cv2
 import os
 from analysis.utilities.data_utilities import save_bearings_vectors

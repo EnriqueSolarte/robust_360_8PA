@@ -4,7 +4,7 @@ from analysis.utilities.essential_e_recovering import *
 class RANSAC_8PA:
 
     def __init__(self, **kwargs):
-        self.residual_threshold = kwargs.get("residual_threshold", 1e-3)
+        self.residual_threshold = kwargs.get("residual_threshold_8PA", 1e-3)
         self.probability_success = kwargs.get("probability_success", 0.99)
         self.expected_inliers = kwargs.get("expected_inliers", 0.5)
         self.solver = EightPointAlgorithmGeneralGeometry()
@@ -21,8 +21,9 @@ class RANSAC_8PA:
         self.counter_trials = 0
         self.time_evaluation = np.inf
 
-        self.prior_function_evaluation = None
+        self.prior_function_evaluation = get_e_by_8pa
         self.post_function_evaluation = get_e_by_8pa
+        self.min_super_set = 8
 
     @staticmethod
     def estimate_essential_matrix(sample_bearings1, sample_bearings2, function):
@@ -46,7 +47,7 @@ class RANSAC_8PA:
         aux_time = time.time()
         for self.counter_trials in range(self.max_trials):
 
-            initial_inliers = random_state.choice(self.num_samples, 8, replace=False)
+            initial_inliers = random_state.choice(self.num_samples, self.min_super_set, replace=False)
             sample_bearings1 = bearings_1[:, initial_inliers]
             sample_bearings2 = bearings_2[:, initial_inliers]
 
@@ -92,8 +93,18 @@ class RANSAC_8PA:
             function=self.post_function_evaluation
             # ! predefined function used for post-evaluation
         )
-
         self.time_evaluation += time.time() - aux_time
+        # * Final Evaluation
+        sample_residuals = projected_error(
+            e=self.best_model,
+            x1=best_bearings_1,
+            x2=best_bearings_2
+        )
+        self.best_evaluation = np.sum(sample_residuals ** 2)
+
+        # * Final Selection
+        sample_inliers = sample_residuals < self.residual_threshold
+        self.best_inliers_num = np.sum(sample_inliers)
         return self.best_model, self.best_inliers
 
     def get_cam_pose(self, bearings_1, bearings_2):

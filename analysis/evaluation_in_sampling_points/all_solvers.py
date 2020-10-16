@@ -2,7 +2,7 @@ from read_datasets.MP3D_VO import MP3D_VO
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 from analysis.utilities.camera_recovering import *
-from analysis.utilities.plot_and_save_utilities import *
+from analysis.utilities.plot_utilities import *
 from analysis.utilities.experimentals_cam_recovering import *
 from file_utilities import generate_fingerprint_time
 
@@ -30,13 +30,10 @@ def run_evaluation(**kwargs):
         kwargs["loss_RES_Rt"], \
         kwargs["time_RES_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
 
-        # kwargs["cam_OURS_opt_res_Rtks"], kwargs["loss_OURS_RES_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
         kwargs["cam_OURS_opt_res_ks_Rt"], \
         kwargs["loss_OURS_RES_ks_Rt"], \
         kwargs["time_OURS_RES_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
-        # ! Based on REPROJECTION
-        # kwargs["cam_PnP_opt_rpj_Rt"], kwargs["loss_PnP"] = get_cam_pose_by_opt_rpj_Rt_pnp(**kwargs)
-        # kwargs["cam_OURS_opt_prj_sk"], kwargs["loss_OURS_RPJ_ks"] = get_cam_pose_by_opt_rpj_SK(**kwargs)
+
         kwargs = eval_cam_pose_error(**kwargs)
 
     return kwargs
