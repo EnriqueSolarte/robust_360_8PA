@@ -24,8 +24,12 @@ def get_dict_results(**kwargs):
             results_filename = filename_in_results(scene=scene, ext=".results", **kwargs)
         else:
             results_filename = filename_in_results(scene=scene + "/{}".format(kwargs["seq"]), ext=".results", **kwargs)
+        if results_filename is None:
+            continue
         list_dt.append(pd.DataFrame(load_obj(results_filename)))
         print("scene evaluated: {} - {} - {}".format(scene, len(list_dt[-1]), kwargs["key"]))
+    if len(list_dt) < 1:
+        exit(0)
     kwargs["results"] = pd.concat(list_dt)
     if kwargs.get("save", False):
         kwargs["save_results_dir"] = os.path.join(
@@ -63,34 +67,47 @@ def get_results(**kwargs):
 
 def eval_results(quantile, **kwargs):
     def print_results():
-        print("Q{} {}: \t \t {} - {} ".format(
+        if "time" in header:
+            scale = scale_time
+        else:
+            scale = 1
+        print("Q{} {},{},{} ".format(
             int(quantile * 100),
             header,
-            np.quantile(data, quantile),
-            np.std(data)
+            np.quantile(data / scale, quantile),
+            np.std(data / scale)
         ))
 
     results = kwargs["results"]
+    scale_time = results["time_8pa"].values
     if kwargs.get("save", False):
-        create_file(kwargs["save_results_dir"] + "/summary_results_Q{}.txt".format(int(quantile * 100)),
+        create_file(kwargs["save_results_dir"] + "/summary_results_Q{}.csv".format(int(quantile * 100)),
                     delete_previous=True)
-    all_headers = [h for h in results.columns if not "kf" in h]
-    all_headers.sort(key=lambda x: x[0:5])
+    all_headers = [h for h in results.columns if "kf" not in h]
+    # all_headers.sort(key=lambda x: x[-1:-5])
     original_stdout = sys.stdout
+    i = 0
     if kwargs.get("save", False):
-        with open(kwargs["save_results_dir"] + "/summary_results_Q{}.txt".format(int(quantile * 100)), "w") as f:
+        with open(kwargs["save_results_dir"] + "/summary_results_Q{}.csv".format(int(quantile * 100)), "w") as f:
             for header in all_headers:
                 data = results[header].values
                 for std in [f, original_stdout]:
                     sys.stdout = std
+                    if i == 0:
+                        print("Description, evaluation, std")
+                        i += 1
                     print_results()
-            print(kwargs.get("extra", ""))
+            for std in [f, original_stdout]:
+                sys.stdout = std
+                print("8PA time,{},{}".format(np.median(scale_time), np.std(scale_time)))
+            # print(kwargs.get("extra", ""))
             sys.stdout = original_stdout
     else:
         for header in all_headers:
             data = results[header].values
             print_results()
-        print(kwargs.get("extra", ""))
+        print("8PA time,{},{}".format(np.median(scale_time), np.std(scale_time)))
+        # print(kwargs.get("extra", ""))
 
 
 if __name__ == '__main__':

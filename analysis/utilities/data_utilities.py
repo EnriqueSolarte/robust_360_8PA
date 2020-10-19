@@ -100,11 +100,18 @@ def eval_cam_pose_error(_print=True, **kwargs):
     if kwargs.get("timing_evaluation", False):
         time_evaluation = [time_ for time_ in kwargs.keys() if "time" in time_]
         print("*****************************************")
+
         for eval in time_evaluation:
             if eval not in kwargs["results"].keys():
-                kwargs["results"][eval] = [kwargs[eval]]
+                if "eval_8pa" == eval:
+                    kwargs["results"][eval] = [kwargs[eval]]
+                else:
+                    kwargs["results"][eval] = [kwargs[eval] / kwargs["time_8pa"]]
             else:
-                kwargs["results"][eval].append(kwargs[eval])
+                if "eval_8pa" == eval:
+                    kwargs["results"][eval].append(kwargs[eval])
+                else:
+                    kwargs["results"][eval].append(kwargs[eval] / kwargs["time_8pa"])
 
             if _print:
                 print("MED time {}: {}".format(eval,

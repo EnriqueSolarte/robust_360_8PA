@@ -4,7 +4,10 @@ import os
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    extra = generate_fingerprint_time() + "_ablation_rtks_test"
+    # label = "_KS:L1_RT:L1_KS-RT:b-*L1"
+    label = "_RT:L2_KS:-L1_KS-RT:a.B=0.5-L1-RTKS:a.B=0.5-L2"
+    # label = "_RT:L1_RTKS:B=0.3-a-L2_"
+    extra = generate_fingerprint_time() + label
     for sc in scene_list:
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
@@ -16,7 +19,7 @@ if __name__ == '__main__':
             loc=(0, 0),
             extra=extra,
             special_eval=True,
-            use_saved_bearings=False
+            use_saved_bearings=True
         )
 
         initial_values = dict(
@@ -42,5 +45,5 @@ if __name__ == '__main__':
                                 **initial_values, **log_settings)
 
         # plot_errors(**kwargs)
-        plot_bar_errors(**kwargs)
+        plot_bar_errors_and_time(**kwargs)
         save_info(**kwargs)

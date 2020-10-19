@@ -4,8 +4,8 @@ import os
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/TUM_VI/dataset"
-    scene_list = os.listdir(path)
-    label_info = generate_fingerprint_time() + "_new_methods_"
+    label = "_KS:L1_RT:L1_RTKS:a-L2_KS-RT:a-L2"
+    extra = generate_fingerprint_time() + label
     for num in [1, 2, 3, 4, 5, 6]:
         scene = "dataset-room{}_512_16".format(num)
         data = TUM_VI(scene=scene, basedir=path)
@@ -13,7 +13,7 @@ if __name__ == '__main__':
             data_scene=data,
             idx_frame=0,
             distance_threshold=0.5,
-            extra=label_info,
+            extra=extra,
             special_eval=True,
             use_saved_bearings=True
         )
@@ -49,5 +49,5 @@ if __name__ == '__main__':
         kwargs = run_evaluation(**scene_settings, **features_setting,
                                 **initial_values, **log_settings)
 
-        plot_bar_errors(**kwargs)
+        plot_bar_errors_and_time(**kwargs)
         save_info(**kwargs)

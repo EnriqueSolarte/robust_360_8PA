@@ -3,8 +3,11 @@ from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from structures.tracker import LKTracker
 from analysis.utilities.camera_recovering import *
 from analysis.utilities.plot_utilities import *
+from analysis.utilities.save_and_load_data import load_bearings_from_sampled_pcl
 from analysis.utilities.experimentals_cam_recovering import *
 from file_utilities import generate_fingerprint_time
+from experiments.MP3D_VO.saving_bearings_from_sampled_pcl import create_dir_for_sampled_pcl, \
+    save_current_bearings_vectores, save_list_of_poses
 
 
 def run_evaluation(**kwargs):
@@ -12,10 +15,14 @@ def run_evaluation(**kwargs):
     if "filename" not in kwargs.keys():
         kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
     print_log_files(kwargs["log_files"])
+    if kwargs.get("save_bearings", False):
+        kwargs = create_dir_for_sampled_pcl(**kwargs)
     while True:
         kwargs, ret = get_bearings_by_plc(**kwargs)
         if not ret:
             break
+        if kwargs.get("save_bearings", False):
+            kwargs = save_current_bearings_vectores(**kwargs)
         print(
             "================================================================="
         )
@@ -23,18 +30,25 @@ def run_evaluation(**kwargs):
         # ! Based on RESIDUALS
         kwargs["cam_8pa"], kwargs["loss_8pa"], kwargs["time_8pa"] = get_cam_pose_by_8pa(**kwargs)
 
-        kwargs["cam_OURS_opt_res_ks"], kwargs["loss_OURS_RES_ks"], kwargs[
-            "time_OURS_RES_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+        kwargs["cam_OURS_opt_res_ks"], kwargs["loss_OURS_opt_res_ks"], kwargs[
+            "time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
 
         kwargs["cam_8pa_opt_res_Rt"], \
-        kwargs["loss_RES_Rt"], \
-        kwargs["time_RES_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
+        kwargs["loss_8pa_opt_res_Rt"], \
+        kwargs["time_8pa_opt_res_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
 
         kwargs["cam_OURS_opt_res_ks_Rt"], \
-        kwargs["loss_OURS_RES_ks_Rt"], \
-        kwargs["time_OURS_RES_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
-
+        kwargs["loss_OURS_opt_res_ks_Rt"], \
+        kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
+        #
+        kwargs["cam_OURS_opt_res_Rtks"], \
+        kwargs["loss_OURS_opt_res_Rtks"], \
+        kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
+        #
         kwargs = eval_cam_pose_error(**kwargs)
+
+    if kwargs.get("save_bearings", False):
+        save_list_of_poses(**kwargs)
 
     return kwargs
 

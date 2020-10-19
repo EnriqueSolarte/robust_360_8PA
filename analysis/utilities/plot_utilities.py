@@ -3,7 +3,7 @@ from plotly.subplots import make_subplots
 from analysis.utilities.data_utilities import *
 import os
 import numpy as np
-from file_utilities import create_dir
+from file_utilities import create_dir, save_obj
 import shutil
 
 
@@ -62,6 +62,66 @@ def get_file_name(**kwargs):
     create_dir(dirname, delete_previous=False)
 
     return os.path.join(dirname, filename)
+
+
+def plot_bar_errors_and_time(**kwargs):
+    results = list(kwargs["results"].keys())
+    titles = [dt for dt in results if dt not in ("kf",)]
+
+    dt_results = list()
+    dt_results.append([dt for dt in titles if "rot" in dt])
+    dt_results.append([dt for dt in titles if "tran" in dt])
+    dt_results.append([dt for dt in titles if "time" in dt])
+    n = 3 * len(dt_results)
+    idxs = np.linspace(0, n - 1, n).reshape(3, -1)
+    fig = make_subplots(
+        subplot_titles=["Q75", "Q50", "Q25", "Q75", "Q50", "Q25", "Q75", "Q50", "Q25"],
+        rows=idxs.shape[0],
+        cols=idxs.shape[1],
+        specs=[[{}, {}, {}], [{}, {}, {}], [{}, {}, {}]])
+
+    kwargs["quartiles"] = dict()
+    for i_row, dt in enumerate(dt_results):
+
+        if len(dt) == 0:
+            continue
+
+        quartiles_settings = dict(Q75=(np.quantile, 0.75),
+                                  Q50=(np.quantile, 0.50),
+                                  Q25=(np.quantile, 0.25))
+
+        for i_quart, quartile in enumerate(list(quartiles_settings.keys())):
+            row, col = i_row + 1, i_quart + 1
+            y_label = dt[0]
+            for dt_r in dt:
+                func = quartiles_settings[quartile][0]
+                arg = quartiles_settings[quartile][1]
+                kwargs["quartiles"][dt_r + "_" + quartile] = func(
+                    kwargs["results"][dt_r], arg)
+
+                color = get_color(dt_r)
+
+                fig.add_trace(go.Bar(x=(dt_r,),
+                                     y=(kwargs["quartiles"][dt_r + "_" +
+                                                            quartile],),
+                                     name=dt_r + "_" + quartile,
+                                     marker_color=color),
+                              row=row,
+                              col=col)
+                if "rot" in dt_r:
+                    y_label = "Rotation Error"
+                elif "tran" in dt_r:
+                    y_label = "Translation Error"
+                elif "time" in dt_r:
+                    y_label = "Computation Time"
+
+            fig.update_yaxes(title_text=y_label, row=row, col=col)
+
+    fig_file = "{}_plot_bar_errors.html".format(kwargs["filename"])
+    fig.update_layout(title_text=fig_file, height=800, width=1800)
+    fig.show()
+    fig.write_html("{}".format(fig_file))
+    print("done")
 
 
 def plot_bar_errors(**kwargs):

@@ -22,11 +22,11 @@ def get_color_by_delta(pcl_size, delta):
 def plot_ovoid_space(v_fov, h_fov, k_norm, s_norm):
     bearings_a, bearings_b = generate_bearings(theta=(-h_fov / 2, h_fov / 2),
                                                phi=(-v_fov / 2, v_fov / 2),
-                                               n_pts=20,
+                                               n_pts=10000,
                                                # n_pts=50,
-                                               min_d=2,
+                                               min_d=30,
                                                max_d=35,
-                                               trans_vector=(0, 0, 0.1),
+                                               trans_vector=(0, 0, 0.01),
                                                rot_vector=(0, 0, 0))
 
     bearings_a_norm, _ = normalizer_Hartley_isotropic(bearings_a)
@@ -51,6 +51,6 @@ def plot_ovoid_space(v_fov, h_fov, k_norm, s_norm):
 
 if __name__ == '__main__':
     fov = (180, 360)
-    k_norm_ = 2.5
+    k_norm_ = 1
     s_norm_ = 2
     plot_ovoid_space(v_fov=fov[0], h_fov=fov[1], k_norm=k_norm_, s_norm=s_norm_)
