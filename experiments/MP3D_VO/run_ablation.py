@@ -22,25 +22,30 @@ def run_ablation(**kwargs):
         # ! Based on RESIDUALS
         kwargs["cam_8pa"], kwargs["loss_8pa"], kwargs["time_8pa"] = get_cam_pose_by_8pa(**kwargs)
 
-        # kwargs["cam_OURS_opt_res_ks"], kwargs["loss_OURS_opt_res_ks"], kwargs[
-        #     "time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+        kwargs["cam_OURS_opt_res_ks"], \
+        kwargs["loss_OURS_opt_res_ks"], \
+        kwargs["time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
 
-        kwargs["cam_8pa_opt_res_Rt"], \
-        kwargs["loss_8pa_opt_res_Rt"], \
-        kwargs["time_8pa_opt_res_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
+        kwargs["cam_8pa_opt_res_Rt_L2"], \
+        kwargs["loss_8pa_opt_res_Rt_L2"], \
+        kwargs["time_8pa_opt_res_Rt_L2"] = get_cam_pose_by_opt_res_error_Rt_L2(**kwargs)
 
-        # kwargs["cam_OURS_opt_res_ks_Rt"], \
-        # kwargs["loss_OURS_opt_res_ks_Rt"], \
-        # kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
+        kwargs["cam_OURS_opt_res_Rtks"], \
+        kwargs["loss_OURS_opt_res_Rtks"], \
+        kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
 
-        kwargs["cam_OURS_opt_res_ks_Rt"], \
-        kwargs["loss_OURS_opt_res_ks_Rt"], \
-        kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_wRt(**kwargs)
+        kwargs["cam_OURS_opt_res_ks_wRt_L2"], \
+        kwargs["loss_OURS_opt_res_ks_wRt_L2"], \
+        kwargs["time_OURS_opt_res_ks_wRt_L2"] = get_cam_pose_by_opt_res_error_SK_wRt_L2(**kwargs)
 
-        # kwargs["cam_OURS_opt_res_Rtks"], \
-        # kwargs["loss_OURS_opt_res_Rtks"], \
-        # kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
-        #
+        kwargs["cam_8pa_opt_res_Rt_L1"], \
+        kwargs["loss_8pa_opt_res_Rt_L1"], \
+        kwargs["time_8pa_opt_res_Rt_L1"] = get_cam_pose_by_opt_res_error_Rt_L1(**kwargs)
+
+        kwargs["cam_OURS_opt_res_ks_wRt_L1"], \
+        kwargs["loss_OURS_opt_res_ks_wRt_L1"], \
+        kwargs["time_OURS_opt_res_ks_wRt_L1"] = get_cam_pose_by_opt_res_error_SK_wRt_L1(**kwargs)
+
         kwargs = eval_cam_pose_error(**kwargs)
     return kwargs
 
@@ -65,7 +70,7 @@ if __name__ == '__main__':
 
     # extra = "COMPARISON_KS:L1_RT:L2_RTKS:B=0.5-a-L2_KS-RT:B=0.5-a-L1_{}".format(keyword)
     # extra = "lie-algebra_{}".format(keyword)
-    extra = "_(RT:L1)(KS:L1-wRT-max2:B=10-L1)_{}".format(keyword)
+    extra = "_ALL_METHODS_{}".format(keyword)
 
     for sc in ("Z6MFQCViBuw",):
         scene = sc + "/0"
