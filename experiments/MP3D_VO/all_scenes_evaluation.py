@@ -5,10 +5,11 @@ if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
     # label = "_KS:L1_RT:L1_KS-RT:b-*L1"
-    label = "_RT:L2_KS:-L1_KS-RT:a.B=0.5-L1-RTKS:a.B=0.5-L2"
+    # label = "_RT:L2_KS:-L1_KS-RT:a.B=0.5-L1-RTKS:a.B=0.5-L2"
     # label = "_RT:L1_RTKS:B=0.3-a-L2_"
+    label = "_(RT:L1)(KS:L1-wRT-max2:B=10-L1)_"
     extra = generate_fingerprint_time() + label
-    for sc in scene_list:
+    for sc in ("Z6MFQCViBuw",):
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
@@ -18,6 +19,7 @@ if __name__ == '__main__':
             res=(360, 180),
             loc=(0, 0),
             extra=extra,
+            keyword="samples200",
             special_eval=True,
             use_saved_bearings=True
         )

@@ -6,7 +6,7 @@ from analysis.utilities.camera_recovering import *
 from analysis.utilities.plot_utilities import *
 from analysis.utilities.experimentals_cam_recovering import *
 from file_utilities import generate_fingerprint_time
-from analysis.utilities.save_and_load_data import load_bearings_from_tracked_features
+from analysis.utilities.save_and_load_data import load_bearings_from_tracked_features, save_bearings
 
 
 def run_evaluation(**kwargs):
@@ -28,23 +28,30 @@ def run_evaluation(**kwargs):
         try:
             kwargs["cam_8pa"], kwargs["loss_8pa"], kwargs["time_8pa"] = get_cam_pose_by_8pa(**kwargs)
 
-            kwargs["cam_OURS_opt_res_ks"], kwargs["loss_OURS_opt_res_ks"], kwargs[
-                "time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+            # kwargs["cam_OURS_opt_res_ks"], kwargs["loss_OURS_opt_res_ks"], kwargs[
+            #     "time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
 
             kwargs["cam_8pa_opt_res_Rt"], \
             kwargs["loss_8pa_opt_res_Rt"], \
             kwargs["time_8pa_opt_res_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
 
+            # kwargs["cam_OURS_opt_res_ks_Rt"], \
+            # kwargs["loss_OURS_opt_res_ks_Rt"], \
+            # kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
+
             kwargs["cam_OURS_opt_res_ks_Rt"], \
             kwargs["loss_OURS_opt_res_ks_Rt"], \
-            kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
+            kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_wRt(**kwargs)
 
-            kwargs["cam_OURS_opt_res_Rtks"], \
-            kwargs["loss_OURS_opt_res_Rtks"], \
-            kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
+            # kwargs["cam_OURS_opt_res_Rtks"], \
+            # kwargs["loss_OURS_opt_res_Rtks"], \
+            # kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
+
             print("{}".format(kwargs["filename"]))
 
             kwargs = eval_cam_pose_error(**kwargs)
+            if kwargs.get("save_bearings", False):
+                save_bearings(**kwargs)
         except:
             print("bearings could be evaluated!!!!")
             print("{}".format(kwargs["filename"]))

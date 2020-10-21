@@ -29,10 +29,14 @@ def run_ablation(**kwargs):
         kwargs["loss_8pa_opt_res_Rt"], \
         kwargs["time_8pa_opt_res_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
 
+        # kwargs["cam_OURS_opt_res_ks_Rt"], \
+        # kwargs["loss_OURS_opt_res_ks_Rt"], \
+        # kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
+
         kwargs["cam_OURS_opt_res_ks_Rt"], \
         kwargs["loss_OURS_opt_res_ks_Rt"], \
-        kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
-        #
+        kwargs["time_OURS_opt_res_ks_Rt"] = get_cam_pose_by_opt_res_error_SK_wRt(**kwargs)
+
         # kwargs["cam_OURS_opt_res_Rtks"], \
         # kwargs["loss_OURS_opt_res_Rtks"], \
         # kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
@@ -44,7 +48,7 @@ def run_ablation(**kwargs):
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    keyword = "inliers_0.95_noise_10"
+    keyword = "inliers_0.5_noise_500"
     # ! L2**2
     # extra = "ABLATION_KS:L1_RT:L2_RTKS:a-L2_KS-RT:a-L2_TRK-FEATURES"
     # extra = "ABLATION_KS:L1_RT:L2_RTKS:a-L2_KS-RT:a-L2_INLIERS_0.5"
@@ -60,9 +64,10 @@ if __name__ == '__main__':
     # extra = "ABLATION_KS:*L1_RT:*L1_RTKS:a-*L1_KS-RT:a-*L1_INLIERS_0.5"
 
     # extra = "COMPARISON_KS:L1_RT:L2_RTKS:B=0.5-a-L2_KS-RT:B=0.5-a-L1_{}".format(keyword)
-    extra = "TEST_RT:L1_KS-RT:B=0.5-a-L1_{}".format(keyword)
+    # extra = "lie-algebra_{}".format(keyword)
+    extra = "_(RT:L1)(KS:L1-wRT-max2:B=10-L1)_{}".format(keyword)
 
-    for sc in ("pRbA3pwrgk9",):
+    for sc in ("Z6MFQCViBuw",):
         scene = sc + "/0"
 
         data = MP3D_VO(scene=scene, basedir=path)

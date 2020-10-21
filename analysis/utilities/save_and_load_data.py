@@ -54,7 +54,7 @@ def load_bearings_from_sampled_pcl(**kwargs):
 def load_bearings_from_tracked_features(**kwargs):
     if "saved_bearings_files" not in kwargs.keys():
         dir_result = os.path.join(os.path.dirname(os.path.dirname(kwargs["filename"])), "saved_bearings")
-        saved_frames_dir = [d for d in os.listdir(dir_result) if "saving_tracked_features" in d][0]
+        saved_frames_dir = [d for d in os.listdir(dir_result) if kwargs["keyword"] in d][0]
         list_saved_files = os.listdir(os.path.join(dir_result, saved_frames_dir + "/frames"))
         list_saved_files = [os.path.join(dir_result, saved_frames_dir + "/frames", f) for f in list_saved_files]
         kwargs["saved_bearings_files"] = list_saved_files
@@ -121,7 +121,16 @@ def save_bearings_vectors(**kwargs):
 def save_bearings(**kwargs):
     if kwargs["bearings"]["kf"] is not None:
         dt = pd.DataFrame(np.vstack((kwargs["bearings"]["kf"], kwargs["bearings"]["frm"])).T)
-        dirname = os.path.join(os.path.dirname(kwargs["filename"]), "frames")
+        dirname = os.path.join(os.path.dirname(os.path.dirname(kwargs["filename"])),
+                               "saved_bearings",
+                               "saving_tracked_features" +
+                               "_samples_" + str(kwargs["sampling"]) +
+                               "_dist_" + str(kwargs["distance_threshold"]) +
+                               "_res_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1]) +
+                               "_loc_" + str(kwargs["loc"][0]) + "." + str(kwargs["loc"][1]),
+                               "frames",
+
+                               )
         file_bearings = str(kwargs["tracker"].initial_frame.idx) + "_" + str(
             kwargs["tracker"].tracked_frame.idx) + ".txt"
         file_bearings = os.path.join(dirname, file_bearings)

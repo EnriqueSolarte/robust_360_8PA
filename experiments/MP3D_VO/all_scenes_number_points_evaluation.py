@@ -5,7 +5,7 @@ import os
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    for sc in ["pRbA3pwrgk9"]:
+    for sc in scene_list[4:]:
         # if sc in ("i5noydFURQK", "sT4fr6TAbpF"):
         #     continue
         scene = sc + "/0"
@@ -38,11 +38,10 @@ if __name__ == '__main__':
                                        **features_setting,
                                        **initial_values,
                                        ),
-                save_bearings=False)
+                save_bearings=True)
 
             kwargs = run_evaluation(
                 **scene_settings, **features_setting, **initial_values, **log_settings
             )
-            plot_errors(**kwargs)
-            plot_bar_errors(**kwargs)
+            plot_bar_errors_and_time(**kwargs)
             save_info(**kwargs)
