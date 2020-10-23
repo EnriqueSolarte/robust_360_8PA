@@ -15,7 +15,8 @@ if __name__ == '__main__':
             distance_threshold=0.5,
             extra=extra,
             special_eval=True,
-            use_saved_bearings=True
+            use_saved_bearings=True,
+            keyword="samples200"
         )
         initial_values = dict(
             iVal_Res_SK=(1, 1),

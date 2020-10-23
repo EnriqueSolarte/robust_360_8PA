@@ -5,6 +5,7 @@ from solvers.epipolar_constraint import *
 import time
 from liegroups.numpy import SE3
 from scipy.stats import norm
+from scipy.stats import t
 
 solver = g8p()
 
@@ -265,6 +266,7 @@ def get_cam_pose_by_opt_res_error_RtSK(**kwargs):
 # # * ********************************************************************
 
 def residuals_error_KS_gaussianW_Rt_L2(parameters, bearings_kf, bearings_frm, s, k):
+    # ! OURS
     bearings_kf_norm, n1 = normalizer_s_k(x=bearings_kf, s=s, k=k)
     bearings_frm_norm, n2 = normalizer_s_k(x=bearings_frm, s=s, k=k)
 
@@ -280,16 +282,15 @@ def residuals_error_KS_gaussianW_Rt_L2(parameters, bearings_kf, bearings_frm, s,
     norm_residuals_error = algebraic_error(
         e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
 
-    # ! residuals
-    # norm_residuals_error = residuals_error
     weights = norm(np.mean(norm_residuals_error), np.std(norm_residuals_error))
-
+    # weights = t.pdf(norm_residuals_error, df=5)
     # * KS-wRT: L2
     loss = np.sqrt(weights.pdf(norm_residuals_error)) * residuals_error
+    # loss = np.sqrt(weights) * residuals_error
 
     return loss
 
-
+# ! OURS
 def get_cam_pose_by_opt_res_error_SK_gaussianW_Rt_L2(**kwargs):
     initial_s_k = kwargs[
         "iVal_Res_SK"]
@@ -357,6 +358,7 @@ def get_cam_pose_by_opt_res_error_SK_gaussianW_Rt_L2(**kwargs):
 
 # # ! ********************************************************************
 # # * ********************************************************************
+# ! OURS
 def residuals_error_KS_wRT_const_w_L2(parameters, bearings_kf, bearings_frm, weights):
     cam_pose = SE3.exp(parameters).as_matrix()
 
@@ -407,22 +409,16 @@ def get_cam_pose_by_opt_res_error_SK_const_gaussianW_Rt_L2(**kwargs):
     print("Iterations: {}".format(info[2]))
     print("termination: {}".format(info[3]))
 
-    # ! residuals
-    # cam_hat, _, delta_time = get_cam_pose_by_8pa(**kwargs)
+    initial_time = time.time()
+    norm_residuals_error = algebraic_error(e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
     # residual = projected_error(
-    #     e=solver.get_e_from_cam_pose(cam_hat),
+    #     e=e_hat,
     #     x1=kwargs["bearings"]['kf'].copy(),
     #     x2=kwargs["bearings"]['frm'].copy())
-
-    initial_time = time.time()
-    # norm_residuals_error = algebraic_error(e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
-    residual = projected_error(
-        e=e_hat,
-        x1=kwargs["bearings"]['kf'].copy(),
-        x2=kwargs["bearings"]['frm'].copy())
-    norm_residuals_error = residual
-
+    # norm_residuals_error = residual
     weights = norm(np.mean(norm_residuals_error), np.std(norm_residuals_error))
+    #
+    # weights = t.pdf(norm_residuals_error, df=5)
 
     initial_pose = cam_hat
     xi = SE3.log(SE3.from_matrix(initial_pose))
@@ -435,6 +431,7 @@ def get_cam_pose_by_opt_res_error_SK_const_gaussianW_Rt_L2(**kwargs):
               kwargs["bearings"]["frm"].copy(),
               # s, k
               weights.pdf(norm_residuals_error)
+              # weights
               ))
     delta_time = time.time() - initial_time + delta_time
 
@@ -469,11 +466,12 @@ def residuals_error_gaussianW_residuals_Rt_L2(parameters, bearings_kf, bearings_
         e=e_rt, x1=bearings_kf, x2=bearings_frm)
 
     # ! residuals
-    norm_residuals_error = residuals_error
-    weights = norm(np.mean(norm_residuals_error), np.std(norm_residuals_error))
+    # weights = t.pdf(residuals_error, df=1000)
+    weights = norm(np.mean(residuals_error), np.std(residuals_error))
 
     # * KS-wRT: L2
-    loss = np.sqrt(weights.pdf(norm_residuals_error)) * residuals_error
+    loss = np.sqrt(weights.pdf(residuals_error)) * residuals_error
+    # loss = np.sqrt(weights) * residuals_error
 
     return loss
 
