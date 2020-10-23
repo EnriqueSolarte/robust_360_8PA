@@ -7,7 +7,7 @@ from file_utilities import create_dir, save_obj
 import shutil
 
 
-def get_file_name(**kwargs):
+def get_file_name(create_directory=True, **kwargs):
     dirname, name_src = os.path.split(kwargs["file_src"])
     dirname = os.path.join(dirname, "results")
     dirname = os.path.join(dirname, kwargs["data_scene"].scene)
@@ -59,7 +59,8 @@ def get_file_name(**kwargs):
         print("initail values not available")
 
     dirname = os.path.join(dirname, filename)
-    create_dir(dirname, delete_previous=False)
+    if create_directory:
+        create_dir(dirname, delete_previous=False)
 
     return os.path.join(dirname, filename)
 

@@ -5,9 +5,11 @@ from file_utilities import generate_fingerprint_time
 from analysis.utilities.plot_utilities import get_file_name
 from analysis.utilities.save_and_load_data import save_bearings_vectors
 import os
+import cv2
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
+    path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
     scene_list = os.listdir(path)
     label_info = generate_fingerprint_time() + "_saved_tracked_features_"
     for sc in scene_list:
@@ -27,10 +29,11 @@ if __name__ == '__main__':
         features_setting = dict(
             feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
             tracker=LKTracker(),
-            show_tracked_features=True,
+            show_tracked_features=False,
         )
         log_settings = dict(filename=get_file_name(file_src=__file__,
                                                    **scene_settings, **features_setting,
+                                                   create_directory=False
                                                    ),
                             save_bearings=False)
         save_bearings_vectors(**scene_settings,

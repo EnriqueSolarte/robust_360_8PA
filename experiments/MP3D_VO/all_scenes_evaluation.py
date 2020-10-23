@@ -2,7 +2,8 @@ from analysis.sequence_in_360_fov.all_solvers import *
 import os
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
+    path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
     scene_list = os.listdir(path)
     # label = "_KS:L1_RT:L1_KS-RT:b-*L1"
     # label = "_RT:L2_KS:-L1_KS-RT:a.B=0.5-L1-RTKS:a.B=0.5-L2"
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     # extra = generate_fingerprint_time() + label
     extra = label
 
-    for sc in (scene_list[3],):
+    for sc in (scene_list[0],):
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(

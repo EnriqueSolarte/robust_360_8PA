@@ -22,17 +22,17 @@ def run_ablation(**kwargs):
         # ! Based on RESIDUALS
         kwargs["cam_8pa"], kwargs["loss_8pa"], kwargs["time_8pa"] = get_cam_pose_by_8pa(**kwargs)
 
-        # kwargs["cam_OURS_opt_res_ks"], \
-        # kwargs["loss_OURS_opt_res_ks"], \
-        # kwargs["time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+        kwargs["cam_OURS_opt_res_ks"], \
+        kwargs["loss_OURS_opt_res_ks"], \
+        kwargs["time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
 
-        # kwargs["cam_8pa_opt_res_Rt_L2"], \
-        # kwargs["loss_8pa_opt_res_Rt_L2"], \
-        # kwargs["time_8pa_opt_res_Rt_L2"] = get_cam_pose_by_opt_res_error_Rt_L2(**kwargs)
+        kwargs["cam_8pa_opt_res_Rt_L2"], \
+        kwargs["loss_8pa_opt_res_Rt_L2"], \
+        kwargs["time_8pa_opt_res_Rt_L2"] = get_cam_pose_by_opt_res_error_Rt_L2(**kwargs)
 
-        # kwargs["cam_OURS_opt_res_Rtks"], \
-        # kwargs["loss_OURS_opt_res_Rtks"], \
-        # kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
+        kwargs["cam_OURS_opt_res_Rtks"], \
+        kwargs["loss_OURS_opt_res_Rtks"], \
+        kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
 
         kwargs["cam_OURS_opt_res_ks_wRt_L2"], \
         kwargs["loss_OURS_opt_res_ks_wRt_L2"], \
@@ -62,12 +62,14 @@ def run_ablation(**kwargs):
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
+    path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+
     scene_list = os.listdir(path)
-    keyword = "_samples_200_inliers_0.5_noise_500"
+    keyword = "_samples_200_inliers_0.9_noise_500"
     extra = "_EVALUATION_KSRT_{}".format(keyword)
 
-    for sc in (scene_list[1],):
+    for sc in (scene_list[0],):
         scene = sc + "/0"
 
         data = MP3D_VO(scene=scene, basedir=path)
