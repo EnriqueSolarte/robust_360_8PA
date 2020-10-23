@@ -21,7 +21,7 @@ def OPT_ransac_opt_ks_rt(**kwargs):
     ransac = RANSAC_OPT_8PA(**kwargs)
 
     ransac.prior_function_evaluation = get_e_by_opt_res_error_Rt
-    ransac.post_function_evaluation = get_e_by_opt_res_error_SK_Rt
+    ransac.post_function_evaluation = get_e_by_opt_res_error_SKRt
     ransac.min_super_set = kwargs.get("min_super_set", 30)
     return eval(method="opt_ks_rt", ransac=ransac, **kwargs)
 

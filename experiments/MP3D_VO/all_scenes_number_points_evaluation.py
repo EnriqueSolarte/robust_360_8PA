@@ -5,7 +5,7 @@ import os
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    for sc in scene_list[4:]:
+    for sc in ("Z6MFQCViBuw",):
         # if sc in ("i5noydFURQK", "sT4fr6TAbpF"):
         #     continue
         scene = sc + "/0"

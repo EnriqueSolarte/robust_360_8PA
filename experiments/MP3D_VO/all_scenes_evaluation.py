@@ -7,9 +7,11 @@ if __name__ == '__main__':
     # label = "_KS:L1_RT:L1_KS-RT:b-*L1"
     # label = "_RT:L2_KS:-L1_KS-RT:a.B=0.5-L1-RTKS:a.B=0.5-L2"
     # label = "_RT:L1_RTKS:B=0.3-a-L2_"
-    label = "_ALL_METHODS_"
-    extra = generate_fingerprint_time() + label
-    for sc in ("Z6MFQCViBuw",):
+    label = "_test_for_you_guys_"
+    # extra = generate_fingerprint_time() + label
+    extra = label
+
+    for sc in (scene_list[3],):
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
@@ -19,7 +21,7 @@ if __name__ == '__main__':
             res=(360, 180),
             loc=(0, 0),
             extra=extra,
-            keyword="samples200",
+            keyword="samples_200_dist",
             special_eval=True,
             use_saved_bearings=True
         )

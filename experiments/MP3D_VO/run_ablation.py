@@ -22,30 +22,41 @@ def run_ablation(**kwargs):
         # ! Based on RESIDUALS
         kwargs["cam_8pa"], kwargs["loss_8pa"], kwargs["time_8pa"] = get_cam_pose_by_8pa(**kwargs)
 
-        kwargs["cam_OURS_opt_res_ks"], \
-        kwargs["loss_OURS_opt_res_ks"], \
-        kwargs["time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+        # kwargs["cam_OURS_opt_res_ks"], \
+        # kwargs["loss_OURS_opt_res_ks"], \
+        # kwargs["time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
 
-        kwargs["cam_8pa_opt_res_Rt_L2"], \
-        kwargs["loss_8pa_opt_res_Rt_L2"], \
-        kwargs["time_8pa_opt_res_Rt_L2"] = get_cam_pose_by_opt_res_error_Rt_L2(**kwargs)
+        # kwargs["cam_8pa_opt_res_Rt_L2"], \
+        # kwargs["loss_8pa_opt_res_Rt_L2"], \
+        # kwargs["time_8pa_opt_res_Rt_L2"] = get_cam_pose_by_opt_res_error_Rt_L2(**kwargs)
 
-        kwargs["cam_OURS_opt_res_Rtks"], \
-        kwargs["loss_OURS_opt_res_Rtks"], \
-        kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
+        # kwargs["cam_OURS_opt_res_Rtks"], \
+        # kwargs["loss_OURS_opt_res_Rtks"], \
+        # kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
 
         kwargs["cam_OURS_opt_res_ks_wRt_L2"], \
         kwargs["loss_OURS_opt_res_ks_wRt_L2"], \
-        kwargs["time_OURS_opt_res_ks_wRt_L2"] = get_cam_pose_by_opt_res_error_SK_wRt_L2(**kwargs)
+        kwargs["time_OURS_opt_res_ks_wRt_L2"] = get_cam_pose_by_opt_res_error_SK_gaussianW_Rt_L2(**kwargs)
 
-        kwargs["cam_8pa_opt_res_Rt_L1"], \
-        kwargs["loss_8pa_opt_res_Rt_L1"], \
-        kwargs["time_8pa_opt_res_Rt_L1"] = get_cam_pose_by_opt_res_error_Rt_L1(**kwargs)
+        kwargs["cam_OURS_opt_res_ks_wRt_const_w_L2"], \
+        kwargs["loss_OURS_opt_res_ks_wRt_const_w_L2"], \
+        kwargs["time_OURS_opt_res_ks_wRt_const_w_L2"] = get_cam_pose_by_opt_res_error_SK_const_gaussianW_Rt_L2(
+            **kwargs)
 
-        kwargs["cam_OURS_opt_res_ks_wRt_L1"], \
-        kwargs["loss_OURS_opt_res_ks_wRt_L1"], \
-        kwargs["time_OURS_opt_res_ks_wRt_L1"] = get_cam_pose_by_opt_res_error_SK_wRt_L1(**kwargs)
+        kwargs["cam_opt_wRt_L2"], \
+        kwargs["loss_opt_wRt_L2"], \
+        kwargs["time_opt_wRt_L2"] = get_cam_pose_by_opt_gaussianW_8PA_Rt_L2(**kwargs)
+        #
+        #
+        kwargs["cam_opt_wRt_constW_L2"], \
+        kwargs["loss_opt_wRt_constW_L2"], \
+        kwargs["time_opt_wRt_constW_L2"] = get_cam_pose_by_opt_const_gaussianW_8PA_Rt_L2(
+            **kwargs)
 
+        # kwargs["cam_8pa_opt_res_Rt_L1"], \
+        # kwargs["loss_8pa_opt_res_Rt_L1"], \
+        # kwargs["time_8pa_opt_res_Rt_L1"] = get_cam_pose_by_opt_res_error_Rt_L1(**kwargs)
+        #
         kwargs = eval_cam_pose_error(**kwargs)
     return kwargs
 
@@ -53,26 +64,10 @@ def run_ablation(**kwargs):
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    keyword = "inliers_0.5_noise_500"
-    # ! L2**2
-    # extra = "ABLATION_KS:L1_RT:L2_RTKS:a-L2_KS-RT:a-L2_TRK-FEATURES"
-    # extra = "ABLATION_KS:L1_RT:L2_RTKS:a-L2_KS-RT:a-L2_INLIERS_0.5"
-    # ! L1**2
-    # extra = "ABLATION_KS:L1_RT:L1_RTKS:a-L1_KS-RT:a-L1_TRK-FEATURES"
-    # extra = "ABLATION_KS:L1_RT:L1_RTKS:a-L1_KS-RT:a-L1_INLIERS_0.5"
+    keyword = "_samples_200_inliers_0.5_noise_500"
+    extra = "_EVALUATION_KSRT_{}".format(keyword)
 
-    # extra = "ABLATION_KS:L1_RT:L1_RTKS:b-L1_KS-RT:b-L1_TRK-FEATURES"
-    # extra = "ABLATION_KS:L1_RT:L1_RTKS:b-L1_KS-RT:b-L1_INLIERS_0.5"
-
-    # ! L1
-    # extra = "ABLATION_KS:*L1_RT:*L1_RTKS:a-*L1_KS-RT:a-*L1_TRK-FEATURES"s
-    # extra = "ABLATION_KS:*L1_RT:*L1_RTKS:a-*L1_KS-RT:a-*L1_INLIERS_0.5"
-
-    # extra = "COMPARISON_KS:L1_RT:L2_RTKS:B=0.5-a-L2_KS-RT:B=0.5-a-L1_{}".format(keyword)
-    # extra = "lie-algebra_{}".format(keyword)
-    extra = "_ALL_METHODS_{}".format(keyword)
-
-    for sc in ("Z6MFQCViBuw",):
+    for sc in (scene_list[1],):
         scene = sc + "/0"
 
         data = MP3D_VO(scene=scene, basedir=path)

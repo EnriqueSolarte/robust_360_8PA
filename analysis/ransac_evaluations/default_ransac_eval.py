@@ -3,7 +3,7 @@ from analysis.utilities.data_utilities import get_bearings
 from solvers.ransac.ransac_8pa import RANSAC_8PA
 from solvers.ransac.ransac_opt_8pa import RANSAC_OPT_8PA
 from geometry_utilities import evaluate_error_in_transformation
-import  pandas as pd
+import pandas as pd
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from analysis.utilities.data_utilities import *
@@ -17,8 +17,15 @@ def eval(method, ransac, **kwargs):
         bearings_1=kwargs["bearings"]["kf"].copy(),
         bearings_2=kwargs["bearings"]["frm"].copy()
     )
+    rot_e, tran_e = evaluate_error_in_transformation(
+        transform_est=kwargs["cam_{}".format(method)],
+        transform_gt=kwargs["cam_gt"]
+    )
+    kwargs = add_results(key="error_cam_{}_rot".format(method), data=rot_e, **kwargs)
+    kwargs = add_results(key="error_cam_{}_tran".format(method), data=tran_e, **kwargs)
     kwargs = add_results(key="residual_{}".format(method), data=ransac.best_evaluation, **kwargs)
-    kwargs = add_results(key="inliers_{}".format(method), data=ransac.best_inliers_num/kwargs["bearings"]["frm"].shape[1], **kwargs)
+    kwargs = add_results(key="inliers_{}".format(method),
+                         data=ransac.best_inliers_num / kwargs["bearings"]["frm"].shape[1], **kwargs)
     kwargs = add_results(key="iterations_{}".format(method), data=ransac.counter_trials, **kwargs)
     kwargs = add_results(key="time_{}".format(method), data=ransac.time_evaluation, **kwargs)
     print("method:{} - ok ".format(method))
@@ -31,28 +38,27 @@ def default_ransac_8pa(**kwargs):
     return eval(method="8PA", ransac=ransac, **kwargs)
 
 
-def ransac_8pa_opt_rt(**kwargs):
+def ransac_8pa_with_opt_rt_L2(**kwargs):
     ransac = RANSAC_8PA(**kwargs)
-    ransac.post_function_evaluation = get_e_by_opt_res_error_Rt
-    return eval(method="8PA_Rt", ransac=ransac, **kwargs)
+    ransac.post_function_evaluation = get_e_by_opt_res_error_Rt_L2
+    return eval(method="8PA_opt_Rt", ransac=ransac, **kwargs)
 
 
-def ransac_8pa_opt_ks(**kwargs):
+def ransac_8pa_with_opt_ks(**kwargs):
     ransac = RANSAC_8PA(**kwargs)
     ransac.post_function_evaluation = get_e_by_opt_res_error_SK
-    return eval(method="opt_ks", ransac=ransac, **kwargs)
+    return eval(method="OURS_8PA_opt_ks", ransac=ransac, **kwargs)
 
 
-def ransac_8pa_opt_ks_rt(**kwargs):
+def ransac_8pa_with_opt_ksrt(**kwargs):
     ransac = RANSAC_8PA(**kwargs)
-    ransac.post_function_evaluation = get_e_by_opt_res_error_SK_Rt
-    return eval(method="opt_ks_rt", ransac=ransac, **kwargs)
+    ransac.post_function_evaluation = get_e_by_opt_res_error_SKRt
+    return eval(method="OURS_8PA_opt_ksrt", ransac=ransac, **kwargs)
 
 
 def eval_methods_ransac(**kwargs):
     if "filename" not in kwargs.keys():
         kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
-
 
     while True:
         kwargs, ret = get_bearings(**kwargs)
@@ -60,9 +66,9 @@ def eval_methods_ransac(**kwargs):
             break
 
         kwargs = default_ransac_8pa(**kwargs)
-        kwargs = ransac_8pa_opt_rt(**kwargs)
-        kwargs = ransac_8pa_opt_ks(**kwargs)
-        kwargs = ransac_8pa_opt_ks_rt(**kwargs)
+        kwargs = ransac_8pa_with_opt_rt_L2(**kwargs)
+        kwargs = ransac_8pa_with_opt_ks(**kwargs)
+        kwargs = ransac_8pa_with_opt_ksrt(**kwargs)
 
         kwargs = eval_cam_pose_error(**kwargs)
         if kwargs.get("save_results", False):

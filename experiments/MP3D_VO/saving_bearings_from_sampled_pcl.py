@@ -64,8 +64,8 @@ def save_bearings_from_sampled_pcl(**kwargs):
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    label_info = generate_fingerprint_time()
-    for sc in ("pRbA3pwrgk9",):
+    label_info = "data_for_ransac_eval"
+    for sc in scene_list[1:]:
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
 
@@ -78,8 +78,8 @@ if __name__ == '__main__':
             loc=(0, 0),
             extra=label_info,
             skip_frames=1,
-            noise=10,
-            inliers_ratio=0.95,
+            noise=500,
+            inliers_ratio=0.5,
             sampling=200,
         )
         save_bearings_from_sampled_pcl(**settings)

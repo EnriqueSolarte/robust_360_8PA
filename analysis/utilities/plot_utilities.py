@@ -295,17 +295,23 @@ def plot_time_results(**kwargs):
 
 def get_color(label):
     if "OURS" in label:
-        if "opt" in label:
-            return colors["COLOR_OURS_OPT_RES_RT"]
         return colors["COLOR_OURS_NORM_8PA"]
-    elif "8pa" in label:
-        if "hartley" in label:
-            return colors["COLOR_HARTLEY_8PA"]
-        if "norm" in label:
-            return colors["COLOR_NORM"]
-        return colors["COLOR_8PA"]
     else:
-        return colors["COLOR_GENERAL"]
+        return colors["COLOR_8PA"]
+
+
+# if "OURS" in label:
+#     if "opt" in label:
+#         return colors["COLOR_OURS_OPT_RES_RT"]
+#     return colors["COLOR_OURS_NORM_8PA"]
+# elif "8pa" in label:
+#     if "hartley" in label:
+#         return colors["COLOR_HARTLEY_8PA"]
+#     if "norm" in label:
+#         return colors["COLOR_NORM"]
+#     return colors["COLOR_8PA"]
+# else:
+#     return colors["COLOR_GENERAL"]
 
 
 def save_info(only_results=True, **kwargs):
