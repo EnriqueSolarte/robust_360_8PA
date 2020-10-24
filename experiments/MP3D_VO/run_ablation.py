@@ -62,12 +62,14 @@ def run_ablation(**kwargs):
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
+    path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+
     scene_list = os.listdir(path)
     keyword = "_samples_200_inliers_0.5_noise_500"
     extra = "_EVALUATION_KSRT_{}".format(keyword)
 
-    for sc in (scene_list[1],):
+    for sc in ("i5noydFURQK",):
         scene = sc + "/0"
 
         data = MP3D_VO(scene=scene, basedir=path)

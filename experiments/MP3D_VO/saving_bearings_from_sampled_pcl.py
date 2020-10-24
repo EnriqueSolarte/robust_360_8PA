@@ -63,11 +63,12 @@ def save_bearings_from_sampled_pcl(**kwargs):
 
 if __name__ == '__main__':
     # path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
     path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
 
     scene_list = os.listdir(path)
     label_info = "data_for_ransac_eval"
-    for sc in scene_list:
+    for sc in (scene_list[1],):
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
 
@@ -79,9 +80,9 @@ if __name__ == '__main__':
             res=(360, 180),
             loc=(0, 0),
             extra=label_info,
-            skip_frames=1,
+            skip_frames=5,
             noise=500,
-            inliers_ratio=0.9,
+            inliers_ratio=0.5,
             sampling=200,
         )
         save_bearings_from_sampled_pcl(**settings)

@@ -8,11 +8,11 @@ import os
 import cv2
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
+    path = "/home/justin/Documents/dataset/MP3D_VO"
     scene_list = os.listdir(path)
-    label_info = generate_fingerprint_time() + "_saved_tracked_features_"
-    for sc in ("i5noydFURQK",):
-        scene = sc + "/1"
+    for sc in (scene_list[4],):
+        scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
             data_scene=data,
@@ -20,25 +20,24 @@ if __name__ == '__main__':
             distance_threshold=0.5,
             res=(360, 180),
             loc=(0, 0),
-            extra="used_features",
-            special_eval=True,
+            special_eval=False,
             sampling=200
         )
 
         features_setting = dict(
-            feat_extractor=Shi_Tomasi_Extractor(maxCorners=200,
-                                                qualityLevel=0.00001,
-                                                minDistance=7,
-                                                blockSize=1),
-            tracker=LKTracker(lk_params=dict(winSize=(20, 20),
+            feat_extractor=Shi_Tomasi_Extractor(maxCorners=500,
+                                                qualityLevel=0.0001,
+                                                minDistance=1,
+                                                blockSize=10),
+            tracker=LKTracker(lk_params=dict(winSize=(10, 10),
                                              maxLevel=2,
                                              criteria=(cv2.TERM_CRITERIA_EPS
-                                                       | cv2.TERM_CRITERIA_COUNT, 1, 0.0001))),
+                                                       | cv2.TERM_CRITERIA_COUNT, 5, 0.0001))),
             show_tracked_features=True,
         )
         log_settings = dict(filename=get_file_name(file_src=__file__,
                                                    **scene_settings, **features_setting,
-                                                   ),
+                                                   create_directory=False),
                             save_bearings=False)
         save_bearings_vectors(**scene_settings,
                               **features_setting,

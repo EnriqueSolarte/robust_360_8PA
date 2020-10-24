@@ -17,9 +17,10 @@ colors = dict(
 def sampling_bearings(**kwargs):
     if "sampling" in kwargs.keys():
         number_of_samples = kwargs["bearings"]["kf"].shape[1]
-        samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
-        kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
-        kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
+        if number_of_samples > kwargs.get("sampling", number_of_samples):
+            samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
+            kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
+            kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
     return kwargs
 
 
