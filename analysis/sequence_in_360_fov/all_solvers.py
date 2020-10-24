@@ -28,41 +28,40 @@ def run_evaluation(**kwargs):
         try:
             kwargs["cam_8pa"], kwargs["loss_8pa"], kwargs["time_8pa"] = get_cam_pose_by_8pa(**kwargs)
 
-            kwargs["cam_OURS_opt_res_ks"], \
-            kwargs["loss_OURS_opt_res_ks"], \
-            kwargs["time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+            kwargs["cam_OURS_opt_ks"], \
+            kwargs["loss_OURS_opt_ks"], \
+            kwargs["time_OURS_opt_ks"] = get_cam_pose_by_opt_SK(**kwargs)
 
-            kwargs["cam_8pa_opt_res_Rt_L2"], \
-            kwargs["loss_8pa_opt_res_Rt_L2"], \
-            kwargs["time_8pa_opt_res_Rt_L2"] = get_cam_pose_by_opt_res_error_Rt_L2(**kwargs)
+            kwargs["cam_8pa_opt_Rt_L2"], \
+            kwargs["loss_8pa_opt_Rt_L2"], \
+            kwargs["time_8pa_opt_Rt_L2"] = get_cam_pose_by_opt_Rt_L2(**kwargs)
 
-            kwargs["cam_OURS_opt_res_Rtks"], \
-            kwargs["loss_OURS_opt_res_Rtks"], \
-            kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
-
-            kwargs["cam_OURS_opt_res_ks_wRt_L2"], \
-            kwargs["loss_OURS_opt_res_ks_wRt_L2"], \
-            kwargs["time_OURS_opt_res_ks_wRt_L2"] = get_cam_pose_by_opt_res_error_SK_gaussianW_Rt_L2(**kwargs)
-
-            kwargs["cam_OURS_opt_res_ks_wRt_const_w_L2"], \
-            kwargs["loss_OURS_opt_res_ks_wRt_const_w_L2"], \
-            kwargs["time_OURS_opt_res_ks_wRt_const_w_L2"] = get_cam_pose_by_opt_res_error_SK_const_gaussianW_Rt_L2(
-                **kwargs)
+            # kwargs["cam_OURS_opt_Rtks"], \
+            # kwargs["loss_OURS_opt_Rtks"], \
+            # kwargs["time_OURS_opt_Rtks"] = get_cam_pose_by_opt_error_RtSK(**kwargs)
 
             kwargs["cam_opt_wRt_L2"], \
             kwargs["loss_opt_wRt_L2"], \
-            kwargs["time_opt_wRt_L2"] = get_cam_pose_by_opt_gaussianW_8PA_Rt_L2(**kwargs)
+            kwargs["time_opt_wRt_L2"] = get_cam_pose_by_opt_wRt_L2(**kwargs)
+
+            kwargs["cam_OURS_opt_ks_wRt_L2"], \
+            kwargs["loss_OURS_opt_ks_wRt_L2"], \
+            kwargs["time_OURS_opt_ks_wRt_L2"] = get_cam_pose_by_opt_SK_wRt_L2(**kwargs)
+
             #
-            #
-            kwargs["cam_opt_wRt_constW_L2"], \
-            kwargs["loss_opt_wRt_constW_L2"], \
-            kwargs["time_opt_wRt_constW_L2"] = get_cam_pose_by_opt_const_gaussianW_8PA_Rt_L2(
+            kwargs["cam_opt_const_wRt_L2"], \
+            kwargs["loss_opt_const_wRt_L2"], \
+            kwargs["time_opt_const_wRt_L2"] = get_cam_pose_by_opt_const_wRt_L2(
                 **kwargs)
 
-            # kwargs["cam_8pa_opt_res_Rt_L1"], \
-            # kwargs["loss_8pa_opt_res_Rt_L1"], \
-            # kwargs["time_8pa_opt_res_Rt_L1"] = get_cam_pose_by_opt_res_error_Rt_L1(**kwargs)
+            kwargs["cam_OURS_opt_ks_const_wRt_L2"], \
+            kwargs["loss_OURS_opt_ks_const_wRt_L2"], \
+            kwargs["time_OURS_opt_ks_const_wRt_L2"] = get_cam_pose_by_opt_SK_const_wRt_L2(
+                **kwargs)
 
+            # kwargs["cam_8pa_opt_Rt_L1"], \
+            # kwargs["loss_8pa_opt_Rt_L1"], \
+            # kwargs["time_8pa_opt_Rt_L1"] = get_cam_pose_by_opt_error_Rt_L1(**kwargs)
             print("{}".format(kwargs["filename"]))
 
             kwargs = eval_cam_pose_error(**kwargs)

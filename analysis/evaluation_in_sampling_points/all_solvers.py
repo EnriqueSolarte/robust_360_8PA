@@ -31,7 +31,7 @@ def run_evaluation(**kwargs):
         kwargs["cam_8pa"], kwargs["loss_8pa"], kwargs["time_8pa"] = get_cam_pose_by_8pa(**kwargs)
 
         kwargs["cam_OURS_opt_res_ks"], kwargs["loss_OURS_opt_res_ks"], kwargs[
-            "time_OURS_opt_res_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+            "time_OURS_opt_res_ks"] = get_cam_pose_by_opt_SK(**kwargs)
 
         kwargs["cam_8pa_opt_res_Rt"], \
         kwargs["loss_8pa_opt_res_Rt"], \
@@ -43,7 +43,7 @@ def run_evaluation(**kwargs):
         #
         kwargs["cam_OURS_opt_res_Rtks"], \
         kwargs["loss_OURS_opt_res_Rtks"], \
-        kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_res_error_RtSK(**kwargs)
+        kwargs["time_OURS_opt_res_Rtks"] = get_cam_pose_by_opt_RtSK(**kwargs)
         #
         kwargs = eval_cam_pose_error(**kwargs)
 

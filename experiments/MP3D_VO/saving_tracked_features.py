@@ -8,12 +8,11 @@ import os
 import cv2
 
 if __name__ == '__main__':
-    # path = "/home/kike/Documents/datasets/MP3D_VO"
-    path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+    path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
     label_info = generate_fingerprint_time() + "_saved_tracked_features_"
-    for sc in scene_list:
-        scene = sc + "/0"
+    for sc in ("i5noydFURQK",):
+        scene = sc + "/1"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
             data_scene=data,
@@ -27,13 +26,18 @@ if __name__ == '__main__':
         )
 
         features_setting = dict(
-            feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
-            tracker=LKTracker(),
-            show_tracked_features=False,
+            feat_extractor=Shi_Tomasi_Extractor(maxCorners=200,
+                                                qualityLevel=0.00001,
+                                                minDistance=7,
+                                                blockSize=1),
+            tracker=LKTracker(lk_params=dict(winSize=(20, 20),
+                                             maxLevel=2,
+                                             criteria=(cv2.TERM_CRITERIA_EPS
+                                                       | cv2.TERM_CRITERIA_COUNT, 1, 0.0001))),
+            show_tracked_features=True,
         )
         log_settings = dict(filename=get_file_name(file_src=__file__,
                                                    **scene_settings, **features_setting,
-                                                   create_directory=False
                                                    ),
                             save_bearings=False)
         save_bearings_vectors(**scene_settings,
