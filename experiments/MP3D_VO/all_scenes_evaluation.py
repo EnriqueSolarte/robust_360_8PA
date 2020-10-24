@@ -11,8 +11,8 @@ if __name__ == '__main__':
     # extra = generate_fingerprint_time() + label
     extra = label
 
-    for sc in (scene_list[3],):
-        scene = sc + "/0"
+    for sc in ("i5noydFURQK",):
+        scene = sc + "/1"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
             data_scene=data,

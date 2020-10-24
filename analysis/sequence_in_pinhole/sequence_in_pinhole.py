@@ -33,7 +33,7 @@ def eval_camera_pose(cam, **kwargs):
     # cam_opt_res_SK_Rt, _ = get_cam_pose_by_opt_res_error_SK_Rt(**kwargs)
 
     kwargs["cam_OURS_opt_res_ks"], kwargs[
-        "loss_OURS_RES_ks"] = get_cam_pose_by_opt_res_error_SK(**kwargs)
+        "loss_OURS_RES_ks"] = get_cam_pose_by_opt_SK(**kwargs)
     kwargs["cam_8pa_opt_res_Rt"], kwargs[
         "loss_RES_Rt"] = get_cam_pose_by_opt_res_error_Rt(**kwargs)
     kwargs["cam_OURS_opt_res_ks_Rt"], kwargs[
