@@ -129,7 +129,6 @@ def save_bearings(**kwargs):
                                "_res_" + str(kwargs["res"][0]) + "." + str(kwargs["res"][1]) +
                                "_loc_" + str(kwargs["loc"][0]) + "." + str(kwargs["loc"][1]),
                                "frames",
-
                                )
         file_bearings = str(kwargs["tracker"].initial_frame.idx) + "_" + str(
             kwargs["tracker"].tracked_frame.idx) + ".txt"

@@ -12,7 +12,7 @@ def create_dir_for_sampled_pcl(**kwargs):
     kwargs["scene_directory"] = os.path.join(
         os.path.dirname(__file__), "results",
         kwargs["data_scene"].scene, "saved_bearings",
-        os.path.splitext(os.path.split(__file__)[1])[0] + "_" +
+        os.path.splitext(os.path.split(__file__)[1])[0] +
         # generate_fingerprint_time() +
         "_samples_" + str(kwargs["sampling"]) +
         "_inliers_" + str(kwargs["inliers_ratio"]) +
@@ -62,10 +62,13 @@ def save_bearings_from_sampled_pcl(**kwargs):
 
 
 if __name__ == '__main__':
-    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+    path = "/home/justin/slam/openvslam_norm/python_scripts/synthetic_points_exp/data/3dv2020"
+
     scene_list = os.listdir(path)
     label_info = "data_for_ransac_eval"
-    for sc in scene_list[1:]:
+    for sc in (scene_list[1],):
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
 
@@ -77,7 +80,7 @@ if __name__ == '__main__':
             res=(360, 180),
             loc=(0, 0),
             extra=label_info,
-            skip_frames=1,
+            skip_frames=5,
             noise=500,
             inliers_ratio=0.5,
             sampling=200,
