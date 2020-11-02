@@ -4,6 +4,7 @@ analysis/loss_surfaces/plots
 analysis/error_loss_8PA/plots
 analysis/performance_comparisons/plots
 **/plots
-**/results*
+**/results_bk
+**/results
 report
 report_backup
