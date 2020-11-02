@@ -17,9 +17,10 @@ colors = dict(
 def sampling_bearings(**kwargs):
     if "sampling" in kwargs.keys():
         number_of_samples = kwargs["bearings"]["kf"].shape[1]
-        samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
-        kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
-        kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
+        if number_of_samples > kwargs.get("sampling"):
+            samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
+            kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
+            kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
     return kwargs
 
 
@@ -87,7 +88,7 @@ def eval_cam_pose_error(_print=True, **kwargs):
                 np.quantile(kwargs["results"][error_name + "_tran"], 0.5)))
             # print("25% Error-tran: {}".format(np.quantile(kwargs["results"][error_name + "_tran"], 0.25)))
             # print("--------------------------------------------------------")
-
+    print("--------------------------------------------------------")
     losses = [loss for loss in kwargs.keys() if "loss" in loss]
     for loss in losses:
         ls = kwargs[loss].copy()
@@ -96,26 +97,56 @@ def eval_cam_pose_error(_print=True, **kwargs):
             kwargs["results"][loss] = [ls]
         else:
             kwargs["results"][loss].append(ls)
+    print("--------------------------------------------------------")
+    time_evaluation = [time_ for time_ in kwargs.keys() if "time" in time_]
+    for eval in time_evaluation:
+        if eval not in kwargs["results"].keys():
+            kwargs["results"][eval] = [kwargs[eval]]
+        else:
+            kwargs["results"][eval].append(kwargs[eval])
 
-    if kwargs.get("timing_evaluation", False):
-        time_evaluation = [time_ for time_ in kwargs.keys() if "time" in time_]
-        print("*****************************************")
+        if _print:
+            print("MED time {}: {}".format(eval,
+                                           np.quantile(kwargs["results"][eval], 0.5)))
 
-        for eval in time_evaluation:
-            if eval not in kwargs["results"].keys():
-                if "eval_8pa" == eval:
-                    kwargs["results"][eval] = [kwargs[eval]]
-                else:
-                    kwargs["results"][eval] = [kwargs[eval] / kwargs["time_8pa"]]
-            else:
-                if "eval_8pa" == eval:
-                    kwargs["results"][eval].append(kwargs[eval])
-                else:
-                    kwargs["results"][eval].append(kwargs[eval] / kwargs["time_8pa"])
+    print("--------------------------------------------------------")
+    sigma_evaluation = [sigma for sigma in kwargs.keys() if "sigma" in sigma]
+    for eval in sigma_evaluation:
+        if eval not in kwargs["results"].keys():
+            kwargs["results"][eval] = [kwargs[eval][-2]]
+            kwargs["results"][eval + "_cond"] = [kwargs[eval][0] / kwargs[eval][-1]]
+        else:
+            kwargs["results"][eval].append(kwargs[eval][-2])
+            kwargs["results"][eval + "_cond"].append(kwargs[eval][0] / kwargs[eval][-1])
 
-            if _print:
-                print("MED time {}: {}".format(eval,
-                                               np.quantile(kwargs["results"][eval], 0.5)))
+        if _print:
+            print("MED sigma {}: {}".format(eval,
+                                            np.quantile(kwargs["results"][eval], 0.5)))
+            print("MED cond {}: {}".format(eval,
+                                           np.quantile(kwargs["results"][eval + "_cond"], 0.5)))
+    print("--------------------------------------------------------")
+    C_evaluation = [C for C in kwargs.keys() if "C" in C]
+    for eval in C_evaluation:
+        if eval not in kwargs["results"].keys():
+            kwargs["results"][eval] = [kwargs[eval]]
+        else:
+            kwargs["results"][eval].append(kwargs[eval])
+
+        if _print:
+            print("MED C {}: {}".format(eval,
+                                        np.quantile(kwargs["results"][eval], 0.5)))
+
+    print("--------------------------------------------------------")
+    pm_evaluation = [pm for pm in kwargs.keys() if "pm" in pm]
+    for eval in pm_evaluation:
+        if eval not in kwargs["results"].keys():
+            kwargs["results"][eval] = [np.max(kwargs[eval])]
+        else:
+            kwargs["results"][eval].append(np.max(kwargs[eval]))
+
+        if _print:
+            print("MED pm {}: {}".format(eval,
+                                         np.quantile(kwargs["results"][eval], 0.5)))
     print("done")
     return kwargs
 
@@ -270,7 +301,7 @@ def get_bearings_by_plc(**kwargs):
     pts = kwargs.get("sampling", 200)
     samples = np.random.randint(0, pcl_dense.shape[1], pts)
     pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
-
+    kwargs["landmarks_kf"] = pcl_a
     pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
                              param=kwargs.get("noise", 500))
 
@@ -298,4 +329,5 @@ def get_bearings_by_plc(**kwargs):
     kwargs["bearings"]["kf"] = bearings_a
     kwargs["bearings"]["frm"] = bearings_b
     kwargs["cam_gt"] = cam_a2b
+    kwargs['e_gt'] = solver.get_e_from_cam_pose(cam_a2b)
     return kwargs, ret

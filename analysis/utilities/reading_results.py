@@ -37,7 +37,7 @@ def get_dict_results(**kwargs):
             "results_{}".format(kwargs["key"]),
         )
         create_dir(kwargs["save_results_dir"], delete_previous=False)
-        kwargs["results"].to_csv(kwargs["save_results_dir"] + "/results.txt")
+        kwargs["results"].to_csv(kwargs["save_results_dir"] + "/results.csv", index=False)
     return kwargs
 
 
@@ -79,7 +79,10 @@ def eval_results(quantile, **kwargs):
         ))
 
     results = kwargs["results"]
-    scale_time = results["time_8pa"].values
+    try:
+        scale_time = results["time_8pa"].values
+    except:
+        scale_time = 1
     if kwargs.get("save", False):
         create_file(kwargs["save_results_dir"] + "/summary_results_Q{}.csv".format(int(quantile * 100)),
                     delete_previous=True)

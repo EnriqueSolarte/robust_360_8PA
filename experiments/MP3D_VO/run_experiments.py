@@ -26,32 +26,32 @@ def run_ablation(**kwargs):
         kwargs["loss_OURS_opt_ks"], \
         kwargs["time_OURS_opt_ks"] = get_cam_pose_by_opt_SK(**kwargs)
 
-        kwargs["cam_8pa_opt_Rt_L2"], \
-        kwargs["loss_8pa_opt_Rt_L2"], \
-        kwargs["time_8pa_opt_Rt_L2"] = get_cam_pose_by_opt_Rt_L2(**kwargs)
-
-        # kwargs["cam_OURS_opt_Rtks"], \
-        # kwargs["loss_OURS_opt_Rtks"], \
-        # kwargs["time_OURS_opt_Rtks"] = get_cam_pose_by_opt_error_RtSK(**kwargs)
-
-        kwargs["cam_opt_wRt_L2"], \
-        kwargs["loss_opt_wRt_L2"], \
-        kwargs["time_opt_wRt_L2"] = get_cam_pose_by_opt_wRt_L2(**kwargs)
-
-        kwargs["cam_OURS_opt_ks_wRt_L2"], \
-        kwargs["loss_OURS_opt_ks_wRt_L2"], \
-        kwargs["time_OURS_opt_ks_wRt_L2"] = get_cam_pose_by_opt_SK_wRt_L2(**kwargs)
-
+        # kwargs["cam_8pa_opt_Rt_L2"], \
+        # kwargs["loss_8pa_opt_Rt_L2"], \
+        # kwargs["time_8pa_opt_Rt_L2"] = get_cam_pose_by_opt_Rt_L2(**kwargs)
         #
-        kwargs["cam_opt_const_wRt_L2"], \
-        kwargs["loss_opt_const_wRt_L2"], \
-        kwargs["time_opt_const_wRt_L2"] = get_cam_pose_by_opt_const_wRt_L2(
-            **kwargs)
-
-        kwargs["cam_OURS_opt_ks_const_wRt_L2"], \
-        kwargs["loss_OURS_opt_ks_const_wRt_L2"], \
-        kwargs["time_OURS_opt_ks_const_wRt_L2"] = get_cam_pose_by_opt_SK_const_wRt_L2(
-            **kwargs)
+        # # kwargs["cam_OURS_opt_Rtks"], \
+        # # kwargs["loss_OURS_opt_Rtks"], \
+        # # kwargs["time_OURS_opt_Rtks"] = get_cam_pose_by_opt_error_RtSK(**kwargs)
+        #
+        # kwargs["cam_opt_wRt_L2"], \
+        # kwargs["loss_opt_wRt_L2"], \
+        # kwargs["time_opt_wRt_L2"] = get_cam_pose_by_opt_wRt_L2(**kwargs)
+        #
+        # kwargs["cam_OURS_opt_ks_wRt_L2"], \
+        # kwargs["loss_OURS_opt_ks_wRt_L2"], \
+        # kwargs["time_OURS_opt_ks_wRt_L2"] = get_cam_pose_by_opt_SK_wRt_L2(**kwargs)
+        #
+        # #
+        # kwargs["cam_opt_const_wRt_L2"], \
+        # kwargs["loss_opt_const_wRt_L2"], \
+        # kwargs["time_opt_const_wRt_L2"] = get_cam_pose_by_opt_const_wRt_L2(
+        #     **kwargs)
+        #
+        # kwargs["cam_OURS_opt_ks_const_wRt_L2"], \
+        # kwargs["loss_OURS_opt_ks_const_wRt_L2"], \
+        # kwargs["time_OURS_opt_ks_const_wRt_L2"] = get_cam_pose_by_opt_SK_const_wRt_L2(
+        #     **kwargs)
 
         # kwargs["cam_8pa_opt_Rt_L1"], \
         # kwargs["loss_8pa_opt_Rt_L1"], \
@@ -64,17 +64,16 @@ def run_ablation(**kwargs):
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
-    keyword = "_samples_200_inliers_0.5_noise_500"
-    extra = "_EVALUATION_KSRT_{}".format(keyword)
-
-    for sc in (scene_list[1],):
+    keyword = "_samples_200_dist"
+    extra = "timing_test_{}".format(keyword)
+    for sc in ("2azQ1b91cZZ",):
         scene = sc + "/0"
 
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
             data_scene=data,
             extra=extra,
-            use_synthetic_points=True,
+            use_synthetic_points=False,
             keyword=keyword
         )
 
@@ -86,5 +85,5 @@ if __name__ == '__main__':
         kwargs = run_ablation(**scene_settings,
                               **initial_values)
 
-    plot_bar_errors_and_time(**kwargs)
-    save_info(**kwargs)
+        plot_bar_errors_and_time(**kwargs)
+        save_info(**kwargs)

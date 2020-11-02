@@ -40,20 +40,38 @@ def default_ransac_8pa(**kwargs):
 
 def ransac_8pa_with_opt_rt_L2(**kwargs):
     ransac = RANSAC_8PA(**kwargs)
-    ransac.post_function_evaluation = get_e_by_opt_res_error_Rt_L2
+    ransac.post_function_evaluation = get_e_by_opt_Rt_L2
     return eval(method="8PA_opt_Rt", ransac=ransac, **kwargs)
 
 
-def ransac_8pa_with_opt_ks(**kwargs):
+def ransac_8pa_with_opt_sk(**kwargs):
     ransac = RANSAC_8PA(**kwargs)
-    ransac.post_function_evaluation = get_e_by_opt_res_error_SK
+    ransac.post_function_evaluation = get_e_by_opt_SK
     return eval(method="OURS_8PA_opt_ks", ransac=ransac, **kwargs)
 
 
-def ransac_8pa_with_opt_ksrt(**kwargs):
+def ransac_8pa_with_opt_sk_wRt_L2(**kwargs):
     ransac = RANSAC_8PA(**kwargs)
-    ransac.post_function_evaluation = get_e_by_opt_res_error_SKRt
-    return eval(method="OURS_8PA_opt_ksrt", ransac=ransac, **kwargs)
+    ransac.post_function_evaluation = get_e_by_opt_SK_wRt_L2
+    return eval(method="OURS_8PA_opt_ks_wRt", ransac=ransac, **kwargs)
+
+
+def ransac_8pa_with_opt_wRt_L2(**kwargs):
+    ransac = RANSAC_8PA(**kwargs)
+    ransac.post_function_evaluation = get_e_by_opt_wRt_L2
+    return eval(method="8PA_opt_wRt", ransac=ransac, **kwargs)
+
+
+def ransac_8pa_with_opt_sk_const_wRt_L2(**kwargs):
+    ransac = RANSAC_8PA(**kwargs)
+    ransac.post_function_evaluation = get_e_by_opt_SK_const_wRt_L2
+    return eval(method="OURS_8PA_opt_ks_const_wRt", ransac=ransac, **kwargs)
+
+
+def ransac_8pa_with_opt_const_wRt_L2(**kwargs):
+    ransac = RANSAC_8PA(**kwargs)
+    ransac.post_function_evaluation = get_e_by_opt_const_wRt_L2
+    return eval(method="8PA_opt_const_wRt", ransac=ransac, **kwargs)
 
 
 def eval_methods_ransac(**kwargs):
@@ -67,8 +85,7 @@ def eval_methods_ransac(**kwargs):
 
         kwargs = default_ransac_8pa(**kwargs)
         kwargs = ransac_8pa_with_opt_rt_L2(**kwargs)
-        kwargs = ransac_8pa_with_opt_ks(**kwargs)
-        kwargs = ransac_8pa_with_opt_ksrt(**kwargs)
+        kwargs = ransac_8pa_with_opt_sk(**kwargs)
 
         kwargs = eval_cam_pose_error(**kwargs)
         if kwargs.get("save_results", False):

@@ -42,12 +42,12 @@ class RANSAC_8PA:
         assert bearings_1.shape[0] is 3
         self.num_samples = bearings_1.shape[1]
 
-        # random_state = np.random.RandomState(1000)
+        random_state = np.random.RandomState(1000)
         self.time_evaluation = 0
         aux_time = time.time()
         for self.counter_trials in range(self.max_trials):
 
-            initial_inliers = np.random.choice(self.num_samples, self.min_super_set, replace=False)
+            initial_inliers = random_state.choice(self.num_samples, self.min_super_set, replace=False)
             sample_bearings1 = bearings_1[:, initial_inliers]
             sample_bearings2 = bearings_2[:, initial_inliers]
 

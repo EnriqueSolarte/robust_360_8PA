@@ -2,12 +2,23 @@ from read_datasets.MP3D_VO import MP3D_VO
 from structures.tracker import LKTracker
 from structures.extractor.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from analysis.utilities.surfaces_utilities import *
+from file_utilities import generate_fingerprint_time
 
 
 def eval_frame(**kwargs):
-    kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
+    kwargs["random_state"] = np.random.RandomState(1000)
 
-    kwargs, _ = get_bearings(**kwargs)
+    kwargs["filename"] = get_file_name(**kwargs, file_src=__file__)
+    if not kwargs.get("use_sampling_points", False):
+        kwargs, _ = get_bearings(**kwargs)
+    else:
+        kwargs, _ = get_bearings_by_plc(**kwargs)
+
+    kwargs["bearings"]["frm"] = add_outliers_to_pcl(
+        kwargs["bearings"]["frm"].copy(),
+        inliers=int(kwargs.get("inliers_ratio", 0.5) * kwargs["bearings"]["frm"].shape[1]))
+
+    kwargs["bearings"]["frm"] = sph.sphere_normalization(kwargs["bearings"]["frm"])
     kwargs = create_grid(**kwargs)
     kwargs = get_eval_of_8PA(**kwargs)
     bearings_kf = kwargs["bearings"]["kf"].copy()
@@ -32,8 +43,7 @@ def eval_frame(**kwargs):
                                                     x1=bearings_kf,
                                                     x2=bearings_frm)
         kwargs = eval_surfaces(**kwargs)
-        print("{} : {}".format(kwargs["filename"],
-                               idx / kwargs["ss_grid"].size))
+        print("{} : {}".format(idx / kwargs["ss_grid"].size, kwargs["filename"]))
     return kwargs
 
 
@@ -44,35 +54,37 @@ if __name__ == '__main__':
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
     data = MP3D_VO(scene=scene, basedir=path)
-
+    label_info = "icra2021-{}".format(generate_fingerprint_time())
+    np.random.seed(100)
     scene_settings = dict(
         data_scene=data,
-        # idx_frame=0,
-        idx_frame=80,
-        distance_threshold=0.5,
+        idx_frame=150,
+        linear_motion=(0.1, 0.1),
+        angular_motion=(-45, 45),
         res=(360, 180),
-        # res=(180, 180),
-        # res=(65.5, 46.4),
         loc=(0, 0),
-        grid=(-1, 1, 50),
-        extra="meting09.25",
+        extra=label_info,
+        skip_frames=1,
+        noise=10,
+        inliers_ratio=0.5,
+        sampling=200,
+        distance_threshold=0.5,
+        grid=(-1, 1, 100),
+        use_sampling_points=False
     )
 
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(maxCorners=1000),
-        sampling=8,
-        tracker=LKTracker(),
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=2000,
+                                            qualityLevel=0.00001,
+                                            minDistance=1,
+                                            blockSize=10),
+        tracker=LKTracker(lk_params=dict(winSize=(20, 20),
+                                         maxLevel=8,
+                                         criteria=(cv2.TERM_CRITERIA_EPS
+                                                   | cv2.TERM_CRITERIA_COUNT, 10, 0.01))),
         show_tracked_features=True)
 
-    ransac_parm = dict(
-        min_samples=8,
-        max_trials=RansacEssentialMatrix.get_number_of_iteration(
-            p_success=0.99, outliers=0.5, min_constraint=8),
-        residual_threshold=1e-5,
-        verbose=True,
-        use_ransac=False)
-
-    kwargs = eval_frame(**scene_settings, **features_setting, **ransac_parm)
+    kwargs = eval_frame(**scene_settings, **features_setting)
 
     plot_surfaces(**kwargs)
     save_surfaces(**kwargs)

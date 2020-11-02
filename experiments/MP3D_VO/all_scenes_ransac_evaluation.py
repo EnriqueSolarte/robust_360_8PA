@@ -21,9 +21,12 @@ def run_ransac_evaluation(**kwargs):
         print("{}".format(kwargs["filename"]))
         # ! Based on RESIDUALS
         kwargs = default_ransac_8pa(**kwargs)
-        kwargs = ransac_8pa_with_opt_rt_L2(**kwargs)
-        kwargs = ransac_8pa_with_opt_ks(**kwargs)
-        kwargs = ransac_8pa_with_opt_ksrt(**kwargs)
+        kwargs = ransac_8pa_with_opt_sk(**kwargs)
+        # kwargs = ransac_8pa_with_opt_rt_L2(**kwargs)
+        # kwargs = ransac_8pa_with_opt_wRt_L2(**kwargs)
+        # kwargs = ransac_8pa_with_opt_sk_wRt_L2(**kwargs)
+        # kwargs = ransac_8pa_with_opt_const_wRt_L2(**kwargs)
+        # kwargs = ransac_8pa_with_opt_sk_const_wRt_L2(**kwargs)
 
     return kwargs
 
@@ -32,25 +35,30 @@ if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
 
-    keyword = "samples_400_inliers_0.5_noise_500"
+    keyword = "samples_200_inliers_0.5_noise_500"
     # keyword = "samples_200_dist"
-    extra = "_(RT:L2)-(KS:L1)-(RTKS:L2)_{}_{}".format(keyword, generate_fingerprint_time())
-
-    for sc in scene_list:
+    # extra = "_(RT:L2)-(KS:L1)-(RTKS:L2)_{}_{}".format(keyword, generate_fingerprint_time())
+    extra = "ransac_eval"
+    # "Z6MFQCViBuw"
+    for sc in ["2azQ1b91cZZ"]:
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
             data_scene=data,
             idx_frame=0,
             use_synthetic_points=True,
-            extra=extra,
+            extra="{}_{}".format(extra, keyword),
             keyword=keyword
         )
 
         ransac_settings = dict(
             expected_inliers=0.5,
             probability_success=0.99,
-            residual_threshold_8PA=1.5e-3,
+            # residual_threshold_8PA=1.7e-4,
+            # residual_threshold_8PA=2*1.7e-4,
+            # residual_threshold_8PA=1.1 * 1.7e-4,
+            # residual_threshold_8PA=2e-4,
+            residual_threshold_8PA=1.1e-3,
             relaxed_threshold_1=1e-4,
             residual_threshold_2=2e-5,
             min_super_set=50

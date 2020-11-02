@@ -6,7 +6,7 @@ if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
     scene_list = os.listdir(path)
     fingerprint = generate_fingerprint_time()
-    for sc in ["pRbA3pwrgk9"]:
+    for sc in ["2azQ1b91cZZ"]:
         scene = sc + "/0"
         data = MP3D_VO(scene=scene, basedir=path)
         scene_settings = dict(
