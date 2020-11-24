@@ -74,7 +74,7 @@ def plot_surfaces(**kwargs):
 
 def get_eval_of_8PA(**kwargs):
     kwargs["8PA"] = dict()
-    kwargs["8PA"]["cam_pose"], _ = get_cam_pose_by_8pa(**kwargs)
+    kwargs["8PA"]["cam_pose"], _, _ = get_cam_pose_by_8pa(**kwargs)
 
     kwargs["8PA"]["e"] = g8p().compute_essential_matrix(
         x1=kwargs["bearings"]["kf"], x2=kwargs["bearings"]["frm"])

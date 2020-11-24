@@ -57,6 +57,10 @@ def get_file_name(create_directory=True, **kwargs):
                 filename += "_" + val + "." + str(kwargs[val])
     except:
         print("initail values not available")
+    try:
+        filename += "_{}_".format(kwargs["keyword"])
+    except:
+        print("No keyword defined")
 
     dirname = os.path.join(dirname, filename)
     if create_directory:

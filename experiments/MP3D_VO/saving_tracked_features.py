@@ -8,8 +8,8 @@ import os
 import cv2
 
 if __name__ == '__main__':
-    # path = "/home/kike/Documents/datasets/MP3D_VO"
-    path = "/home/justin/Documents/dataset/MP3D_VO"
+    path = "/home/kike/Documents/datasets/MP3D_VO"
+    # path = "/home/justin/Documents/dataset/MP3D_VO"
     scene_list = os.listdir(path)
     for sc in (scene_list[4],):
         scene = sc + "/0"

@@ -49,7 +49,7 @@ def eval_frame(**kwargs):
 
 if __name__ == '__main__':
     path = "/home/kike/Documents/datasets/MP3D_VO"
-    scene = "2azQ1b91cZZ/0"
+    scene = "i5noydFURQK/0"
     # scene = "1LXtFkjw3qL/0"
     # scene = "759xd9YjKW5/0"
     # path = "/run/user/1001/gvfs/sftp:host=140.114.27.95,port=50002/NFS/kike/minos/vslab_MP3D_VO/512x1024"
@@ -58,30 +58,30 @@ if __name__ == '__main__':
     np.random.seed(100)
     scene_settings = dict(
         data_scene=data,
-        idx_frame=150,
-        linear_motion=(0.1, 0.1),
+        idx_frame=370,
+        linear_motion=(0.1, 1),
         angular_motion=(-45, 45),
-        res=(360, 180),
+        res=(180, 180),
         loc=(0, 0),
         extra=label_info,
         skip_frames=1,
         noise=10,
-        inliers_ratio=0.5,
-        sampling=200,
+        inliers_ratio=1,
+        sampling=100,
         distance_threshold=0.5,
-        grid=(-1, 1, 100),
-        use_sampling_points=False
+        grid=(-1, 1, 50),
+        use_sampling_points=True
     )
 
     features_setting = dict(
-        feat_extractor=Shi_Tomasi_Extractor(maxCorners=2000,
-                                            qualityLevel=0.00001,
-                                            minDistance=1,
-                                            blockSize=10),
-        tracker=LKTracker(lk_params=dict(winSize=(20, 20),
-                                         maxLevel=8,
+        feat_extractor=Shi_Tomasi_Extractor(maxCorners=250,
+                                            qualityLevel=0.1,
+                                            minDistance=20,
+                                            blockSize=5),
+        tracker=LKTracker(lk_params=dict(winSize=(15, 15),
+                                         maxLevel=4,
                                          criteria=(cv2.TERM_CRITERIA_EPS
-                                                   | cv2.TERM_CRITERIA_COUNT, 10, 0.01))),
+                                                   | cv2.TERM_CRITERIA_COUNT, 10, 0.1))),
         show_tracked_features=True)
 
     kwargs = eval_frame(**scene_settings, **features_setting)

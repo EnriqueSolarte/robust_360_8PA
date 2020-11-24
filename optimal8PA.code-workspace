@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Utilities"
+		},
+		{
+			"path": "../CameraModels"
+		},
+		{
+			"path": "../vslam360/vslam360_src"
+		}
+	],
+	"settings": {}
+}

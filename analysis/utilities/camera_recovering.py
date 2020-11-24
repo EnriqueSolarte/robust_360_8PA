@@ -44,8 +44,8 @@ def residuals_error_Rt_L2(parameters, bearings_kf, bearings_frm):
 
 
 def get_cam_pose_by_opt_Rt_L2(**kwargs):
-    initial_pose = get_cam_pose_by_8pa(**kwargs)[0]
     tic_toc = time.time()
+    initial_pose = get_cam_pose_by_8pa(**kwargs)[0]
     xi = SE3.log(SE3.from_matrix(initial_pose))
     opt_r_t, p_cov, info = levmar.levmar(
         func=residuals_error_Rt_L2,
@@ -54,7 +54,7 @@ def get_cam_pose_by_opt_Rt_L2(**kwargs):
         args=(kwargs["bearings"]["kf"], kwargs["bearings"]["frm"]))
 
     cam_final = SE3.exp(opt_r_t).as_matrix()
-    final_time = solver.timing + time.time() - tic_toc
+    final_time = time.time() - tic_toc
     print("***********************************")
     print("Opt RESIDUALS over Rt ")
     print("Iterations: {}".format(info[2]))
@@ -344,7 +344,7 @@ def get_cam_pose_by_opt_SK_const_wRt_L2(**kwargs):
     print("termination: {}".format(info[3]))
 
     initial_time = time.time()
-    norm_residuals_error = algebraic_error(e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
+    # norm_residuals_error = algebraic_error(e=e_norm, x1=bearings_kf_norm, x2=bearings_frm_norm)
     residual = projected_error(
         e=e_hat,
         x1=kwargs["bearings"]['kf'].copy(),

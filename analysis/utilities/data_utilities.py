@@ -17,10 +17,13 @@ colors = dict(
 def sampling_bearings(**kwargs):
     if "sampling" in kwargs.keys():
         number_of_samples = kwargs["bearings"]["kf"].shape[1]
-        if number_of_samples > kwargs.get("sampling"):
-            samples = np.random.randint(0, number_of_samples, kwargs.get("sampling", number_of_samples))
-            kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples]
-            kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples]
+        pts = kwargs.get("sampling")
+        if number_of_samples > pts:
+            samples = np.linspace(0, number_of_samples - 1, number_of_samples).astype(np.int)
+            np.random.shuffle(samples)
+            kwargs["bearings"]["kf"] = kwargs["bearings"]["kf"][:, samples[0:pts]]
+            kwargs["bearings"]["frm"] = kwargs["bearings"]["frm"][:, samples[0:pts]]
+    print("Sampled bearing vectors {}".format(kwargs["bearings"]["kf"].shape[1]))
     return kwargs
 
 
@@ -30,27 +33,15 @@ def get_bearings(**kwargs):
         return kwargs, False
     # ! 8PA Evaluation
     kwargs["bearings"] = dict()
-    if kwargs.get("use_ransac", False):
-        # ! Solving by using RANSAC
-        ransac = RansacEssentialMatrix(**kwargs)
-        _ = ransac.solve(data=(bearings_kf.copy().T, bearings_frm.copy().T))
-        num_inliers = sum(ransac.current_inliers)
-        num_of_samples = len(ransac.current_inliers)
-        kwargs["bearings"]["rejections"] = 1 - (num_inliers / num_of_samples)
-        kwargs["bearings"]["ransac_residuals"] = ransac.current_residual
-        kwargs["bearings"]["kf"] = bearings_kf[:, ransac.current_inliers]
-        kwargs["bearings"]["frm"] = bearings_frm[:, ransac.current_inliers]
-    else:
-        kwargs["bearings"]["kf"] = bearings_kf
-        kwargs["bearings"]["frm"] = bearings_frm
-
+    kwargs["bearings"]["kf"] = bearings_kf
+    kwargs["bearings"]["frm"] = bearings_frm
     kwargs = sampling_bearings(**kwargs)
     kwargs["cam_gt"] = cam_gt
     kwargs["e_gt"] = g8p.get_e_from_cam_pose(cam_gt)
     if kwargs.get("timing_evaluation", False):
         cam_pose, _, _ = get_cam_pose_by_8pa(**kwargs)
     else:
-        cam_pose, _ = get_cam_pose_by_8pa(**kwargs)
+        cam_pose, _, _ = get_cam_pose_by_8pa(**kwargs)
 
     kwargs["landmarks_kf"] = g8p.triangulate_points_from_cam_pose(
         cam_pose=cam_pose,
@@ -232,6 +223,10 @@ def track_features(**kwargs):
                 extractor=kwargs["feat_extractor"],
                 mask=kwargs["mask"])
             idx += 1
+            kwargs["tracker"].aux_indexes = np.random.randint(
+                low=0,
+                high=len(kwargs["tracker"].tracks),
+                size=int(len(kwargs["tracker"].tracks) * np.random.uniform(0.15, 0.30, 1)))
             continue
 
         relative_pose = frame_curr.get_relative_pose(
@@ -246,7 +241,7 @@ def track_features(**kwargs):
             print("KeyFrame/CurrFrame:   {}-{}".format(
                 kwargs["tracker"].initial_frame.idx, frame_curr.idx))
             cv2.imshow("preview", tracked_img[:, :, ::-1])
-            cv2.waitKey(10)
+            cv2.waitKey(1)
 
         if camera_distance > kwargs.get("distance_threshold", 0.5):
             break
@@ -299,8 +294,10 @@ def get_bearings_by_plc(**kwargs):
                   np.random.uniform(angular_motion[0], angular_motion[1])))
 
     pts = kwargs.get("sampling", 200)
-    samples = np.random.randint(0, pcl_dense.shape[1], pts)
-    pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples])
+
+    samples = np.linspace(0, pcl_dense.shape[1] - 1, pcl_dense.shape[1]).astype(np.int)
+    np.random.shuffle(samples)
+    pcl_a = extend_array_to_homogeneous(pcl_dense[:, samples[0:pts]])
     kwargs["landmarks_kf"] = pcl_a
     pcl_b = add_noise_to_pcl(np.linalg.inv(cam_a2b).dot(pcl_a),
                              param=kwargs.get("noise", 500))
