@@ -1,0 +1,11 @@
+# Configurations 
+
+# Dataset settings
+dataset: MP3D_VO
+scene: 2n8kARJN3HM
+scene_version: 0
+
+# Features and motion settings
+min_camera_distance: 0.5
+max_number_features: 200
+show_tracking: True
