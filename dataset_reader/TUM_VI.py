@@ -1,22 +1,25 @@
+import sys
+sys.path.append("/home/kike/Documents/Research/Utilities")
+sys.path.append("/home/kike/Documents/Research/CameraModels")
+from .dataset import Data
+import matplotlib.pyplot as plt
+from file_utilities import read_yaml_file, load_obj, save_obj
+from geometry_utilities import *
+from vispy_utilities import *
+from sphere import Sphere
 import cv2
 import os
 import numpy as np
-from sphere import Sphere
-from vispy_utilities import *
-from geometry_utilities import *
-from file_utilities import read_yaml_file, load_obj, save_obj
 
-import matplotlib.pyplot as plt
-from read_datasets.data import Data
 
 
 class TUM_VI(Data):
-    def __init__(self, basedir, scene):
+    def __init__(self, dt_dir, scene):
         # Adding dataset utilities
         # print("loading TUM_RGBD_SLAM_data from: {}\nScene: {}".format(dataset_path, scene))
         # TUM_utilities = os.path.join(dataset_path, "utilities/scripts")
         # sys.path.append(TUM_utilities)
-        super().__init__(basedir, scene)
+        super().__init__(dt_dir, scene)
 
         from TUM_RGBD_utils.associate import associate, read_file_list, read_file_association
         from TUM_RGBD_utils.evaluate_rpe import read_trajectory
@@ -29,7 +32,7 @@ class TUM_VI(Data):
         # ! For now we are considering a monocular camera so
         # ! extrinsic parameters are neglected
         # camera_yaml = read_yaml_file(self.scene_dir + '/dso/camchain.yaml')
-        camera_yaml = read_yaml_file(self.basedir + '/omni_calib.yaml')
+        camera_yaml = read_yaml_file(self.dt_dir + '/omni_calib.yaml')
         self.camera_projection = UnifiedModel.by_calibrated_parameters(calib=camera_yaml)
 
         # ! Create dic-bases
@@ -59,13 +62,21 @@ class TUM_VI(Data):
                 pose_rgb_association_file)
 
         self.number_frames = self.dic_pose_rgb_association.shape[0]
-        self.stamps = self.dic_pose_rgb_association[:, 0]
+        self.timestamps = self.dic_pose_rgb_association[:, 0]
         self.t_cam_imu_transform = np.array(camera_yaml["cam0"]['T_cam_imu']).reshape((4, 4))
         self.shape = self.camera_projection.shape
         self.cam = self.camera_projection
 
     def get_shape(self):
         return self.camera_projection.get_shape()
+
+    def get_rgb(self, idx):
+        frame_dict = self.get_frame(idx, return_dict=True)
+        return frame_dict["image"]
+
+    def get_pose(self, idx):
+        frame_dict = self.get_frame(idx, return_dict=True)
+        return frame_dict["pose"]
 
     def get_frame(self, idx=0, return_dict=True):
         pose_timestamp = self.dic_pose_rgb_association[idx, 0]
@@ -80,37 +91,8 @@ class TUM_VI(Data):
             return dict(image=rgb,
                         depth=None,
                         pose=pose,
-                        timestamp=self.stamps[idx])
+                        timestamp=self.timestamps[idx],
+                        idx=idx
+                        )
 
-        return rgb, None, pose, self.stamps[idx]
-
-
-if __name__ == "__main__":
-    path = "/home/justin/Downloads"
-    scene = "dataset-room3_512_16"
-    file_dt = "{}.tumvi".format(scene)
-
-    saving_data = True
-
-    if saving_data:
-        data = TUM_VI(basedir=path, scene=scene)
-        save_obj(filename=file_dt, obj=data)
-    else:
-        data = load_obj(filename=file_dt)
-
-    pts = []
-
-    for idx in range(0, data.seq_len, 1):
-        rgb, pose, stamp = data.get_frame(idx)
-        pts.append(pose[:, 3])
-        # print(pts[-1])
-        # cv2.imshow("TUM VI", rgb)
-        # cv2.waitKey(1)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
-
-    pts = np.array(pts)
-    ax.scatter(pts[:, 0], pts[:, 1], pts[:, 2], c=pts[:, 2], cmap='viridis')
-
-    plt.show()
+        return rgb, None, pose, self.timestamps[idx], idx

@@ -9,3 +9,5 @@ analysis/performance_comparisons/plots
 report
 report_backup
 *.mp4
+
+*.code-workspace

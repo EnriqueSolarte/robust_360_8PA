@@ -1,15 +1,21 @@
 from config import Cfg
 import os
-from dataset_reader import MP3D_VO
+from dataset_reader.MP3D_VO import MP3D_VO
+from dataset_reader.TUM_VI import TUM_VI
 
 def get_dataset(cfg: Cfg):
-    if cfg.dataset == "MP3D_VO":
-        dataset_dir = os.getenv("MP3D_VO_DATASET_DIR")
+    if cfg.dataset_name == "MP3D_VO":
+        dataset_dir = cfg.DIR_MP3D_VO_DATASET
         scene = cfg.scene + "/" + cfg.scene_version
-        return MP3D_VO(dt_dir=dataset_dir, scene=scene)
-    elif cfg.dataset == "TUM_VI":
-        print("Not yet tun VI!!!!")
-        exit()
+        cfg.dataset =  MP3D_VO(dt_dir=dataset_dir, scene=scene)
+        return cfg.dataset
+
+
+    elif cfg.dataset_name == "TUM_VI":
+        dataset_dir = cfg.DIR_TUM_VI_DATASET
+        scene = "dataset-room{}_{}".format(cfg.scene, cfg.scene_version)
+        cfg.dataset =  TUM_VI(dt_dir=dataset_dir, scene=scene)
+        return cfg.dataset
 
 
 def get_image_mask(cfg: Cfg):
@@ -17,7 +23,7 @@ def get_image_mask(cfg: Cfg):
     returns a mask map given a resolution res=(theta, phi) and location
     loc(theta, phi) camera orientation
     """
-    shape = cfg.dataset
+    shape = cfg.dataset_name
     assert len(shape) == 2
     from geometry_utilities import extend_array_to_homogeneous as ext
 
