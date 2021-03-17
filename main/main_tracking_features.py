@@ -1,5 +1,5 @@
 from config import Cfg
-from tracker.feature_tracker import FeatureTracker
+from tracker import FeatureTracker
 
 if __name__ == '__main__':
 
