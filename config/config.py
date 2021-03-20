@@ -1,20 +1,15 @@
-############## Setting paths ################
 import cv2
 import datetime
 import yaml
 import sys
 import os
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv())
-sys.path.append(os.getenv("DIR_ROOT"))
-#################******#####################
 
 
 class Cfg:
     DIR_ROOT = os.getenv("DIR_ROOT")
     FILE_CONFIG_MP3D_VO = os.path.join(DIR_ROOT, 'config', 'config_MP3D_VO.yaml')
     FILE_CONFIG_TUM_VI = os.path.join(DIR_ROOT, 'config', 'config_TUM_VI.yaml')
-    
+
     DIR_MP3D_VO_DATASET = os.getenv("DIR_MP3D_VO_DATASET")
     DIR_TUM_VI_DATASET = os.getenv("DIR_TUM_VI_DATASET")
 
@@ -33,7 +28,6 @@ class Cfg:
         self.show_tracked_features = kwargs.get("show_tracked_features")
         self.save_bearings = kwargs.get("save_bearings")
 
-
         # ! Shi-Tomasi Feature extrator
         self.max_number_corners = kwargs.get("max_number_corners")
         self.quality_corner_level = kwargs.get("quality_corner_level")
@@ -45,7 +39,6 @@ class Cfg:
         self.block_size_for_tracking = kwargs.get("block_size_for_tracking")
         self.eps_tracking = kwargs.get("eps_tracking")
         self.counter_iterations = kwargs.get("counter_iterations")
-        
 
     @classmethod
     def from_cfg_file(cls, yaml_config):

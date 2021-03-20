@@ -1,8 +1,8 @@
 from config import Cfg
-from utils.data_utilities import get_dataset
-from .lkt_tracker import LKT_tracker
-from .shi_tomosi_extractor import Shi_Tomasi_Extractor
-from .frame import Frame
+from utils import get_dataset
+from tracker.lkt_tracker import LKT_tracker
+from tracker.shi_tomosi_extractor import Shi_Tomasi_Extractor
+from tracker.frame import Frame
 import numpy as np
 import cv2
 
@@ -73,12 +73,11 @@ class FeatureTracker:
         return bearings_kf, bearings_frm, relative_pose, ret
 
 
-
 if __name__ == '__main__':
 
     config_file = Cfg.FILE_CONFIG_MP3D_VO
     config_file = Cfg.FILE_CONFIG_TUM_VI
-    
+
     cfg = Cfg.from_cfg_file(yaml_config=config_file)
     tracker = FeatureTracker(cfg)
 
