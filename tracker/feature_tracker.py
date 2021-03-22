@@ -17,10 +17,11 @@ class FeatureTracker:
 
     def track(self, return_dict=False):
         idx_curr = self.idx
+         
         if idx_curr == self.dataset.number_frames:
-            return None, None, None, False
-
-        ret = True
+            ret = False
+        else:
+            ret = True
         while True:
             frame_curr = Frame(**self.dataset.get_frame(idx_curr, return_dict=True))
 
@@ -51,7 +52,8 @@ class FeatureTracker:
                 break
             idx_curr += 1
             if idx_curr == self.dataset.number_frames:
-                return None, None, None, False
+                ret = False
+                break
 
         relative_pose = frame_curr.get_relative_pose(key_frame=self.tracker.initial_frame)
 
@@ -75,6 +77,8 @@ class FeatureTracker:
                 bearings_kf=bearings_kf,
                 bearings_frm=bearings_frm,
                 relative_pose=relative_pose,
+                idx_kf=self.tracker.initial_frame.idx,
+                idx_frm=self.tracker.tracked_frame.idx,
                 cfg=self.cfg
             ), ret
         return bearings_kf, bearings_frm, relative_pose, ret

@@ -6,7 +6,7 @@ scene: 2n8kARJN3HM
 scene_version: 0
 
 # Data settings
-initial_frame: 0              #* intial frame to read automatically
+initial_frame: 1000              #* intial frame to read automatically
 special_tracking: False       #* track every frame as inital ref for tracking
 min_cam_distance: 0.5         #* min camera motion between ref and tracked frame
 show_tracked_features: True   #* show while tracking

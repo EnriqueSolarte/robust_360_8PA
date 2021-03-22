@@ -14,5 +14,5 @@ if __name__ == '__main__':
         data_bearings, ret = tracker.track(return_dict=True)
         if not ret:
             break
-
+        
         save_bearings(**data_bearings, save_config=True)

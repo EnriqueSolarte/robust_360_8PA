@@ -3,6 +3,7 @@ import datetime
 import yaml
 import sys
 import os
+import csv
 
 
 class Cfg:
@@ -42,6 +43,31 @@ class Cfg:
             self.counter_iterations = kwargs["counter_iterations"]
         except:
             print("Error reading YAML config file")
+
+    def save_config(self, dirname):
+        """
+        Saves the current configuration (settings) in a yaml file
+        """
+        time = datetime.datetime.now()
+
+        config_file = os.path.join(dirname, "config.yaml")
+
+        timestamp = str(time.year) + "-" + str(time.month) + "-" + str(time.day) + \
+            "." + str(time.hour) + '.' + str(time.minute) + '.' + str(time.second)
+        original_stdout = sys.stdout  # Save a reference to the original standard output
+
+        with open(config_file, "w") as file:
+            yaml.dump(self.kwargs, file)
+
+            sys.stdout = file  # Change the standard output to the file we created.
+
+            print('\n\n# VSLAB National Tsing Hua University')
+            print("# This config file has been generated automatically with the parameters")
+            print("# used for tracking the features described in this directory")
+            print("# {}".format(dirname))
+            print('# {}'.format(timestamp))
+            sys.stdout = original_stdout
+
     @classmethod
     def from_cfg_file(cls, yaml_config):
         """
