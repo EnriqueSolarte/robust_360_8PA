@@ -54,17 +54,26 @@ def save_bearings(*args, **kwargs):
         # [kfx, kfy, kfz, frmx, frmy, frmz] --> (n, 6)
         dt = pd.DataFrame(np.vstack((kwargs["bearings_kf"], kwargs["bearings_frm"])).T)
 
-        dirname = os.path.join(
-            kwargs['cfg'].DIR_ROOT,
-            'data',
-            kwargs['cfg'].dataset_name,
-            kwargs['cfg'].scene,
-            kwargs['cfg'].scene_version,
-            "tracked_bearings"
-        )
+        if kwargs['cfg'].dataset_name == "MP3D_VO":
+            dirname = os.path.join(
+                kwargs['cfg'].DIR_ROOT,
+                'data',
+                kwargs['cfg'].dataset_name,
+                kwargs['cfg'].scene,
+                str(kwargs['cfg'].scene_version),
+                "tracked_bearings"
+            )
+        else:
+            dirname = os.path.join(
+                kwargs['cfg'].DIR_ROOT,
+                'data',
+                kwargs['cfg'].dataset_name,
+                'dataset-room{}_{}'.format(kwargs['cfg'].scene, kwargs['cfg'].scene_version),
+                "tracked_bearings"
+            )
 
         create_dir(dirname, delete_previous=False)
-      
+
         kwargs['cfg'].save_config(dirname=dirname)
 
         file_bearings = str(kwargs["idx_kf"]) + "_" + str(kwargs["idx_frm"]) + ".txt"
