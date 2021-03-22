@@ -15,7 +15,7 @@ class FeatureTracker:
         self.dataset = get_dataset(cfg)
         self.idx = cfg.initial_frame
 
-    def track(self):
+    def track(self, return_dict=False):
         idx_curr = self.idx
         if idx_curr == self.dataset.number_frames:
             return None, None, None, False
@@ -70,6 +70,13 @@ class FeatureTracker:
         else:
             self.idx = self.tracker.frame_idx
 
+        if return_dict:
+            return dict(
+                bearings_kf=bearings_kf,
+                bearings_frm=bearings_frm,
+                relative_pose=relative_pose,
+                cfg=self.cfg
+            ), ret
         return bearings_kf, bearings_frm, relative_pose, ret
 
 

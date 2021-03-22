@@ -16,30 +16,32 @@ class Cfg:
     def __init__(self, *args, **kwargs):
         self.kwargs = kwargs
 
-        # ! Data settings
-        self.scene = kwargs.get("scene")
-        self.scene_version = str(kwargs.get("scene_version"))
-        self.dataset_name = kwargs["dataset"]
+        try:
+            # ! Data settings
+            self.scene = kwargs["scene"]
+            self.scene_version = str(kwargs["scene_version"])
+            self.dataset_name = kwargs["dataset"]
 
-        # ! Tracking features settings
-        self.initial_frame = kwargs.get("initial_frame")
-        self.special_tracking = kwargs.get("special_tracking")
-        self.min_cam_distance = kwargs.get("min_cam_distance")
-        self.show_tracked_features = kwargs.get("show_tracked_features")
-        self.save_bearings = kwargs.get("save_bearings")
+            # ! Tracking features settings
+            self.initial_frame = kwargs["initial_frame"]
+            self.special_tracking = kwargs["special_tracking"]
+            self.min_cam_distance = kwargs["min_cam_distance"]
+            self.show_tracked_features = kwargs["show_tracked_features"]
+            self.save_bearings = kwargs["save_bearings"]
 
-        # ! Shi-Tomasi Feature extrator
-        self.max_number_corners = kwargs.get("max_number_corners")
-        self.quality_corner_level = kwargs.get("quality_corner_level")
-        self.min_corner_distance = kwargs.get("min_corner_distance")
-        self.block_size_for_corners = kwargs.get("block_size_for_corners")
+            # ! Shi-Tomasi Feature extrator
+            self.max_number_corners = kwargs["max_number_corners"]
+            self.quality_corner_level = kwargs["quality_corner_level"]
+            self.min_corner_distance = kwargs["min_corner_distance"]
+            self.block_size_for_corners = kwargs["block_size_for_corners"]
 
-        # ! LK tracker
-        self.coarse_fine_levels = kwargs.get("coarse_fine_levels")
-        self.block_size_for_tracking = kwargs.get("block_size_for_tracking")
-        self.eps_tracking = kwargs.get("eps_tracking")
-        self.counter_iterations = kwargs.get("counter_iterations")
-
+            # ! LK tracker
+            self.coarse_fine_levels = kwargs["coarse_fine_levels"]
+            self.block_size_for_tracking = kwargs["block_size_for_tracking"]
+            self.eps_tracking = kwargs["eps_tracking"]
+            self.counter_iterations = kwargs["counter_iterations"]
+        except:
+            print("Error reading YAML config file")
     @classmethod
     def from_cfg_file(cls, yaml_config):
         """
