@@ -1,0 +1,37 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Utilities"
+		},
+		{
+			"path": "../CameraModels"
+		},
+		{
+			"path": "../vslam360/vslam360_src"
+		},
+
+	],
+	"settings": {
+		"python.pythonPath": "/home/kike/anaconda3/envs/slam_layout/bin/python",
+		"python.analysis.extraPaths": [
+			//* LOCAL PATHS
+			".",
+			"../Utilities",
+		],
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Python: Current File",
+				"type": "python",
+				"request": "launch",
+				"program": "${file}",
+				"console": "integratedTerminal",
+			}
+		]
+	}
+}

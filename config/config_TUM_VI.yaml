@@ -1,0 +1,26 @@
+# Configurations 
+
+# Dataset settings
+dataset_name: TUM_VI
+scene: 1
+scene_version: "512_16"
+
+# Data settings
+initial_frame: 0              #* intial frame to read automatically
+special_tracking: False       #* track every frame as inital ref for tracking
+min_cam_distance: 0.5         #* min camera motion between ref and tracked frame
+show_tracked_features: True   #* show while tracking
+save_bearings: True           #* save bearing vectors which are evaluated
+max_number_features: 200      #* Number of features (sampling from all tracked features)
+
+# Shi-Tomasi feature extractor
+max_number_corners: 1000       #* Number of extracted feature by the extarctor
+quality_corner_level: 0.01  #* Quality of corners (higher better but less features)
+min_corner_distance: 10       #* Min distance bewteen extracted features
+block_size_for_corners: 5    #* Windows patch used to compute a feature
+
+# LK tracker
+coarse_fine_levels: 8         #* Number of course-fine level used to track features
+block_size_for_tracking: 15
+eps_tracking: 0.1
+counter_iterations: 10
