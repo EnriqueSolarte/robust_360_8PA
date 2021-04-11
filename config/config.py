@@ -4,6 +4,7 @@ import yaml
 import sys
 import os
 import csv
+from collections import namedtuple
 
 
 class Cfg:
@@ -16,34 +17,8 @@ class Cfg:
 
     def __init__(self, *args, **kwargs):
         self.kwargs = kwargs
-
-        try:
-            # ! Data settings
-            self.scene = kwargs["scene"]
-            self.scene_version = str(kwargs["scene_version"])
-            self.dataset_name = kwargs["dataset"]
-
-            # ! Tracking features settings
-            self.initial_frame = kwargs["initial_frame"]
-            self.special_tracking = kwargs["special_tracking"]
-            self.min_cam_distance = kwargs["min_cam_distance"]
-            self.show_tracked_features = kwargs["show_tracked_features"]
-            self.save_bearings = kwargs["save_bearings"]
-
-            # ! Shi-Tomasi Feature extrator
-            self.max_number_corners = kwargs["max_number_corners"]
-            self.quality_corner_level = kwargs["quality_corner_level"]
-            self.min_corner_distance = kwargs["min_corner_distance"]
-            self.block_size_for_corners = kwargs["block_size_for_corners"]
-
-            # ! LK tracker
-            self.coarse_fine_levels = kwargs["coarse_fine_levels"]
-            self.block_size_for_tracking = kwargs["block_size_for_tracking"]
-            self.eps_tracking = kwargs["eps_tracking"]
-            self.counter_iterations = kwargs["counter_iterations"]
-        except:
-            print("Error reading YAML config file")
-
+        self.prmt = namedtuple('ConfigFile', kwargs.keys())(*kwargs.values())
+    
     def save_config(self, dirname):
         """
         Saves the current configuration (settings) in a yaml file
@@ -61,9 +36,10 @@ class Cfg:
 
             sys.stdout = file  # Change the standard output to the file we created.
 
-            print('\n\n# VSLAB National Tsing Hua University')
-            print("# This config file has been generated automatically with the parameters")
-            print("# used for tracking the features described in this directory")
+            # ! This is the comment at the end of every generated config file
+            print('\n\n# VSLAB @ National Tsing Hua University')
+            print("# This config file has been generated automatically")
+            print("# for the bearing vectors saved at the following directory")
             print("# {}".format(dirname))
             print('# {}'.format(timestamp))
             sys.stdout = original_stdout
