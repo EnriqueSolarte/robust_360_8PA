@@ -8,12 +8,27 @@ from collections import namedtuple
 
 
 class Cfg:
+
+    # ! Paths
     DIR_ROOT = os.getenv("DIR_ROOT")
     FILE_CONFIG_MP3D_VO = os.path.join(DIR_ROOT, 'config', 'config_MP3D_VO.yaml')
     FILE_CONFIG_TUM_VI = os.path.join(DIR_ROOT, 'config', 'config_TUM_VI.yaml')
 
+    #! Datasets 
     DIR_MP3D_VO_DATASET = os.getenv("DIR_MP3D_VO_DATASET")
     DIR_TUM_VI_DATASET = os.getenv("DIR_TUM_VI_DATASET")
+
+    # ! Labels
+    #### ! camera poses
+    CAM_POSES_GT = "cam_pose_gt.txt"
+    CAM_POSES_8PA = "cam_pose_8PA.txt"
+    CAM_POSES_eSK = "cam_pose_eSK.txt"
+    CAM_POSES_GSM = "cam_pose_GSM.txt"
+    CAM_POSES_wSK = "cam_pose_wSK.txt"
+
+    #### ! camera poses
+    FROM_TRACKED_BEARINGS= "tracked_bearings"
+    FROM_SAMPLED_BEARINGS= "sampled_bearings"
 
     def __init__(self, *args, **kwargs):
         self.kwargs = kwargs

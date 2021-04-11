@@ -73,7 +73,7 @@ class FeatureTracker:
             self.idx = self.tracker.frame_idx
 
         if return_dict:
-            self.cfg.tracked_or_sampled = "tracked_bearings"
+            self.cfg.tracked_or_sampled = self.cfg.FROM_TRACKED_BEARINGS
             return dict(
                 bearings_kf=bearings_kf,
                 bearings_frm=bearings_frm,

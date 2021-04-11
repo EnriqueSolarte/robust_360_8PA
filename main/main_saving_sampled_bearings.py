@@ -14,4 +14,5 @@ if __name__ == '__main__':
         if not ret:
             break
 
-        save_bearings(**data_bearings, save_config=True, save_camera_as="cam_gt.txt")
+        save_bearings(**data_bearings, save_config=True,
+                      save_camera_as=cfg.CAM_POSES_GT)

@@ -7,12 +7,12 @@ scene_version: 0
 
 # Data settings
 initial_frame: 0              #* intial frame to read automatically
-special_tracking: False       #* track every frame as inital ref for tracking
+special_tracking: True        #* track every frame as inital ref for tracking
 min_cam_distance: 0.5         #* min camera motion between ref and tracked frame
 show_tracked_features: True   #* show while tracking
 save_bearings: True           #* save bearing vectors which are evaluated
 max_number_features: 200      #* Number of features (sampling from all tracked features)
-skipped_frames: 5             #* Number of frames skipped when sampling bearing from PCL
+skipped_frames: 1             #* Number of frames skipped when sampling bearing from PCL
 range_liner_motion: [-1, 1]       #* Range of translation vectors for synthetic camera poses
 range_angular_motion: [-10, 10]   #* Range of rotation angle for synthetic camera poses
 

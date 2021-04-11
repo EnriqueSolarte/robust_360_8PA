@@ -56,7 +56,7 @@ class BearingsSampler:
             ret = False
 
         if return_dict:
-            self.cfg.tracked_or_sampled = "sampled_bearings"
+            self.cfg.tracked_or_sampled = self.cfg.FROM_SAMPLED_BEARINGS
 
             if not ret:
                 return None, ret

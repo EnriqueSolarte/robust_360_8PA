@@ -1,3 +1,7 @@
+from os.path import dirname
+from utils.geometry_utilities import isRotationMatrix
+from numpy.testing._private.utils import raises
+from pandas.core.base import DataError
 from config import Cfg
 import os
 from dataset_reader.MP3D_VO import MP3D_VO
@@ -6,9 +10,13 @@ import pandas as pd
 import numpy as np
 from utils.file_utils import create_dir
 from utils.file_utils import create_file, write_file
-import csv
+import pandas as pd
+
 
 def get_dataset(cfg: Cfg):
+    """
+    Returns an object datatset
+    """
     if cfg.prmt.dataset_name == "MP3D_VO":
         dataset_dir = cfg.DIR_MP3D_VO_DATASET
         scene = "{}/{}".format(cfg.prmt.scene, cfg.prmt.scene_version)
@@ -21,8 +29,41 @@ def get_dataset(cfg: Cfg):
         cfg.dataset = TUM_VI(dt_dir=dataset_dir, scene=scene)
         return cfg.dataset
 
-def save_bearings(*args, **kwargs):
 
+def get_data_dirname(cfg: Cfg):
+    if cfg.prmt.dataset_name == "MP3D_VO":
+        return os.path.join(
+            cfg.DIR_ROOT,
+            'data',
+            cfg.prmt.dataset_name,
+            cfg.prmt.scene,
+            str(cfg.prmt.scene_version),
+            cfg.tracked_or_sampled
+        )
+    else:
+        return os.path.join(
+            cfg.DIR_ROOT,
+            'data',
+            cfg.prmt.dataset_name,
+            'dataset-room{}_{}'.format(cfg.prmt.scene, cfg.prmt.scene_version),
+            cfg.tracked_or_sampled
+        )
+
+
+def save_bearings(*args, **kwargs):
+    """
+    Saves a set of bearings vectors into a file.txt to be used later, as backup, or simply for
+    practical purposes. 
+    A kwards dictionary is expected as input with the following keys:
+    bearings_kf=bearings_kf,\n
+    bearings_frm=bearings_frm,\n
+    relative_pose=cam_a2b,\n
+    idx_kf=idx_curr,\n
+    idx_frm=idx_curr+1,\n
+    cfg=self.cfg\n
+    save_config=True\n
+    save_camera_as="cam_gt.txt"\n
+    """
     # > In case that the bearing vector were not calculated the whole
     # > fucntion is skiped
     if kwargs["bearings_kf"] is not None:
@@ -30,33 +71,18 @@ def save_bearings(*args, **kwargs):
         # [kfx, kfy, kfz, frmx, frmy, frmz] --> (n, 6)
         dt = pd.DataFrame(np.vstack((kwargs["bearings_kf"], kwargs["bearings_frm"])).T)
 
-        if kwargs['cfg'].prmt.dataset_name == "MP3D_VO":
-            dirname = os.path.join(
-                kwargs['cfg'].DIR_ROOT,
-                'data',
-                kwargs['cfg'].prmt.dataset_name,
-                kwargs['cfg'].prmt.scene,
-                str(kwargs['cfg'].prmt.scene_version),
-                kwargs['cfg'].tracked_or_sampled
-            )
-        else:
-            dirname = os.path.join(
-                kwargs['cfg'].DIR_ROOT,
-                'data',
-                kwargs['cfg'].prmt.dataset_name,
-                'dataset-room{}_{}'.format(kwargs['cfg'].prmt.scene, kwargs['cfg'].prmt.scene_version),
-                kwargs['cfg'].tracked_or_sampled
-            )
+        dirname = get_data_dirname(kwargs["cfg"])
 
         # * DELETE PREVIOUS DATA INFO ONLY ONCE
-        try: 
-            if kwargs["cfg"].newDataFlag:
-                create_dir(dirname, delete_previous=False)
-        except:
-            kwargs["cfg"].newDataFlag = True
-            create_dir(dirname, delete_previous=True)
-    
-        file_bearings = "bearings_" + str(kwargs["idx_kf"]) + "_" + str(kwargs["idx_frm"]) + ".txt"
+        if kwargs.get("delete_previous", True):
+            try:
+                if kwargs["cfg"].newDataFlag:
+                    create_dir(dirname, delete_previous=False)
+            except:
+                kwargs["cfg"].newDataFlag = True
+                create_dir(dirname, delete_previous=True)
+
+        file_bearings = "bearings_" + str(kwargs["idx_kf"]) + "_" + str(kwargs["idx_frm"]) + "_.txt"
         file_bearings = os.path.join(dirname, file_bearings)
         print("-")
         print("Saved filename:{}".format(file_bearings))
@@ -67,10 +93,67 @@ def save_bearings(*args, **kwargs):
         if kwargs['save_config']:
             kwargs['cfg'].save_config(dirname=dirname)
 
-        camera_pose_filename = kwargs.get("save_camera_as", None)
-        if camera_pose_filename is not None:
-            pose_file = os.path.join(dirname, camera_pose_filename)
-            flatten_pose = kwargs["relative_pose"].flatten()
-            write_file(pose_file, tuple(flatten_pose))
+        camera_pose_filename = kwargs.get("save_camera_as", "cam_pose.txt")
+        pose_file = os.path.join(dirname, camera_pose_filename)
+        flatten_pose = kwargs["relative_pose"].flatten()
+        write_file(pose_file, tuple(flatten_pose))
 
 
+class SavedData:
+
+    def __init__(self, cfg, tracked_or_sampled):
+        self.cfg = cfg
+        if tracked_or_sampled not in (cfg.FROM_TRACKED_BEARINGS, cfg.FROM_SAMPLED_BEARINGS):
+            print("ERROR: tracked_or_sampled can be either \"cfg.FROM_TRACKED_BEARINGS\" or \"cfg.FROM_TRACKED_BEARINGS\". we got {}.".format(tracked_or_sampled))
+            exit()
+        if tracked_or_sampled == cfg.FROM_TRACKED_BEARINGS:
+            cfg.tracked_or_sampled = cfg.FROM_TRACKED_BEARINGS
+        else:
+            cfg.tracked_or_sampled = cfg.FROM_SAMPLED_BEARINGS
+
+        self.dirname = get_data_dirname(cfg)
+
+        list_all_files = os.listdir(self.dirname)
+        self.list_bearings_files = [f for f in list_all_files if "bearings" in f]
+        self.list_cam_pose_files = [f for f in list_all_files if "cam_pose" in f]
+        self.all_cam_poses = None
+        self.idx = 0
+
+    def get_bearings(self, idx=None, cam_pose=Cfg.CAM_POSES_GT, return_dict=False):
+
+        if idx is None:
+            idx = self.idx
+
+        if idx < self.list_bearings_files.__len__():
+            ret = True
+            # ! Reading saved bearings vector
+            bearings_file = os.path.join(self.dirname, self.list_bearings_files[idx])
+            all_bearings = pd.read_csv(bearings_file, header=None).values
+            aux_name = str.split(self.list_bearings_files[idx], sep=("_"))
+
+            # ! Reading saved camera pose
+            cam_pose_file = os.path.join(self.dirname, cam_pose)
+            if self.all_cam_poses is None:
+                self.all_cam_poses = pd.read_csv(cam_pose_file, header=None).values
+            cam_pose = self.all_cam_poses[idx, :].reshape(4, 4)
+            assert isRotationMatrix(cam_pose[0:3, 0:3])
+
+            self.idx += 1
+        else:
+            ret = False
+
+        if return_dict:
+            if not ret:
+                return None, ret
+            return dict(
+                bearings_kf=all_bearings[:, 0:3].T,
+                bearings_frm=all_bearings[:, 3:].T,
+                relative_pose=cam_pose,
+                idx_kf=aux_name[1],
+                idx_frm=aux_name[2],
+                cfg=self.cfg
+            ), True
+        else:
+            if not ret:
+                return None, None, None, ret
+            return all_bearings[:, 0:3].T, all_bearings[:, 3:].T, cam_pose, True
