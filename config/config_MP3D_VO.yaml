@@ -1,7 +1,7 @@
 # Configurations 
 
 # Dataset settings
-dataset: MP3D_VO
+dataset_name: MP3D_VO
 scene: 2n8kARJN3HM
 scene_version: 0
 
@@ -12,6 +12,10 @@ min_cam_distance: 0.5         #* min camera motion between ref and tracked frame
 show_tracked_features: True   #* show while tracking
 save_bearings: True           #* save bearing vectors which are evaluated
 max_number_features: 200      #* Number of features (sampling from all tracked features)
+skipped_frames: 5             #* Number of frames skipped when sampling bearing from PCL
+range_liner_motion: [-1, 1]       #* Range of translation vectors for synthetic camera poses
+range_angular_motion: [-10, 10]   #* Range of rotation angle for synthetic camera poses
+
 
 # Shi-Tomasi feature extractor
 max_number_corners: 500       #* Number of extracted feature by the extarctor
@@ -24,3 +28,7 @@ coarse_fine_levels: 2         #* Number of course-fine level used to track featu
 block_size_for_tracking: 10
 eps_tracking: 0.0001
 counter_iterations: 5
+
+# Noise & Outliers setting
+vMF_kappa: 500                #* Von Mises-Fisher noise parameter
+outliers_ratio: 0.1           #* Outliers ratio wrt $max_number_features

@@ -1,15 +1,17 @@
 from config import Cfg
 from utils import *
 
+
 if __name__ == '__main__':
 
     config_file = Cfg.FILE_CONFIG_MP3D_VO
-    config_file = Cfg.FILE_CONFIG_TUM_VI
-    
     cfg = Cfg.from_cfg_file(yaml_config=config_file)
-    tracker = FeatureTracker(cfg)
+
+    sampler = BearingsSampler(cfg)
 
     while True:
-        bearings_kf, bearings_frm, cam_pose_gt, ret = tracker.track()
+        data_bearings, ret = sampler.get_bearings(return_dict=True)
         if not ret:
             break
+
+        save_bearings(**data_bearings, save_config=True, save_camera_as="cam_gt.txt")

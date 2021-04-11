@@ -1,7 +1,7 @@
 # Configurations 
 
 # Dataset settings
-dataset: TUM_VI
+dataset_name: TUM_VI
 scene: 1
 scene_version: "512_16"
 

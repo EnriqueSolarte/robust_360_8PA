@@ -1,8 +1,8 @@
 from config import Cfg
-from utils import get_dataset
-from tracker.lkt_tracker import LKT_tracker
-from tracker.shi_tomosi_extractor import Shi_Tomasi_Extractor
-from tracker.frame import Frame
+from utils.data_utilities import get_dataset
+from utils.lkt_tracker import LKT_tracker
+from utils.shi_tomosi_extractor import Shi_Tomasi_Extractor
+from utils.frame import Frame
 import numpy as np
 import cv2
 
@@ -13,7 +13,7 @@ class FeatureTracker:
         self.feature_extractor = Shi_Tomasi_Extractor(cfg)
         self.tracker = LKT_tracker(cfg)
         self.dataset = get_dataset(cfg)
-        self.idx = cfg.initial_frame
+        self.idx = cfg.prmt.initial_frame
 
     def track(self, return_dict=False):
         idx_curr = self.idx
@@ -38,7 +38,7 @@ class FeatureTracker:
             camera_distance = np.linalg.norm(relative_pose[0:3, 3])
 
             tracked_img = self.tracker.track(frame=frame_curr)
-            if self.cfg.show_tracked_features:
+            if self.cfg.prmt.show_tracked_features:
                 print("Camera Distance       {}".format(camera_distance))
                 print("Tracked features      {}".format(len(self.tracker.tracks)))
                 print("KeyFrame/CurrFrame:   {}-{}".format(
@@ -48,7 +48,7 @@ class FeatureTracker:
                 cv2.imshow("preview", tracked_img[:, :, ::-1])
                 cv2.waitKey(1)
 
-            if camera_distance > self.cfg.min_cam_distance:
+            if camera_distance > self.cfg.prmt.min_cam_distance:
                 break
             idx_curr += 1
             if idx_curr == self.dataset.number_frames:
@@ -67,12 +67,13 @@ class FeatureTracker:
             bearings_frm = None
             print("Error projecting features to bearing vectors!!!")
 
-        if self.cfg.special_tracking:
+        if self.cfg.prmt.special_tracking:
             self.idx += 1
         else:
             self.idx = self.tracker.frame_idx
 
         if return_dict:
+            self.cfg.tracked_or_sampled = "tracked_bearings"
             return dict(
                 bearings_kf=bearings_kf,
                 bearings_frm=bearings_frm,

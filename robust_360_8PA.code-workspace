@@ -19,6 +19,7 @@
 		"python.analysis.extraPaths": [
 			//* LOCAL PATHS
 			".",
+			"../Utilities",
 		],
 	},
 	"launch": {
