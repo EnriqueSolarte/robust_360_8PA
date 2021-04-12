@@ -15,7 +15,7 @@ class FeatureTracker:
         self.dataset = get_dataset(cfg)
         self.idx = cfg.prmt.initial_frame
 
-    def track(self, return_dict=False):
+    def track(self, return_dict=False, verbose=True):
         idx_curr = self.idx
          
         if idx_curr == self.dataset.number_frames:
@@ -39,12 +39,12 @@ class FeatureTracker:
 
             tracked_img = self.tracker.track(frame=frame_curr)
             if self.cfg.prmt.show_tracked_features:
-                print("Camera Distance       {}".format(camera_distance))
-                print("Tracked features      {}".format(len(self.tracker.tracks)))
-                print("KeyFrame/CurrFrame:   {}-{}".format(
-                    self.tracker.initial_frame.idx, frame_curr.idx
-                ))
-
+                if verbose:
+                    print("Camera Distance       {}".format(camera_distance))
+                    print("Tracked features      {}".format(len(self.tracker.tracks)))
+                    print("KeyFrame/CurrFrame:   {}-{}".format(
+                        self.tracker.initial_frame.idx, frame_curr.idx
+                    ))
                 cv2.imshow("preview", tracked_img[:, :, ::-1])
                 cv2.waitKey(1)
 
