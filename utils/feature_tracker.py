@@ -1,5 +1,5 @@
 from config import Cfg
-from utils.data_utilities import get_dataset
+from utils.data_utilities import get_dataset, sampling_idxs
 from utils.lkt_tracker import LKT_tracker
 from utils.shi_tomosi_extractor import Shi_Tomasi_Extractor
 from utils.frame import Frame
@@ -13,7 +13,7 @@ class FeatureTracker:
         self.feature_extractor = Shi_Tomasi_Extractor(cfg)
         self.tracker = LKT_tracker(cfg)
         self.dataset = get_dataset(cfg)
-        self.idx = cfg.prmt.initial_frame
+        self.idx = cfg.conffile.initial_frame
 
     def track(self, return_dict=False, verbose=True):
         idx_curr = self.idx
@@ -38,7 +38,7 @@ class FeatureTracker:
             camera_distance = np.linalg.norm(relative_pose[0:3, 3])
 
             tracked_img = self.tracker.track(frame=frame_curr)
-            if self.cfg.prmt.show_tracked_features:
+            if self.cfg.conffile.show_tracked_features:
                 if verbose:
                     print("Camera Distance       {}".format(camera_distance))
                     print("Tracked features      {}".format(len(self.tracker.tracks)))
@@ -48,7 +48,7 @@ class FeatureTracker:
                 cv2.imshow("preview", tracked_img[:, :, ::-1])
                 cv2.waitKey(1)
 
-            if camera_distance > self.cfg.prmt.min_cam_distance:
+            if camera_distance > self.cfg.conffile.min_cam_distance:
                 break
             idx_curr += 1
             if idx_curr == self.dataset.number_frames:
@@ -59,15 +59,16 @@ class FeatureTracker:
 
         cam = self.dataset.cam
         matches = self.tracker.get_matches()
+        samples = sampling_idxs(length=matches[0].shape[0], max_size=self.cfg.conffile.max_number_features)
         try:
-            bearings_kf = cam.pixel2euclidean_space(matches[0])
-            bearings_frm = cam.pixel2euclidean_space(matches[1])
+            bearings_kf = cam.pixel2euclidean_space(matches[0][samples, :])
+            bearings_frm = cam.pixel2euclidean_space(matches[1][samples, :])
         except:
             bearings_kf = None
             bearings_frm = None
             print("Error projecting features to bearing vectors!!!")
 
-        if self.cfg.prmt.special_tracking:
+        if self.cfg.conffile.special_tracking:
             self.idx += 1
         else:
             self.idx = self.tracker.frame_idx

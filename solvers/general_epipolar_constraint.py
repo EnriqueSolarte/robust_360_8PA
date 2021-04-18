@@ -10,10 +10,10 @@ class EightPointAlgorithmGeneralGeometry:
     This implementation aims to find the Essential matrix for both perspective and spherical projection.
     """
 
-    def __init__(self, cfg: Cfg):
-        self.cfg = cfg
+    # def __init__(self, cfg: Cfg):
+    #     self.cfg = cfg
 
-    def compute_essential_matrix(self, x1, x2, return_sigma=False, return_all=False):
+    def compute_essential_matrix(self, x1, x2, return_sigma=False):
         """
         This function compute the Essential matrix of a pair of Nx3 points. The points must be matched each other
         from two geometry views (Epipolar constraint). This general function doesn't assume a homogeneous
@@ -166,3 +166,17 @@ class EightPointAlgorithmGeneralGeometry:
         landmarks_x1 = np.asarray(landmarks_x1).T
         landmarks_x1 = landmarks_x1 / landmarks_x1[3, :]
         return landmarks_x1
+
+    @staticmethod
+    def projected_error(**kwargs):
+        """
+        This residual loss is introduced as projected distance in:
+        A. Pagani and D. Stricker,
+        “Structure from Motion using full spherical panoramic cameras,”
+        ICCV 2011
+        """
+        E_dot_x1 = np.matmul(kwargs["e"].T, kwargs["x1"])
+        E_dot_x2 = np.matmul(kwargs["e"], kwargs["x2"])
+        dst = np.sum(kwargs["x1"] * E_dot_x2, axis=0)
+        return dst / (np.linalg.norm(kwargs["x1"]) *
+                    np.linalg.norm(E_dot_x2))

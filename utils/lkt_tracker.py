@@ -14,10 +14,10 @@ class LKT_tracker:
         self.tracks = []
         self.frame_idx = 0
         self.track_len = 0
-        self.lk_params = dict(winSize=(cfg.prmt.block_size_for_tracking, cfg.prmt.block_size_for_tracking),
-                              maxLevel=cfg.prmt.coarse_fine_levels,
+        self.lk_params = dict(winSize=(cfg.conffile.block_size_for_tracking, cfg.conffile.block_size_for_tracking),
+                              maxLevel=cfg.conffile.coarse_fine_levels,
                               criteria=(cv2.TERM_CRITERIA_EPS
-                                        | cv2.TERM_CRITERIA_COUNT, cfg.prmt.counter_iterations, cfg.prmt.eps_tracking))
+                                        | cv2.TERM_CRITERIA_COUNT, cfg.conffile.counter_iterations, cfg.conffile.eps_tracking))
 
     def track(self, frame):
         self.tracked_frame = frame

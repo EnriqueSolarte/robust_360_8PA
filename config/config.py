@@ -32,7 +32,7 @@ class Cfg:
 
     def __init__(self, *args, **kwargs):
         self.kwargs = kwargs
-        self.prmt = namedtuple('ConfigFile', kwargs.keys())(*kwargs.values())
+        self.conffile = namedtuple('ConfigFile', kwargs.keys())(*kwargs.values())
     
     def save_config(self, dirname):
         """
