@@ -180,3 +180,9 @@ class EightPointAlgorithmGeneralGeometry:
         dst = np.sum(kwargs["x1"] * E_dot_x2, axis=0)
         return dst / (np.linalg.norm(kwargs["x1"]) *
                     np.linalg.norm(E_dot_x2))
+
+    @staticmethod
+    def algebraic_error(**kwargs):
+        E_dot_x2 = np.matmul(kwargs["e"], kwargs["x2"])
+        dst = np.sum(kwargs["x1"] * E_dot_x2, axis=0)
+        return dst

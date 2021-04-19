@@ -18,10 +18,10 @@ range_angular_motion: [-10, 10]         #* Range of rotation angle for synthetic
 
 
 # Shi-Tomasi feature extractor
-max_number_corners: 10000         #* Number of extracted feature by the extarctor
+max_number_corners: 1000         #* Number of extracted feature by the extarctor
 quality_corner_level: 0.0001      #* Quality of corners (higher better but less features)
-min_corner_distance: 20           #* Min distance bewteen extracted features
-block_size_for_corners: 3         #* Windows patch used to compute a feature
+min_corner_distance: 1           #* Min distance bewteen extracted features
+block_size_for_corners: 10         #* Windows patch used to compute a feature
 
 # LK tracker
 coarse_fine_levels: 2             #* Number of course-fine level used to track features
@@ -31,4 +31,4 @@ counter_iterations: 2
 
 # Noise & Outliers setting
 vMF_kappa: 500                    #* Von Mises-Fisher noise parameter
-outliers_ratio: 0.5               #* Outliers ratio wrt $max_number_features
+outliers_ratio: 0.2               #* Outliers ratio wrt $max_number_features
