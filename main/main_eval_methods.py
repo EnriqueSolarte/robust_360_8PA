@@ -3,28 +3,10 @@ from utils import *
 from solvers import *
 
 
-def add_error_eval(error_eval, method_name, hist_errors):
-    
-    key_name = str.split(method_name, sep="by_")[1]
-    if key_name in hist_errors.keys():
-        hist_errors[key_name][0].append(error_eval[0])
-        hist_errors[key_name][1].append(error_eval[1])
-    else:
-        hist_errors[key_name] = ([error_eval[0]], [error_eval[1]])
-
-    print("Rot-e:{0:2e}\tTran-e:{1:2e}\t{2:}".format(
-        np.median(hist_errors[key_name][0]),
-        np.median(hist_errors[key_name][1]),
-        key_name,
-    ))
-
-    return hist_errors
-
-
 def eval_solvers(cfg: Cfg):
 
     tracker = FeatureTracker(cfg)
-    # sampler = BearingsSampler(cfg)
+    sampler = BearingsSampler(cfg)
 
     list_methods = [
         get_cam_pose_by_8pa,
@@ -59,12 +41,14 @@ def eval_solvers(cfg: Cfg):
                     transform_gt=cam_pose_gt
                 )
                 hist_errors = add_error_eval(cam_pose_error, method.__name__, hist_errors)
+        
+        print("done")
 
 
 if __name__ == '__main__':
 
-    # config_file = Cfg.FILE_CONFIG_MP3D_VO
-    config_file = Cfg.FILE_CONFIG_TUM_VI
+    config_file = Cfg.FILE_CONFIG_MP3D_VO
+    # config_file = Cfg.FILE_CONFIG_TUM_VI
 
     cfg = Cfg.from_cfg_file(yaml_config=config_file)
     eval_solvers(cfg)

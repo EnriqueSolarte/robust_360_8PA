@@ -3,7 +3,6 @@
 analysis/loss_surfaces/plots
 analysis/error_loss_8PA/plots
 analysis/performance_comparisons/plots
-**/plots
 **/results_bk
 **/results
 report

@@ -26,6 +26,14 @@ class Cfg:
     CAM_POSES_GSM = "cam_pose_GSM.txt"
     CAM_POSES_wSK = "cam_pose_wSK.txt"
 
+    # ! Labels
+    _8PA = "8pa"
+    OPT_eSK = "opt_SK"
+    GSM = "GSM"
+    wSK = "GSM_const_wSK"
+    wRT = "GSM_const_wRT"
+
+
     #### ! camera poses
     FROM_TRACKED_BEARINGS= "tracked_bearings"
     FROM_SAMPLED_BEARINGS= "sampled_bearings"

@@ -2,8 +2,8 @@
 
 # Dataset settings
 dataset_name: MP3D_VO
-scene: 2n8kARJN3HM
-scene_version: 0
+scene: 1LXtFkjw3qL
+scene_version: 1
 
 # Data settings
 initial_frame: 0                        #* intial frame to read automatically
@@ -18,13 +18,13 @@ range_angular_motion: [-10, 10]         #* Range of rotation angle for synthetic
 
 
 # Shi-Tomasi feature extractor
-max_number_corners: 1000         #* Number of extracted feature by the extarctor
-quality_corner_level: 0.0001      #* Quality of corners (higher better but less features)
-min_corner_distance: 1           #* Min distance bewteen extracted features
+max_number_corners: 500         #* Number of extracted feature by the extarctor
+quality_corner_level: 0.00001      #* Quality of corners (higher better but less features)
+min_corner_distance: 10           #* Min distance bewteen extracted features
 block_size_for_corners: 10         #* Windows patch used to compute a feature
 
 # LK tracker
-coarse_fine_levels: 2             #* Number of course-fine level used to track features
+coarse_fine_levels: 1             #* Number of course-fine level used to track features
 block_size_for_tracking: 10
 eps_tracking: 0.001
 counter_iterations: 2

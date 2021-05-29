@@ -111,6 +111,29 @@ def sampling_idxs(length, max_size):
         return samples
 
 
+def add_error_eval(error_eval, method_name, hist_errors):
+
+    key_name = str.split(method_name, sep="by_")[1]
+    if key_name in hist_errors.keys():
+        hist_errors[key_name][0].append(error_eval[0])
+        hist_errors[key_name][1].append(error_eval[1])
+
+        hist_errors[key_name+"_rot_e"].append(np.median(hist_errors[key_name][0]))
+        hist_errors[key_name+"_tra_e"].append(np.median(hist_errors[key_name][1]))
+    else:
+        hist_errors[key_name] = ([error_eval[0]], [error_eval[1]])
+        hist_errors[key_name+"_rot_e"] = [error_eval[0]]
+        hist_errors[key_name+"_tra_e"] = [error_eval[1]]
+
+    print("Rot-e:{0:2e}\tTran-e:{1:2e}\t{2:}".format(
+        np.median(hist_errors[key_name][0]),
+        np.median(hist_errors[key_name][1]),
+        key_name,
+    ))
+
+    return hist_errors
+
+
 class SavedData:
 
     def __init__(self, cfg, tracked_or_sampled):

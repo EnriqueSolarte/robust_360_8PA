@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import vonmises
 
 
-def add_outliers_to_pcl(pcl, number_inliers=1):
+def add_outliers_to_pcl(pcl, number_inliers):
     """
     It randomly select vector into the pcl array and redefines its values
     """
