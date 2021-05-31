@@ -1,8 +1,10 @@
+from config.config import Cfg
 import levmar
 import numpy as np
 from solvers.general_epipolar_constraint import EightPointAlgorithmGeneralGeometry as G8PA
 from liegroups.numpy import SE3
 from scipy.stats import norm
+from .ransac import RANSAC_8PA
 
 g8p = G8PA()
 
@@ -33,8 +35,8 @@ def residuals_error_SK(parameters, bearings_kf, bearings_frm):
 
     e_norm = g8p.compute_essential_matrix(
         x1=bearings_kf_norm, x2=bearings_frm_norm)
-    
-    ## ! De-normalization
+
+    # ! De-normalization
     e_hat = t1.T @ e_norm @ t2
     residuals_error = g8p.projected_error(
         e=e_hat, x1=bearings_kf, x2=bearings_frm)
@@ -194,4 +196,54 @@ def get_cam_pose_by_GSM_const_wRT(x1, x2):
               ))
     cam_final = SE3.exp(opt_rt).as_matrix()
 
+    return cam_final
+
+
+def get_cam_pose_by_ransac_8pa(x1, x2, cfg: Cfg):
+    ransac = RANSAC_8PA(cfg)
+    ransac.post_function_evaluation = get_cam_pose_by_8pa
+    cam_final = ransac.get_cam_pose(
+        bearings_1=x1,
+        bearings_2=x2
+    )
+    return cam_final
+
+
+def get_cam_pose_by_ransac_opt_SK(x1, x2, cfg: Cfg):
+    ransac = RANSAC_8PA(cfg)
+    ransac.post_function_evaluation = get_cam_pose_by_opt_SK
+    cam_final = ransac.get_cam_pose(
+        bearings_1=x1,
+        bearings_2=x2
+    )
+    return cam_final
+
+
+def get_cam_pose_by_ransac_GSM(x1, x2, cfg: Cfg):
+    ransac = RANSAC_8PA(cfg)
+    ransac.post_function_evaluation = get_cam_pose_by_GSM
+    cam_final = ransac.get_cam_pose(
+        bearings_1=x1,
+        bearings_2=x2
+    )
+    return cam_final
+
+
+def get_cam_pose_by_ransac_GSM_const_wRT(x1, x2, cfg: Cfg):
+    ransac = RANSAC_8PA(cfg)
+    ransac.post_function_evaluation = get_cam_pose_by_GSM_const_wRT
+    cam_final = ransac.get_cam_pose(
+        bearings_1=x1,
+        bearings_2=x2
+    )
+    return cam_final
+
+
+def get_cam_pose_by_ransac_GSM_const_wSK(x1, x2, cfg: Cfg):
+    ransac = RANSAC_8PA(cfg)
+    ransac.post_function_evaluation = get_cam_pose_by_GSM_const_wSK
+    cam_final = ransac.get_cam_pose(
+        bearings_1=x1,
+        bearings_2=x2
+    )
     return cam_final

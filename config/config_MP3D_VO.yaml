@@ -1,34 +1,40 @@
-# Configurations 
+#! Configurations 
 
-# Dataset settings
+#! Dataset settings
 dataset_name: MP3D_VO
 scene: 1LXtFkjw3qL
-scene_version: 1
+scene_version: 0
 
-# Data settings
+#! Data settings
 initial_frame: 0                        #* intial frame to read automatically
 special_tracking: False                 #* track every frame as inital ref for tracking
 min_cam_distance: 0.5                   #* min camera motion between ref and tracked frame
 show_tracked_features: True             #* show while tracking
 save_bearings: True                     #* save bearing vectors which are evaluated
-max_number_features: 200                #* Number of features (sampling from all tracked features)
+max_number_features: 400                #* Number of features (sampling from all tracked features)
 skipped_frames: 1                       #* Number of frames skipped when sampling bearing from PCL
 range_liner_motion: [-1, 1]             #* Range of translation vectors for synthetic camera poses
 range_angular_motion: [-10, 10]         #* Range of rotation angle for synthetic camera poses
 
 
-# Shi-Tomasi feature extractor
+#! Shi-Tomasi feature extractor
 max_number_corners: 500         #* Number of extracted feature by the extarctor
 quality_corner_level: 0.0001      #* Quality of corners (higher better but less features)
 min_corner_distance: 10           #* Min distance bewteen extracted features
 block_size_for_corners: 10         #* Windows patch used to compute a feature
 
-# LK tracker
+#! LK tracker
 coarse_fine_levels: 2             #* Number of course-fine level used to track features
 block_size_for_tracking: 7
 eps_tracking: 0.0001
 counter_iterations: 2
 
-# Noise & Outliers setting
+#! Noise & Outliers setting
 vMF_kappa: 500                   #* Von Mises-Fisher noise parameter
-outliers_ratio: 0.2              #* Outliers ratio wrt $max_number_features
+outliers_ratio: 0.5              #* Outliers ratio wrt $max_number_features
+
+#! RANSAC 
+expected_inliers: 0.5
+probability_success: 0.99
+residual_threshold: 1.1e-3
+min_super_set: 50
