@@ -7,7 +7,7 @@ scene_version: "512_16"
 
 # Data settings
 initial_frame: 0                      #* intial frame to read automatically
-special_tracking: True               #* track every frame as inital ref for tracking
+special_tracking: False               #* track every frame as inital ref for tracking
 min_cam_distance: 0.5                 #* min camera motion between ref and tracked frame
 show_tracked_features: True           #* show while tracking
 save_bearings: True                   #* save bearing vectors which are evaluated

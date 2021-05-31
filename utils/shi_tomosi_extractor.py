@@ -7,10 +7,10 @@ class Shi_Tomasi_Extractor():
     def __init__(self, cfg: Cfg):
         self.extractor = "Shi_Tomasi"
         self.descriptor = cv2.ORB_create()
-        self.feature_params = dict(maxCorners=cfg.conffile.max_number_corners,
-                                   qualityLevel=cfg.conffile.quality_corner_level,
-                                   minDistance=cfg.conffile.min_corner_distance,
-                                   blockSize=cfg.conffile.block_size_for_corners)
+        self.feature_params = dict(maxCorners=cfg.params.max_number_corners,
+                                   qualityLevel=cfg.params.quality_corner_level,
+                                   minDistance=cfg.params.min_corner_distance,
+                                   blockSize=cfg.params.block_size_for_corners)
 
     def get_features_descriptors(self, image, mask=None):
         if len(image.shape) > 2:

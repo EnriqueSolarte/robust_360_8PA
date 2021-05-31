@@ -1,4 +1,3 @@
-from os.path import dirname
 from utils.geometry_utilities import isRotationMatrix
 from numpy.testing._private.utils import raises
 from pandas.core.base import DataError
@@ -17,35 +16,35 @@ def get_dataset(cfg: Cfg):
     """
     Returns an object datatset
     """
-    if cfg.conffile.dataset_name == "MP3D_VO":
+    if cfg.params.dataset_name == "MP3D_VO":
         dataset_dir = cfg.DIR_MP3D_VO_DATASET
-        scene = "{}/{}".format(cfg.conffile.scene, cfg.conffile.scene_version)
+        scene = "{}/{}".format(cfg.params.scene, cfg.params.scene_version)
         cfg.dataset = MP3D_VO(dt_dir=dataset_dir, scene=scene)
         return cfg.dataset
 
-    elif cfg.conffile.dataset_name == "TUM_VI":
+    elif cfg.params.dataset_name == "TUM_VI":
         dataset_dir = cfg.DIR_TUM_VI_DATASET
-        scene = "dataset-room{}_{}".format(cfg.conffile.scene, cfg.conffile.scene_version)
+        scene = "dataset-room{}_{}".format(cfg.params.scene, cfg.params.scene_version)
         cfg.dataset = TUM_VI(dt_dir=dataset_dir, scene=scene)
         return cfg.dataset
 
 
 def get_data_dirname(cfg: Cfg):
-    if cfg.conffile.dataset_name == "MP3D_VO":
+    if cfg.params.dataset_name == "MP3D_VO":
         return os.path.join(
             cfg.DIR_ROOT,
             'data',
-            cfg.conffile.dataset_name,
-            cfg.conffile.scene,
-            str(cfg.conffile.scene_version),
+            cfg.params.dataset_name,
+            cfg.params.scene,
+            str(cfg.params.scene_version),
             cfg.tracked_or_sampled
         )
     else:
         return os.path.join(
             cfg.DIR_ROOT,
             'data',
-            cfg.conffile.dataset_name,
-            'dataset-room{}_{}'.format(cfg.conffile.scene, cfg.conffile.scene_version),
+            cfg.params.dataset_name,
+            'dataset-room{}_{}'.format(cfg.params.scene, cfg.params.scene_version),
             cfg.tracked_or_sampled
         )
 
@@ -97,6 +96,12 @@ def save_bearings(*args, **kwargs):
         pose_file = os.path.join(dirname, camera_pose_filename)
         flatten_pose = kwargs["relative_pose"].flatten()
         write_file(pose_file, tuple(flatten_pose))
+
+
+def save_results(*args, **kwargs):
+    dirname = get_data_dirname(kwargs["cfg"])
+    np.save(os.path.join(dirname, "error.results"), kwargs["errors"])
+    
 
 
 def sampling_idxs(length, max_size):

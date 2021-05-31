@@ -6,7 +6,7 @@ from solvers import *
 def eval_solvers(cfg: Cfg):
 
     tracker = FeatureTracker(cfg)
-    sampler = BearingsSampler(cfg)
+    # sampler = BearingsSampler(cfg)
 
     list_methods = [
         get_cam_pose_by_8pa,

@@ -9,6 +9,8 @@ def main(cfg: Cfg):
     tracker = FeatureTracker(cfg)
 
     s = []
+    plt.figure("Stability", figsize=(6, 4))
+    plt.grid()    
     while True:
         bearings_kf, bearings_frm, cam_pose_gt, ret = tracker.track(verbose=False)
         if not ret:
@@ -23,14 +25,12 @@ def main(cfg: Cfg):
         
         s.append(sigma[-2])
 
-        plt.figure("Stability", figsize=(5, 3))
         plt.title("Stability")
-        plt.plot(range(s.__len__()), s, c="red")
+        plt.plot(range(s.__len__()), s, c="red",marker=".")
+        plt.xlabel("frame idx")
+        plt.ylabel("stability $\sigma_8$")
         plt.draw()
-        plt.waitforbuttonpress(0.001)
-
-        if s.__len__() < 1:
-            input("kike")
+        plt.waitforbuttonpress(0.01)
 
 
 if __name__ == '__main__':

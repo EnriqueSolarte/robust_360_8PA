@@ -15,9 +15,9 @@ from vispy_utilities import plot_color_plc, plot_pcl_list
 class BearingsSampler:
     def __init__(self, cfg: Cfg):
         self.cfg = cfg
-        assert cfg.conffile.dataset_name == "MP3D_VO", "Wrong datastet. Only MP3D-VO is suitable for sampling a PCL"
+        assert cfg.params.dataset_name == "MP3D_VO", "Wrong datastet. Only MP3D-VO is suitable for sampling a PCL"
         self.dataset = get_dataset(cfg)
-        self.idx = cfg.conffile.initial_frame
+        self.idx = cfg.params.initial_frame
 
     def get_bearings(self, return_dict=False):
         idx_curr = self.idx
@@ -27,8 +27,8 @@ class BearingsSampler:
             pcl, color, pose, timestamp, idx = self.dataset.get_pcl(idx_curr)
 
             # ! Create a random camera pose
-            linear_motion = self.cfg.conffile.range_liner_motion
-            angular_motion = self.cfg.conffile.range_angular_motion
+            linear_motion = self.cfg.params.range_liner_motion
+            angular_motion = self.cfg.params.range_angular_motion
             cam_a2b = get_homogeneous_transform_from_vectors(
                 t_vector=(np.random.uniform(linear_motion[0], linear_motion[1]),
                           np.random.uniform(linear_motion[0], linear_motion[1]),
@@ -38,25 +38,25 @@ class BearingsSampler:
                           np.random.uniform(angular_motion[0], angular_motion[1])))
 
             # ! Sampling PCL
-            samples = sampling_idxs(length=pcl.shape[1], max_size=self.cfg.conffile.max_number_features)      
+            samples = sampling_idxs(length=pcl.shape[1], max_size=self.cfg.params.max_number_features)      
             
             pcl_a = pcl[:, samples]
 
             pcl_b = np.linalg.inv(cam_a2b)[0:3, :] @ extend_array_to_homogeneous(pcl_a)
 
-            pcl_b = add_noise_to_pcl(pcl_b, param=self.cfg.conffile.vMF_kappa)
+            pcl_b = add_noise_to_pcl(pcl_b, param=self.cfg.params.vMF_kappa)
 
-            pcl_b = add_outliers_to_pcl(pcl_b, number_inliers=(1-self.cfg.conffile.outliers_ratio) * pcl_b.shape[1])
+            pcl_b = add_outliers_to_pcl(pcl_b, number_inliers=(1-self.cfg.params.outliers_ratio) * pcl_b.shape[1])
 
             bearings_kf = self.dataset.cam.sphere_normalization(pcl_a)
             bearings_frm = self.dataset.cam.sphere_normalization(pcl_b)
 
-            self.idx += self.cfg.conffile.skipped_frames
+            self.idx += self.cfg.params.skipped_frames
         else:
             ret = False
 
+        self.cfg.tracked_or_sampled = self.cfg.FROM_SAMPLED_BEARINGS
         if return_dict:
-            self.cfg.tracked_or_sampled = self.cfg.FROM_SAMPLED_BEARINGS
 
             if not ret:
                 return None, ret
