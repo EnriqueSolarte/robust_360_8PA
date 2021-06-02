@@ -14,8 +14,8 @@ For a quick introduction (3 min), please [here](https://drive.google.com/file/d/
 ---
 ### News
 **June 3, 2021** - Code realesed 
-
 ***Coming Soon***: *realesing Dataset MP3D-VO*
+
 ---
 
 ### Description
