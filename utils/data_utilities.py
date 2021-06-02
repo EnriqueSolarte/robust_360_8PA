@@ -5,8 +5,8 @@ from dataset_reader.MP3D_VO import MP3D_VO
 from dataset_reader.TUM_VI import TUM_VI
 import pandas as pd
 import numpy as np
-from utils.file_utils import create_dir
-from utils.file_utils import create_file, write_file
+from utils.file_utilities import create_dir
+from utils.file_utilities import create_file, write_file
 import pandas as pd
 
 

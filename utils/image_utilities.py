@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from scipy import ndimage
 from scipy.interpolate import interp2d
-from utils.file_utils import create_dir
+from utils.file_utilities import create_dir
 import os
 import matplotlib.pyplot as plt
 

@@ -4,10 +4,10 @@
 			"path": "."
 		},
 		{
-			"path": "../Utilities"
+			"path": "../Utilities_1"
 		},
 		{
-			"path": "../CameraModels"
+			"path": "../CameraModels_1"
 		},
 		{
 			"path": "../vslam360/vslam360_src"
@@ -19,8 +19,8 @@
 		"python.analysis.extraPaths": [
 			//* LOCAL PATHS
 			".",
-			"../Utilities",
-			"../CameraModels",
+			"../Utilities_1",
+			"../CameraModels_1",
 		],
 	},
 	"launch": {

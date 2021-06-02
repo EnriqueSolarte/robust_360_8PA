@@ -9,7 +9,7 @@ from utils.pcl_utilities import add_outliers_to_pcl
 import numpy as np
 import cv2
 
-from vispy_utilities import plot_color_plc, plot_pcl_list
+from utils.vispy_utilities import plot_color_plc, plot_pcl_list
 
 
 class BearingsSampler:

@@ -1,12 +1,10 @@
 import sys
-sys.path.append("/home/kike/Documents/Research/Utilities")
-sys.path.append("/home/kike/Documents/Research/CameraModels")
 from .dataset import Data
 import matplotlib.pyplot as plt
-from file_utilities import read_yaml_file, load_obj, save_obj
-from geometry_utilities import *
-from vispy_utilities import *
-from sphere import Sphere
+from utils.file_utilities import read_yaml_file
+from utils.geometry_utilities import *
+from utils.vispy_utilities import *
+from utils.camera_models import Sphere
 import cv2
 import os
 import numpy as np
