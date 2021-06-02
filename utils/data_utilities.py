@@ -1,6 +1,4 @@
 from utils.geometry_utilities import isRotationMatrix
-from numpy.testing._private.utils import raises
-from pandas.core.base import DataError
 from config import Cfg
 import os
 from dataset_reader.MP3D_VO import MP3D_VO
@@ -11,6 +9,18 @@ from utils.file_utils import create_dir
 from utils.file_utils import create_file, write_file
 import pandas as pd
 
+
+def get_shape(array_map):
+    """
+     Useful function to get the shape of an image array regardless
+     of its shape.
+     :return (h, w)
+    """
+    if len(array_map.shape) > 2:
+        h, w, c = array_map.shape
+    else:
+        h, w = array_map.shape
+    return h, w
 
 def get_dataset(cfg: Cfg):
     """

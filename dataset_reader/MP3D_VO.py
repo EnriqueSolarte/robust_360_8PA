@@ -1,11 +1,8 @@
 import sys
-sys.path.append("/home/kike/Documents/Research/Utilities")
-sys.path.append("/home/kike/Documents/Research/CameraModels")
-from pcl_utilities import *
 import numpy as np
-from projections.equi2pcl.equi2pcl import Equi2PCL
+from utils.equi2pcl import Equi2PCL
 from .dataset import Data
-from TUM_RGBD_utils.evaluate_rpe import read_trajectory
+from utils.TUM_RGBD_utils.evaluate_rpe import read_trajectory
 from config import Cfg
 import os
 from imageio import imread

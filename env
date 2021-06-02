@@ -4,10 +4,10 @@
 DIR_DATASETS=/HD/datasets
 echo "DIR_DATASETS: "$DIR_DATASETS
 
-# ! Utilities
-DIR_UTILITIES=$HOME/Documents/Research/Utilities
-echo "DIR_UTILITIES: "$DIR_UTILITIES
+# # ! Utilities
+# DIR_UTILITIES=$HOME/Documents/Research/Utilities
+# echo "DIR_UTILITIES: "$DIR_UTILITIES
 
-# ! CameraModels
-DIR_CAMERA_MODELS=$HOME/Documents/Research/CameraModels
-echo "DIR_CAMERA_MODELS: "$DIR_CAMERA_MODELS
+# # ! CameraModels
+# DIR_CAMERA_MODELS=$HOME/Documents/Research/CameraModels
+# echo "DIR_CAMERA_MODELS: "$DIR_CAMERA_MODELS

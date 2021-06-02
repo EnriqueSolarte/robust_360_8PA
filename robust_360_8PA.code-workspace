@@ -20,6 +20,7 @@
 			//* LOCAL PATHS
 			".",
 			"../Utilities",
+			"../CameraModels",
 		],
 	},
 	"launch": {

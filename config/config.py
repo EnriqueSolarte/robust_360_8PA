@@ -10,7 +10,7 @@ from collections import namedtuple
 class Cfg:
 
     # ! Paths
-    DIR_ROOT = os.getenv("DIR_ROOT")
+    DIR_ROOT = os.getenv("DIR_ROBUST_360_8PA")
     FILE_CONFIG_MP3D_VO = os.path.join(DIR_ROOT, 'config', 'config_MP3D_VO.yaml')
     FILE_CONFIG_TUM_VI = os.path.join(DIR_ROOT, 'config', 'config_TUM_VI.yaml')
 
