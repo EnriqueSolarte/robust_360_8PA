@@ -71,6 +71,14 @@ cfg = Cfg.from_cfg_file(yaml_config=config_file)
 eval_solvers(cfg)
 
 ```
+***NOTE***: In general ```cfg``` is created at the begining of every script in this implementation, e.g. in  ```plots/plot_cam_pose_errors.py```
+
+```
+if __name__ == '__main__':
+    config_file = Cfg.FILE_CONFIG_MP3D_VO
+    cfg = Cfg.from_cfg_file(yaml_config=config_file)
+    plot_sampling_evaluations(cfg)
+```
 
 ##### ENV variables and source this implementation
 
@@ -118,15 +126,6 @@ To plot the MAE evaluations (median absolute errors), you can run:
 
 ```
 python plots/plot_cam_pose_errors.py
-```
-
-***NOTE***: In order to specify the datasets as well as the parameter used in the above evaluations, a particular config file has been loaded, e.g. in  ```plots/plot_cam_pose_errors.py```, 
-
-```
-if __name__ == '__main__':
-    config_file = Cfg.FILE_CONFIG_MP3D_VO
-    cfg = Cfg.from_cfg_file(yaml_config=config_file)
-    plot_sampling_evaluations(cfg)
 ```
 
 [![image](https://github.com/EnriqueSolarte/EnriqueSolarte.github.io/blob/main/robust_360_8pa/assets/demo_v3_2.gif)](https://enriquesolarte.github.io/robust_360_8pa/)
