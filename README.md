@@ -54,7 +54,7 @@ from config import Cfg
  cfg = Cfg.from_cfg_file(yaml_config=config_file)
 ```
 
-the ```cfg``` instance is the used to set everyint up for all of the classes in this implementation. e.g., 
+the ```cfg``` instance is the used to set all of the classes and methods in this implementation. e.g., 
 
 ```py
 
@@ -80,7 +80,7 @@ eval_solvers(cfg)
 There are three main ENV variables that have to be modified in ```env``` file. 
 
 ```sh
-DIR_DATASETS=/HD/datasets  #path to root dir of dataset
+DIR_DATASETS=/HD/datasets  #path to root dir of datasets
 MP3D_VO_DATASET=${DIR_DATASETS}/ICRA2021  # path to MP3D-VO dataset
 TUM_VI_DATASET=${DIR_DATASETS}/TUM_VI       # path to TUM-VI dataset
 ```
@@ -116,13 +116,13 @@ Rot-e:3.659004e-02      Tran-e:8.599553e-02     ransac_GSM_const_wRT
 Rot-e:2.893354e-02      Tran-e:5.370007e-02     ransac_GSM_const_wSK
 ```
 
-To plot MAE evaluations (median absolute errors), you can run:
+To plot the MAE evaluations (median absolute errors), you can run:
 
 ```
 python plots/plot_cam_pose_errors.py
 ```
 
-***NOTE***: In order to specify the datasets, and the parameter used in the above evaluations a particular config file has been loaded, e.g. in  ```plots/plot_cam_pose_errors.py```, 
+***NOTE***: In order to specify the datasets as well as the parameter used in the above evaluations, a particular config file has been loaded, e.g. in  ```plots/plot_cam_pose_errors.py```, 
 
 ```
 if __name__ == '__main__':
@@ -151,8 +151,7 @@ Please cite our paper for any purpose of usage.
 }
 ```
 
-
-
+### References
 
 [1]: [Longuet-Higgins, H. C. (1981). A computer algorithm for reconstructing a scene from two projections. Nature, 293(5828), 133-135.](https://www.nature.com/articles/293133a0)
 
