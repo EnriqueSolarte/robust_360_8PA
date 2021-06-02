@@ -16,16 +16,21 @@ For a quick introduction (3 min), please [here](https://drive.google.com/file/d/
 **June 3, 2021** - Code realesed 
 
 ***Coming Soon***: *realesing Dataset MP3D-VO*
+---
 
 ### Description
 
 This **REPO** is our own implemantation, in python, for a camera pose estimation using the eight-point algorithm [1], the non-linear optmization over residual errors (Gold Standar Method [GSM]) [2], and our method named **Robust 360-8PA**.
 
 Using this implementation, you can:
-* Track features from 360-FoV (our MP3D-VO dataset) and Fish-eye (TUM-VI dataset [3]) images using LKT-tracker. 
+
+* Track key-features, using LKT-tracker, from 360-FoV and Fish-eye images (from our MP3D-VO and TUM-VI[3] datasets, respectively). 
 * Sample 3D points from GT 360-depth maps (only for our MP3D-VO dataset), adding noise vMF, and outliers.
 * Evaluate camera pose, with and without RANSAC, using 8-PA[1], GSM[2], and our **Robust 360-8PA**.
 
+Futher capabilities, analysis and resourses are released in the branch [```dev```](https://github.com/EnriqueSolarte/robust_360_8PA/tree/dev).
+
+---
 ### Requirements
 * python                    3.7.7
 * vispy                     0.5.3
@@ -33,10 +38,10 @@ Using this implementation, you can:
 * opencv-python             3.4.3.18
 * pandas                    1.0.5 
 * levmar                    0.2.3
+---
+### Settings
 
-### Setting and REPO configuration
-
-For convience, we implement a  ***< Class config >*** to load both datasets and the settings used in this implementation from a yaml file. ```e.g .config/config_TUM_VI.yaml```. You can use the following lines for loading this configuracion. 
+For convience, we implement a  ***< Class config >*** to load the used settings in this repo, from a yaml file. ```e.g .config/config_TUM_VI.yaml```. You can use the following lines for loading this configuracion. 
 
 ```py
 from config import Cfg
@@ -45,12 +50,34 @@ from config import Cfg
  cfg = Cfg.from_cfg_file(yaml_config=config_file)
 ```
 
-### ENV variables and source this implementation
+the ```cfg``` instance is used to set all of the classes and methods in this implementation. e.g., 
+
+```py
+
+# from test/test_tracking_features.py
+config_file = Cfg.FILE_CONFIG_TUM_VI    
+cfg = Cfg.from_cfg_file(yaml_config=config_file)
+tracker = FeatureTracker(cfg)
+
+# from test/test_saving_sampled_bearings.py
+config_file = Cfg.FILE_CONFIG_MP3D_VO
+cfg = Cfg.from_cfg_file(yaml_config=config_file)
+sampler = BearingsSampler(cfg)
+
+# test/test_eval_methods.py
+config_file = Cfg.FILE_CONFIG_MP3D_VO
+cfg = Cfg.from_cfg_file(yaml_config=config_file)
+eval_solvers(cfg)
+
+```
+
+##### ENV variables and source this implementation
+
 
 There are three main ENV variables that have to be modified in ```env``` file. 
 
 ```sh
-DIR_DATASETS=/HD/datasets  #path to root dir of dataset
+DIR_DATASETS=/HD/datasets  #path to root dir of datasets
 MP3D_VO_DATASET=${DIR_DATASETS}/ICRA2021  # path to MP3D-VO dataset
 TUM_VI_DATASET=${DIR_DATASETS}/TUM_VI       # path to TUM-VI dataset
 ```
@@ -60,7 +87,7 @@ After this. You should source the ```setup.sh``` to export these variables and s
 # from root of this REPO
 source setup.bash
 ```
-
+---
 ## RUN FILES
 
 To run this implementation, we present several run test files in ```/test```:
@@ -86,13 +113,13 @@ Rot-e:3.659004e-02      Tran-e:8.599553e-02     ransac_GSM_const_wRT
 Rot-e:2.893354e-02      Tran-e:5.370007e-02     ransac_GSM_const_wSK
 ```
 
-To plot MAE evaluation (median absolute errors), you can run:
+To plot the MAE evaluations (median absolute errors), you can run:
 
 ```
 python plots/plot_cam_pose_errors.py
 ```
 
-NOTE: that to specified the dataset, and the parameter used in the above evaluation a particular config yaml file has been loaded, e.g. in  ```plots/plot_cam_pose_errors.py```, 
+***NOTE***: In order to specify the datasets as well as the parameter used in the above evaluations, a particular config file has been loaded, e.g. in  ```plots/plot_cam_pose_errors.py```, 
 
 ```
 if __name__ == '__main__':
@@ -106,7 +133,6 @@ if __name__ == '__main__':
 
 ## Acknowledgement
 - Credit of this repo is shared with [Chin-Hsuan Wu](https://chinhsuanwu.github.io/).
-  
 
 ## Citation
 Please cite our paper for any purpose of usage.
@@ -120,10 +146,8 @@ Please cite our paper for any purpose of usage.
                     primaryClass={cs.CV}
 }
 ```
-
-
-
-
+---
+### References
 [1]: [Longuet-Higgins, H. C. (1981). A computer algorithm for reconstructing a scene from two projections. Nature, 293(5828), 133-135.](https://www.nature.com/articles/293133a0)
 
 [2]: [A. Pagani and D. Stricker, "Structure from Motion using full spherical panoramic cameras," 2011 IEEE International Conference on Computer Vision Workshops (ICCV Workshops), 2011, pp. 375-382, doi: 10.1109/ICCVW.2011.6130266.](10.1109/ICCVW.2011.6130266)
