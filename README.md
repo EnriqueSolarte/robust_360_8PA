@@ -1,5 +1,3 @@
-
-
 # Robust 360-8PA
 
 This is the implementation of our ICRA 2021 ["
@@ -19,11 +17,13 @@ For a quick introduction (3 min), please [here](https://drive.google.com/file/d/
 
 ***Coming Soon***: *realesing Dataset MP3D-VO*
 ---
+
 ### Description
 
 This **REPO** is our own implemantation, in python, for a camera pose estimation using the eight-point algorithm [1], the non-linear optmization over residual errors (Gold Standar Method [GSM]) [2], and our method named **Robust 360-8PA**.
 
 Using this implementation, you can:
+
 * Track key-features, using LKT-tracker, from 360-FoV and Fish-eye images (from our MP3D-VO and TUM-VI[3] datasets, respectively). 
 * Sample 3D points from GT 360-depth maps (only for our MP3D-VO dataset), adding noise vMF, and outliers.
 * Evaluate camera pose, with and without RANSAC, using 8-PA[1], GSM[2], and our **Robust 360-8PA**.
@@ -50,7 +50,7 @@ from config import Cfg
  cfg = Cfg.from_cfg_file(yaml_config=config_file)
 ```
 
-the ```cfg``` instance is the used to set all of the classes and methods in this implementation. e.g., 
+the ```cfg``` instance is used to set all of the classes and methods in this implementation. e.g., 
 
 ```py
 
@@ -72,6 +72,7 @@ eval_solvers(cfg)
 ```
 
 ##### ENV variables and source this implementation
+
 
 There are three main ENV variables that have to be modified in ```env``` file. 
 
@@ -132,7 +133,6 @@ if __name__ == '__main__':
 
 ## Acknowledgement
 - Credit of this repo is shared with [Chin-Hsuan Wu](https://chinhsuanwu.github.io/).
- 
 
 ## Citation
 Please cite our paper for any purpose of usage.
@@ -146,9 +146,8 @@ Please cite our paper for any purpose of usage.
                     primaryClass={cs.CV}
 }
 ```
-
+---
 ### References
-
 [1]: [Longuet-Higgins, H. C. (1981). A computer algorithm for reconstructing a scene from two projections. Nature, 293(5828), 133-135.](https://www.nature.com/articles/293133a0)
 
 [2]: [A. Pagani and D. Stricker, "Structure from Motion using full spherical panoramic cameras," 2011 IEEE International Conference on Computer Vision Workshops (ICCV Workshops), 2011, pp. 375-382, doi: 10.1109/ICCVW.2011.6130266.](10.1109/ICCVW.2011.6130266)
