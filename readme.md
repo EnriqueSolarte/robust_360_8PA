@@ -5,10 +5,11 @@ Robust 360-8PA": Redesigning The Normalized 8-point Algorithm
 for 360-FoV Images](https://arxiv.org/abs/2104.10900)" ([website project](https://enriquesolarte.github.io/robust_360_8pa/)).
 
 
-[![image](https://github.com/EnriqueSolarte/EnriqueSolarte.github.io/blob/main/robust_360_8pa/assets/play_video_12_min.png)](https://drive.google.com/file/d/1qSuaWtE9uO62hN8XR8Gxa4KDCfVfeDzt/preview)
+### Introduction
+[![image](https://github.com/EnriqueSolarte/EnriqueSolarte.github.io/blob/main/robust_360_8pa/assets/play_video_3_min.png)](https://drive.google.com/file/d/1BazLvaZllLIf-QY1xb2tbQaJYhtXy2_R/preview)
 
+[Quick Introduction (3 min)](https://drive.google.com/file/d/1qSuaWtE9uO62hN8XR8Gxa4KDCfVfeDzt/preview)
 
-For more information, please vist our webside project [website project](https://enriquesolarte.github.io/robust_360_8pa/)
 
 ---
 ### News
