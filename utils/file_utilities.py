@@ -2,6 +2,12 @@ import os
 import csv
 
 
+def read_yaml_file(path):
+    with open(path) as f:
+        yaml_data = yaml.load(f, Loader=yamlordereddictloader.Loader)
+    return yaml_data
+
+
 def write_file(file, line):
     """
     Writes in a file one specific line

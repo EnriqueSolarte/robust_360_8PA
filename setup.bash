@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
 # ! Directory of this project
-export DIR_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-echo $DIR_ROOT/"setup.bash has been source"
-# ! Dataset directories
-export DIR_MP3D_VO_DATASET=${HOME}/Documents/datasets/MP3D_VO
-export DIR_TUM_VI_DATASET=${HOME}/Documents/datasets/TUM_VI
+export DIR_ROBUST_360_8PA="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+echo $DIR_ROBUST_360_8PA/"setup.bash has been source"
 
-export PYTHONPATH=$PYTHONPATH:$DIR_ROOT
+source $DIR_ROBUST_360_8PA/env
+
+# ! Dataset directories
+export DIR_MP3D_VO_DATASET=${MP3D_VO_DATASET}
+export DIR_TUM_VI_DATASET=${TUM_VI_DATASET}
+
+export PYTHONPATH=$PYTHONPATH:$DIR_ROBUST_360_8PA

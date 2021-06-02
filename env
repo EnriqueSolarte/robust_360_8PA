@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# ! Dataset directories
+DIR_DATASETS=/HD/datasets
+echo "DIR_DATASETS: "$DIR_DATASETS
+
+MP3D_VO_DATASET=${DIR_DATASETS}/ICRA2021
+TUM_VI_DATASET=${DIR_DATASETS}/TUM_VI
+
+# # ! Utilities
+# DIR_UTILITIES=$HOME/Documents/Research/Utilities
+# echo "DIR_UTILITIES: "$DIR_UTILITIES
+
+# # ! CameraModels
+# DIR_CAMERA_MODELS=$HOME/Documents/Research/CameraModels
+# echo "DIR_CAMERA_MODELS: "$DIR_CAMERA_MODELS

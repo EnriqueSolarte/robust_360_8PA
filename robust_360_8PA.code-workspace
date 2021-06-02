@@ -3,23 +3,12 @@
 		{
 			"path": "."
 		},
-		{
-			"path": "../Utilities"
-		},
-		{
-			"path": "../CameraModels"
-		},
-		{
-			"path": "../vslam360/vslam360_src"
-		},
-
 	],
 	"settings": {
 		"python.pythonPath": "/home/kike/anaconda3/envs/slam_layout/bin/python",
 		"python.analysis.extraPaths": [
 			//* LOCAL PATHS
 			".",
-			"../Utilities",
 		],
 	},
 	"launch": {

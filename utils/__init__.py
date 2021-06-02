@@ -3,7 +3,7 @@
 from .data_utilities import *
 
 # ! File utilities
-from .file_utils import *
+from .file_utilities import *
 
 from .geometry_utilities import *
 
