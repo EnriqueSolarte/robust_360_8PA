@@ -1,8 +1,4 @@
----
-noteId: "22a88ff0c35911eba26d3bf9b36a6553"
-tags: []
 
----
 
 # Robust 360-8PA
 
