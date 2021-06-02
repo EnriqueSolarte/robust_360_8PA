@@ -4,9 +4,9 @@ This is the implementation of our ICRA 2021 ["
 Robust 360-8PA": Redesigning The Normalized 8-point Algorithm
 for 360-FoV Images](https://arxiv.org/abs/2104.10900)" ([website project](https://enriquesolarte.github.io/robust_360_8pa/)).
 
- <iframe width="400" height="200"
-                src="https://drive.google.com/file/d/1qSuaWtE9uO62hN8XR8Gxa4KDCfVfeDzt/preview"  frameborder="0"
-                allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+[![IMAGE ALT TEXT HERE](.assets/intro.png)](https://drive.google.com/file/d/1qSuaWtE9uO62hN8XR8Gxa4KDCfVfeDzt/preview)
+
 
 For more information, please vist our webside project [website project](https://enriquesolarte.github.io/robust_360_8pa/)
 
