@@ -8,7 +8,6 @@ import matplotlib.colors as mcolors
 
 def plot_sampling_evaluations(cfg: Cfg):
     sampler = BearingsSampler(cfg)
-    tracker = FeatureTracker(cfg)
 
     list_methods = [
         get_cam_pose_by_8pa,
@@ -22,7 +21,6 @@ def plot_sampling_evaluations(cfg: Cfg):
 
     while True:
         data_bearings, ret = sampler.get_bearings(return_dict=True)
-        # _ = tracker.track(verbose=False)
 
         if not ret:
             break

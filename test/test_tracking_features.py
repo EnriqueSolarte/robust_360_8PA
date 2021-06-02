@@ -13,3 +13,4 @@ if __name__ == '__main__':
         bearings_kf, bearings_frm, cam_pose_gt, ret = tracker.track()
         if not ret:
             break
+

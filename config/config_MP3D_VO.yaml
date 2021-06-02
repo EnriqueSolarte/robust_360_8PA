@@ -36,5 +36,5 @@ outliers_ratio: 0.5              #* Outliers ratio wrt $max_number_features
 #! RANSAC 
 expected_inliers: 0.5
 probability_success: 0.99
-residual_threshold: 1.1e-3
+residual_threshold: 1.e-2
 min_super_set: 50

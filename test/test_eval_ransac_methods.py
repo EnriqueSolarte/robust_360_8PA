@@ -26,7 +26,7 @@ def eval_solvers(cfg: Cfg):
                 continue
             
             print("#\n")
-            print("Number of bearings evaluated: {}".format(bearings_kf.shape[1]))
+            print("Number of evaluated bearings: {}".format(bearings_kf.shape[1]))
             for method in list_methods:
                 cam_pose_hat = method(
                     x1=bearings_kf,
