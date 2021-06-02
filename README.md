@@ -73,7 +73,7 @@ eval_solvers(cfg)
 ```
 ***NOTE***: In general ```cfg``` is created at the begining of every script in this implementation, e.g. in  ```plots/plot_cam_pose_errors.py```
 
-```
+```py
 if __name__ == '__main__':
     config_file = Cfg.FILE_CONFIG_MP3D_VO
     cfg = Cfg.from_cfg_file(yaml_config=config_file)
