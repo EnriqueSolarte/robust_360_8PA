@@ -1,7 +1,7 @@
 from config import Cfg
 from utils.data_utilities import get_dataset, sampling_idxs
 from utils.lkt_tracker import LKT_tracker
-from utils.shi_tomosi_extractor import Shi_Tomasi_Extractor
+from utils.shi_tomasi_extractor import Shi_Tomasi_Extractor
 from utils.frame import Frame
 import numpy as np
 import cv2

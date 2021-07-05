@@ -1,6 +1,6 @@
 import os
-from TUM_RGBD_utils.associate import associate, read_file_list
-from TUM_RGBD_utils.evaluate_rpe import read_trajectory
+from utils.TUM_RGBD_utils.associate import associate, read_file_list
+from utils.TUM_RGBD_utils.evaluate_rpe import read_trajectory
 import pandas as pd
 
 

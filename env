@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # ! Dataset directories
-DIR_DATASETS=/HD/datasets
+DIR_DATASETS=/HD/datasets/ICRA2021
 echo "DIR_DATASETS: "$DIR_DATASETS
 
-MP3D_VO_DATASET=${DIR_DATASETS}/ICRA2021
+MP3D_VO_DATASET=${DIR_DATASETS}/MP3D_VO
 TUM_VI_DATASET=${DIR_DATASETS}/TUM_VI
 
 # # ! Utilities

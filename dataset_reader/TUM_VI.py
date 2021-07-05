@@ -8,6 +8,10 @@ from utils.camera_models import Sphere
 import cv2
 import os
 import numpy as np
+from utils.TUM_RGBD_utils.associate import associate, read_file_list, read_file_association
+from utils.TUM_RGBD_utils.evaluate_rpe import read_trajectory
+from utils.TUM_RGBD_utils.save_association import save_association
+from utils.camera_models.unifiedModel import UnifiedModel
 
 
 
@@ -19,10 +23,10 @@ class TUM_VI(Data):
         # sys.path.append(TUM_utilities)
         super().__init__(dt_dir, scene)
 
-        from TUM_RGBD_utils.associate import associate, read_file_list, read_file_association
-        from TUM_RGBD_utils.evaluate_rpe import read_trajectory
-        from TUM_RGBD_utils.save_association import save_association
-        from unifiedModel import UnifiedModel
+        # from TUM_RGBD_utils.associate import associate, read_file_list, read_file_association
+        # from TUM_RGBD_utils.evaluate_rpe import read_trajectory
+        # from TUM_RGBD_utils.save_association import save_association
+        # from unifiedModel import UnifiedModel
 
         rgb_image_paths = self.scene_dir + '/mav0/cam0/data.csv'
         trajectory_gt = self.scene_dir + '/dso/gt_imu.csv'
