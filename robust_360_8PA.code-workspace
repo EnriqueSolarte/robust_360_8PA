@@ -10,6 +10,9 @@
 			//* LOCAL PATHS
 			".",
 		],
+		"terminal.integrated.env.linux": {
+			"ZSH_INIT_COMMAND": "source ${workspaceFolder}/setup.bash",
+			},
 	},
 	"launch": {
 		"version": "0.2.0",

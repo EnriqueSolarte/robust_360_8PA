@@ -6,8 +6,8 @@ scene: 1LXtFkjw3qL
 scene_version: 0
 
 #! Data settings
-initial_frame: 0                        #* intial frame to read automatically
-special_tracking: False                 #* track every frame as inital ref for tracking
+initial_frame: 0                        #* initial frame to read automatically
+special_tracking: False                 #* track every frame as initial ref for tracking
 min_cam_distance: 0.5                   #* min camera motion between ref and tracked frame
 show_tracked_features: True             #* show while tracking
 save_bearings: True                     #* save bearing vectors which are evaluated
@@ -18,9 +18,9 @@ range_angular_motion: [-10, 10]         #* Range of rotation angle for synthetic
 
 
 #! Shi-Tomasi feature extractor
-max_number_corners: 500         #* Number of extracted feature by the extarctor
+max_number_corners: 500         #* Number of extracted feature by the extractor
 quality_corner_level: 0.0001      #* Quality of corners (higher better but less features)
-min_corner_distance: 10           #* Min distance bewteen extracted features
+min_corner_distance: 10           #* Min distance between extracted features
 block_size_for_corners: 10         #* Windows patch used to compute a feature
 
 #! LK tracker
@@ -30,7 +30,7 @@ eps_tracking: 0.0001
 counter_iterations: 2
 
 #! Noise & Outliers setting
-vMF_kappa: 500                   #* Von Mises-Fisher noise parameter
+vMF_kappa: 500                   #* Von Misses-Fisher noise parameter
 outliers_ratio: 0.5              #* Outliers ratio wrt $max_number_features
 
 #! RANSAC 

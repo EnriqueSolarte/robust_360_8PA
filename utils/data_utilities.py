@@ -22,6 +22,7 @@ def get_shape(array_map):
         h, w = array_map.shape
     return h, w
 
+
 def get_dataset(cfg: Cfg):
     """
     Returns an object datatset
@@ -111,7 +112,6 @@ def save_bearings(*args, **kwargs):
 def save_results(*args, **kwargs):
     dirname = get_data_dirname(kwargs["cfg"])
     np.save(os.path.join(dirname, "error.results"), kwargs["errors"])
-    
 
 
 def sampling_idxs(length, max_size):

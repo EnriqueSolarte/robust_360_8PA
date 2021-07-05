@@ -1,8 +1,5 @@
 from config import Cfg
 from utils.data_utilities import get_dataset, sampling_idxs
-from utils.lkt_tracker import LKT_tracker
-from utils.shi_tomosi_extractor import Shi_Tomasi_Extractor
-from utils.frame import Frame
 from utils.geometry_utilities import get_homogeneous_transform_from_vectors, extend_array_to_homogeneous
 from utils.pcl_utilities import add_noise_to_pcl
 from utils.pcl_utilities import add_outliers_to_pcl

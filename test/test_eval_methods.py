@@ -19,8 +19,8 @@ def eval_solvers(cfg: Cfg):
     hist_errors = {}
 
     while True:
-        bearings_kf, bearings_frm, cam_pose_gt, ret = tracker.track(verbose=False)
-        # bearings_kf, bearings_frm, cam_pose_gt, ret = sampler.get_bearings()
+        # bearings_kf, bearings_frm, cam_pose_gt, ret = tracker.track(verbose=False)
+        bearings_kf, bearings_frm, cam_pose_gt, ret = sampler.get_bearings()
         if not ret:
             break
         
