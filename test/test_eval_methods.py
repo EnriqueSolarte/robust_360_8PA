@@ -4,9 +4,9 @@ from solvers import *
 
 
 def eval_solvers(cfg: Cfg):
-
-    tracker = FeatureTracker(cfg)
-    # sampler = BearingsSampler(cfg)
+    # ! This is for evaluate TRACKING FEATURES
+    # tracker = FeatureTracker(cfg)
+    sampler = BearingsSampler(cfg)
 
     list_methods = [
         get_cam_pose_by_8pa,
@@ -19,6 +19,7 @@ def eval_solvers(cfg: Cfg):
     hist_errors = {}
 
     while True:
+        # ! This is for evaluate TRACKING FEATURES    
         # bearings_kf, bearings_frm, cam_pose_gt, ret = tracker.track(verbose=False)
         bearings_kf, bearings_frm, cam_pose_gt, ret = sampler.get_bearings()
         if not ret:

@@ -2,10 +2,13 @@
 
 # ! Dataset directories
 DIR_DATASETS=/HD/datasets/ICRA2021
-echo "DIR_DATASETS: "$DIR_DATASETS
+# NAS=/run/user/1000/gvfs/sftp:host=127.0.0.1,port=8002/NFS/kike/
+# echo "NAS:$NAS"
+
+# echo "DIR_DATASETS: "$DIR_DATASETS
 
 MP3D_VO_DATASET=${DIR_DATASETS}/MP3D_VO
-TUM_VI_DATASET=${DIR_DATASETS}/TUM_VI
+TUM_VI_DATASET=${DIR_DATASETS}/TUM_VI/dataset
 
 # # ! Utilities
 # DIR_UTILITIES=$HOME/Documents/Research/Utilities
