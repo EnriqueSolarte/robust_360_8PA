@@ -15,7 +15,7 @@ For a quick introduction (3 min), please [here](https://drive.google.com/file/d/
 ### News
 **June 3, 2021** - Code release 
 
-***Coming Soon***: *Dataset MP3D-VO release*
+**Sep 12, 2021**: Dataset release
 
 ---
 
@@ -40,6 +40,9 @@ Futher capabilities, analysis and resourses are released in the branch [```dev``
 * pandas                    1.0.5 
 * levmar                    0.2.3
 ---
+### Dataset
+For convenience, our dataset MP3D_VO and TUM_VI [3] has been released for free access at [this Google drive directory](https://drive.google.com/drive/folders/1wGLRFXJXeKxpFB5_N3LXaV7TcEPF1-Fh?usp=sharing).
+
 ### Settings
 
 For convience, we implement a  ***< Class config >*** to load the used settings in this repo, from a yaml file. ```e.g .config/config_TUM_VI.yaml```. You can use the following lines for loading this configuracion. 
