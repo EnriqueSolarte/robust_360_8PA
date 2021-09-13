@@ -21,7 +21,7 @@ For a quick introduction (3 min), please [here](https://drive.google.com/file/d/
 
 ### Description
 
-This **REPO** is our own implemantation, in python, for a camera pose estimation using the eight-point algorithm [1], the non-linear optmization over residual errors (Gold Standar Method [GSM]) [2], and our method named **Robust 360-8PA**.
+This **REPO** is our own implementation, in python, for a camera pose estimation using the eight-point algorithm [1], the non-linear optimization over residual errors (Gold Standard Method [GSM]) [2], and our method named **Robust 360-8PA**.
 
 Using this implementation, you can:
 
@@ -29,7 +29,7 @@ Using this implementation, you can:
 * Sample 3D points from GT 360-depth maps (only for our MP3D-VO dataset), adding noise vMF, and outliers.
 * Evaluate camera pose, with and without RANSAC, using 8-PA[1], GSM[2], and our **Robust 360-8PA**.
 
-Futher capabilities, analysis and resourses are released in the branch [```dev```](https://github.com/EnriqueSolarte/robust_360_8PA/tree/dev).
+Further capabilities, analysis and resources are released in the branch [```dev```](https://github.com/EnriqueSolarte/robust_360_8PA/tree/dev).
 
 ---
 ### Requirements
@@ -41,11 +41,11 @@ Futher capabilities, analysis and resourses are released in the branch [```dev``
 * levmar                    0.2.3
 ---
 ### Dataset
-For convenience, our dataset MP3D_VO and TUM_VI [3] has been released for free access at [this Google drive directory](https://drive.google.com/drive/folders/1wGLRFXJXeKxpFB5_N3LXaV7TcEPF1-Fh?usp=sharing).
+For convenience, our dataset MP3D_VO and TUM_VI [3] will be provided after filling out the following form and agreement [VSLAB-Form](https://docs.google.com/forms/d/e/1FAIpQLScbXDPg6GQ5Chb9dkSvCgguVxuPRK5U47EBSN4K1vSfcimPsg/viewform?usp=sf_link)
 
 ### Settings
 
-For convience, we implement a  ***< Class config >*** to load the used settings in this repo, from a yaml file. ```e.g .config/config_TUM_VI.yaml```. You can use the following lines for loading this configuracion. 
+For convience, we implement a  ***< Class config >*** to load the used settings in this repo, from a yaml file. ```e.g .config/config_TUM_VI.yaml```. You can use the following lines for loading this configuration. 
 
 ```py
 from config import Cfg
@@ -74,7 +74,7 @@ cfg = Cfg.from_cfg_file(yaml_config=config_file)
 eval_solvers(cfg)
 
 ```
-***NOTE***: In general ```cfg``` is created at the begining of every script in this implementation, e.g. in  ```plots/plot_cam_pose_errors.py```
+***NOTE***: In general ```cfg``` is created at the beginning of every script in this implementation, e.g. in  ```plots/plot_cam_pose_errors.py```
 
 ```py
 if __name__ == '__main__':
