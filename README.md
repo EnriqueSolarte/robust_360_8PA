@@ -140,14 +140,15 @@ python plots/plot_cam_pose_errors.py
 ## Citation
 Please cite our paper for any purpose of usage.
 ```
- @misc{solarte2021robust,
-                    title={Robust 360-8PA: Redesigning The Normalized 8-point Algorithm for 360-FoV Images}, 
-                    author={Bolivar Solarte and Chin-Hsuan Wu and Kuan-Wei Lu and Min Sun and Wei-Chen Chiu and Yi-Hsuan Tsai},
-                    year={2021},
-                    eprint={2104.10900},
-                    archivePrefix={arXiv},
-                    primaryClass={cs.CV}
-}
+@INPROCEEDINGS{9560888,
+  author={Solarte, Bolivar and Wu, Chin-Hsuan and Lu, Kuan-Wei and Tsai, Yi-Hsuan and Chiu, Wei-Chen and Sun, Min},
+  booktitle={2021 IEEE International Conference on Robotics and Automation (ICRA)}, 
+  title={Robust 360-8PA: Redesigning The Normalized 8-point Algorithm for 360-FoV Images}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={11032-11038},
+  doi={10.1109/ICRA48506.2021.9560888}}
 ```
 ---
 ### References
